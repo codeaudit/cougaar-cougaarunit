@@ -323,10 +323,8 @@ public abstract class PluginTestCase extends ComponentPlugin {
         if (logging.isInfoEnabled()) {
             logging.info("STARTING TESTS...");
         }
-        if(started){
-        	return;
-        }
-
+       
+        
         //determine the report format
         Thread t = new Thread(new Runnable() {
                     public void run() {
@@ -454,7 +452,9 @@ public abstract class PluginTestCase extends ComponentPlugin {
                         System.exit((PluginTestResult.getOverallResult()) ? 0 : 1); //exit code = 0 if all tests passed, otherwise 1
                     }
                 });
-        t.start();
+        if(isStarted()==false){
+        	t.start();
+        }
     }
 
     /**

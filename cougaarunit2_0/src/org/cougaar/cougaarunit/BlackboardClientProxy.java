@@ -17,7 +17,7 @@ import org.cougaar.core.blackboard.BlackboardClient;
 public class BlackboardClientProxy implements BlackboardClient {
 	private BlackboardClient actualPlugin;
 	private static Vector pluginList = new Vector();
-
+	private static boolean testStarted  =false;
 	
 
 	/**
@@ -40,7 +40,8 @@ public class BlackboardClientProxy implements BlackboardClient {
 				Object obj = plugins.nextElement();
 				if (obj.getClass().getName().equals(targetPluginClassName)) {
 					//if the target plugin has been loaded then we can start the tests
-					if (((PluginTestCase) actualPlugin).isStarted() == false) {
+					if (testStarted == false) {
+						testStarted = true;
 						((PluginTestCase) actualPlugin).startTests();
 						((PluginTestCase) actualPlugin).setStarted(true);
 					}
@@ -64,7 +65,8 @@ public class BlackboardClientProxy implements BlackboardClient {
 						.getName()
 						.equals(targetPluginClassName)) {
 						//if this current class is the target plugin, then start the tests
-						if (((PluginTestCase) obj).isStarted() == false) {
+						if (testStarted == false) {
+							testStarted = true;
 							((PluginTestCase) obj).startTests();
 							((PluginTestCase) obj).setStarted(true);
 						}
