@@ -21,10 +21,6 @@ import com.borland.jbcl.control.MessageDialog;
 import java.io.FileInputStream;
 import org.cougaar.plugin.test.capture.CapturedPublishAction;
 import java.io.FilenameFilter;
-import com.klg.jclass.table.JCTable;
-import com.klg.jclass.table.data.JCEditableVectorDataSource;
-import com.klg.jclass.table.JCTableEnum;
-import com.klg.jclass.table.data.JCVectorDataSource;
 import org.cougaar.plugin.test.util.*;
 import com.borland.jbcl.layout.*;
 
@@ -212,10 +208,6 @@ class StreamedDataTableModel extends DefaultTableModel  {
       return c;
     }
   }
-
-
-
-
 
 
   /**
@@ -955,15 +947,20 @@ class StreamedDataTableModel extends DefaultTableModel  {
   }
 
   private void buildTimeDataModel(Vector v) {
+    if (v.size() == 0) return;
+    long baseTime = ((CapturedPublishAction)v.elementAt(0)).timeStamp;
     for (int i=0; i<v.size(); i++ ) {
       CapturedPublishAction cpa = (CapturedPublishAction)v.elementAt(i);
-      timeDataTableModel.addRow(new Object[] {String.valueOf(i), String.valueOf(cpa.timeStamp), cpa.publishingSource, String.valueOf(cpa.getActionString()), cpa.publishedObject});
+      timeDataTableModel.addRow(new Object[] {String.valueOf(i), String.valueOf(cpa.timeStamp-baseTime), cpa.publishingSource, String.valueOf(cpa.getActionString()), cpa.publishedObject});
     }
     this.jTableTimeData.updateUI();
   }
 
   private void buildSourceDataModel(Vector v) {
     Vector cols = new Vector();
+    if (v.size() == 0) return;
+    long baseTime = ((CapturedPublishAction)v.elementAt(0)).timeStamp;
+
     cols.addElement("TIME");
     //calculate the column names
     for (int i=0; i<v.size(); i++) {
@@ -977,23 +974,17 @@ class StreamedDataTableModel extends DefaultTableModel  {
     //calculate the rows
     for (int i=0; i<v.size(); i++) {
       CapturedPublishAction cpa = (CapturedPublishAction)v.elementAt(i);
-      Object[] row = (Object[])rows.get(String.valueOf(cpa.timeStamp));
+      Object[] row = (Object[])rows.get(String.valueOf(cpa.timeStamp-baseTime));
       if (row == null) {
         row = new Object[cols.size()];
-        row[0] = String.valueOf(cpa.timeStamp);
+        row[0] = String.valueOf(cpa.timeStamp-baseTime);
         for (int j=1; j<cols.size(); j++) { //initialize the row
           row[j] = "";
         }
-        rows.put(String.valueOf(cpa.timeStamp), row);
+        rows.put(String.valueOf(cpa.timeStamp-baseTime), row);
       }
       String currentVal = (String)row[cols.indexOf(cpa.publishingSource)];
-      //adjust the published object name to remove the path portion
-      String objStr = cpa.publishedObject.toString();
-      int index = objStr.lastIndexOf(".");
-      if (index != -1) {
-        objStr = objStr.substring(index+1);
-      }
-      String newVal = (currentVal.equals(""))?cpa.getActionString() + " " + objStr:currentVal+"\n"+cpa.getActionString() + " " + objStr;
+      String newVal = (currentVal.equals(""))?cpa.getActionString() + " " + cpa.publishedObject:currentVal+"\n"+cpa.getActionString() + " " + cpa.publishedObject;
       row[cols.indexOf(cpa.publishingSource)] = newVal;
     }
 
@@ -1032,6 +1023,7 @@ class StreamedDataTableModel extends DefaultTableModel  {
   void jRadioButtonSourceView_actionPerformed(ActionEvent e) {
     jScrollPaneTimeData.setVisible(false);
     jScrollPaneSourceData.setVisible(true);
+    jTableSourceData.sortAllRowsBy(sourceDataTableModel, 0, true);
   }
 }
 

@@ -36,14 +36,15 @@ public class SortableJTable extends JTable {
   private void init() {
     getTableHeader().addMouseListener(new ColumnHeaderListener());
     this.setDefaultRenderer(Object.class, new JListRenderer());
-  }
+ }
 
   public void sortAllRowsBy(DefaultTableModel model, int colIndex, boolean ascending) {
     Vector data = model.getDataVector();
     Collections.sort(data, new ColumnSorter(colIndex, ascending));
     model.fireTableStructureChanged();
-    this.updateUI();
+    try {this.updateUI();} catch (Exception e){}
   }
+
 
   public static void main(String[] args) {
     JFrame f = new JFrame("test");
@@ -66,6 +67,7 @@ public class SortableJTable extends JTable {
 
     f.show();
   }
+
 
   class ColumnHeaderListener extends MouseAdapter {
     public void mouseClicked(MouseEvent evt) {
@@ -116,12 +118,12 @@ public class SortableJTable extends JTable {
       }
       else if ((o1 instanceof String )&& (o2 instanceof String)) {
         try {
-          int i1 =  Integer.parseInt((String)o1);
-          int i2 = Integer.parseInt((String)o2);
+          long i1 = Long.parseLong((String)o1);
+          long i2 = Long.parseLong((String)o2);
           if (ascending)
-            return i1-i2;
+            return (int)(i1-i2);
           else
-            return (i2-i1);
+            return (int)(i2-i1);
         }
         catch(NumberFormatException nfe){}
       }

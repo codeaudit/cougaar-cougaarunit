@@ -14,6 +14,7 @@ import java.util.Enumeration;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.io.ByteArrayOutputStream;
+import org.cougaar.plugin.test.ClassStringRendererRegistry;
 
 /**
  * <p>Title: BlackboardServiceCapturingProxy</p>
@@ -162,7 +163,7 @@ public class BlackboardServiceCapturingProxy implements BlackboardService {
      * @return
      */
     public boolean publishAdd(Object parm1) {
-        objectStream.add(new CapturedPublishAction(CapturedPublishAction.ACTION_ADD, parm1.getClass().getName(), requestingClient));
+        objectStream.add(new CapturedPublishAction(CapturedPublishAction.ACTION_ADD, ClassStringRendererRegistry.render(parm1), requestingClient));
         return actualBlackboardService.publishAdd(parm1);
     }
 
@@ -172,7 +173,7 @@ public class BlackboardServiceCapturingProxy implements BlackboardService {
      * @return
      */
     public boolean publishRemove(Object parm1) {
-      objectStream.add(new CapturedPublishAction(CapturedPublishAction.ACTION_REMOVE, parm1.getClass().getName(), requestingClient));
+      objectStream.add(new CapturedPublishAction(CapturedPublishAction.ACTION_REMOVE, ClassStringRendererRegistry.render(parm1), requestingClient));
       return actualBlackboardService.publishRemove(parm1);
     }
 
@@ -182,7 +183,7 @@ public class BlackboardServiceCapturingProxy implements BlackboardService {
      * @return
      */
     public boolean publishChange(Object parm1) {
-        objectStream.add(new CapturedPublishAction(CapturedPublishAction.ACTION_CHANGE, parm1.getClass().getName(), requestingClient));
+        objectStream.add(new CapturedPublishAction(CapturedPublishAction.ACTION_CHANGE, ClassStringRendererRegistry.render(parm1), requestingClient));
         return actualBlackboardService.publishChange(parm1);
     }
 
@@ -193,7 +194,7 @@ public class BlackboardServiceCapturingProxy implements BlackboardService {
      * @return
      */
     public boolean publishChange(Object parm1, Collection parm2) {
-        objectStream.add(new CapturedPublishAction(CapturedPublishAction.ACTION_CHANGE, parm1.getClass().getName(), requestingClient));
+        objectStream.add(new CapturedPublishAction(CapturedPublishAction.ACTION_CHANGE, ClassStringRendererRegistry.render(parm1), requestingClient));
         return actualBlackboardService.publishChange(parm1, parm2);
     }
 

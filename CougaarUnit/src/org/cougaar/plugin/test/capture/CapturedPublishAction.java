@@ -16,12 +16,12 @@ public class CapturedPublishAction implements Serializable {
     public final static int ACTION_CHANGE =2 ;
     public final static int ACTION_REMOVE = 3;
 
-    public Object publishedObject;
+    public String publishedObject;
     public int action;
     public String publishingSource;
     public long timeStamp;
 
-    public CapturedPublishAction(int action, Object publishedObject, String publishingSource) {
+    public CapturedPublishAction(int action, String publishedObject, String publishingSource) {
         this.action = action;
         this.publishedObject = publishedObject;
         this.publishingSource = publishingSource;
