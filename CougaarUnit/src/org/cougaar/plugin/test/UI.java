@@ -4,6 +4,11 @@ import java.awt.*;
 import javax.swing.*;
 import com.borland.jbcl.layout.*;
 import javax.swing.border.*;
+import java.awt.event.*;
+import java.io.File;
+import java.util.jar.JarFile;
+import java.util.Enumeration;
+import java.util.jar.JarEntry;
 
 /**
  * <p>Title: </p>
@@ -23,18 +28,20 @@ public class UI extends JFrame {
     private JButton jButtonCancel = new JButton();
     private BorderLayout borderLayout2 = new BorderLayout();
     private JPanel jPanel3 = new JPanel();
-    private JPanel jPanel4 = new JPanel();
-    private JPanel jPanel5 = new JPanel();
+    private JPanel jPanelTests = new JPanel();
+    private JPanel jPanelDirJar = new JPanel();
     private BorderLayout borderLayout3 = new BorderLayout();
-    private JTextField jTextField1 = new JTextField();
+    private JTextField jTextFieldDirJar = new JTextField();
     private JButton jButtonBrowse = new JButton();
     private JLabel jLabelSelectDir = new JLabel();
     private FlowLayout flowLayout1 = new FlowLayout();
-    private JSplitPane jSplitPane1 = new JSplitPane();
-    private JScrollPane jScrollPane1 = new JScrollPane();
-    private JScrollPane jScrollPane2 = new JScrollPane();
-    private JList jList1 = new JList();
-    private JList jList2 = new JList();
+    private JSplitPane jSplitPaneTests = new JSplitPane();
+    private JScrollPane jScrollPaneTestSuites = new JScrollPane();
+    private JScrollPane jScrollPaneTestCases = new JScrollPane();
+    private JList jListTestSuites = new JList();
+    private JList jListTestCases = new JList();
+    private DefaultListModel testCaseModel = new DefaultListModel();
+    private DefaultListModel testSuiteModel = new DefaultListModel();
     private Border border1;
     private TitledBorder titledBorder1;
     private Border border2;
@@ -50,11 +57,18 @@ public class UI extends JFrame {
     public UI() {
         try {
             jbInit();
+            init2();
         }
         catch(Exception e) {
             e.printStackTrace();
         }
     }
+
+    private void init2() {
+        jListTestCases.setModel(testCaseModel);
+        jListTestSuites.setModel(testSuiteModel);
+    }
+
     private void jbInit() throws Exception {
         border1 = BorderFactory.createEtchedBorder(Color.white,new Color(178, 178, 178));
         titledBorder1 = new TitledBorder(border1,"Test Suites");
@@ -73,44 +87,95 @@ public class UI extends JFrame {
         jButtonCancel.setText("Cancel");
         jPanel1.setLayout(borderLayout2);
         jPanel3.setLayout(borderLayout3);
-        jTextField1.setPreferredSize(new Dimension(350, 21));
-        jTextField1.setText("jTextField1");
+        jTextFieldDirJar.setPreferredSize(new Dimension(300, 21));
         jButtonBrowse.setText("Browse");
-        jLabelSelectDir.setText("Select Directory");
-        jPanel5.setLayout(flowLayout1);
+        jButtonBrowse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                jButtonBrowse_actionPerformed(e);
+            }
+        });
+        jLabelSelectDir.setText("Select Directory/Jar File");
+        jPanelDirJar.setLayout(flowLayout1);
         flowLayout1.setHgap(10);
-        jPanel4.setLayout(borderLayout4);
-        jScrollPane1.setBorder(titledBorder2);
-        jScrollPane1.setPreferredSize(new Dimension(268, 230));
-        jScrollPane2.setBorder(titledBorder3);
-        jScrollPane2.setPreferredSize(new Dimension(268, 230));
-        jSplitPane1.setPreferredSize(new Dimension(543, 230));
-        jSplitPane1.setContinuousLayout(true);
+        jPanelTests.setLayout(borderLayout4);
+        jScrollPaneTestSuites.setBorder(titledBorder2);
+        jScrollPaneTestSuites.setPreferredSize(new Dimension(268, 230));
+        jScrollPaneTestCases.setBorder(titledBorder3);
+        jScrollPaneTestCases.setPreferredSize(new Dimension(268, 230));
+        jSplitPaneTests.setPreferredSize(new Dimension(543, 230));
+        jSplitPaneTests.setContinuousLayout(true);
         jTextArea1.setPreferredSize(new Dimension(70, 125));
         jScrollPane3.setBorder(titledBorder4);
-        jPanel5.add(jLabelSelectDir, null);
+        jPanelDirJar.add(jLabelSelectDir, null);
         this.getContentPane().add(jLabel1,  BorderLayout.NORTH);
         this.getContentPane().add(jPanel1, BorderLayout.CENTER);
         jPanel1.add(jPanel3, BorderLayout.NORTH);
-        jPanel3.add(jPanel5, BorderLayout.CENTER);
-        jPanel5.add(jTextField1, null);
-        jPanel5.add(jButtonBrowse, null);
-        jPanel1.add(jPanel4, BorderLayout.CENTER);
+        jPanel3.add(jPanelDirJar, BorderLayout.CENTER);
+        jPanelDirJar.add(jTextFieldDirJar, null);
+        jPanelDirJar.add(jButtonBrowse, null);
+        jPanel1.add(jPanelTests, BorderLayout.CENTER);
         this.getContentPane().add(jPanel2, BorderLayout.SOUTH);
         jPanel2.add(jButtonCancel, null);
         jPanel2.add(jButtonRun, null);
-        jPanel4.add(jSplitPane1, BorderLayout.CENTER);
-        jSplitPane1.add(jScrollPane1, JSplitPane.TOP);
-        jScrollPane1.getViewport().add(jList1, null);
-        jSplitPane1.add(jScrollPane2, JSplitPane.BOTTOM);
+        jPanelTests.add(jSplitPaneTests, BorderLayout.CENTER);
+        jSplitPaneTests.add(jScrollPaneTestSuites, JSplitPane.TOP);
+        jScrollPaneTestSuites.getViewport().add(jListTestSuites, null);
+        jSplitPaneTests.add(jScrollPaneTestCases, JSplitPane.BOTTOM);
         jPanel1.add(jScrollPane3,  BorderLayout.SOUTH);
         jScrollPane3.getViewport().add(jTextArea1, null);
-        jScrollPane2.getViewport().add(jList2, null);
-        jSplitPane1.setDividerLocation(250);
+        jScrollPaneTestCases.getViewport().add(jListTestCases, null);
+        jSplitPaneTests.setDividerLocation(250);
     }
     public static void main(String[] args) {
         UI ui= new UI();
-        ui.setSize(500,500);
+        ui.setSize(600,500);
         ui.show();
+    }
+
+    private void searchJarFile(File file) {
+        //search jar file for classes that are instances of PLutinTestCase or PluginTestSuite
+        try {
+            JarFile jarFile = new JarFile(file);
+            for (Enumeration entries = jarFile.entries(); entries.hasMoreElements(); ) {
+                JarEntry entry = (JarEntry)entries.nextElement();
+                String fileName = entry.getName();
+                if (fileName.endsWith(".class")) {
+                    String className = fileName.substring(0, fileName.lastIndexOf(".class"));
+                    className = className.replace('/', '.');
+                    try {
+                        Class clazz = this.getClass().forName(className);
+                        Class superClazz = clazz.getSuperclass();
+                        if (superClazz.equals(PluginTestCase.class)) {
+                            testCaseModel.addElement(clazz);
+                        }
+                        else if (superClazz.equals(PluginTestSuite.class)) {
+                            testSuiteModel.addElement(clazz);
+                        }
+                    }
+                    catch (RuntimeException rtw){}
+                    catch (Exception e) {}
+
+                }
+            }
+        }
+        catch (Exception e) {}
+    }
+
+
+    void jButtonBrowse_actionPerformed(ActionEvent e) {
+        JFileChooser jfc = new JFileChooser();
+        jfc.setDialogTitle("Select directory or jar file");
+        int ret = jfc.showOpenDialog(this);
+        if (ret == JFileChooser.APPROVE_OPTION) {
+            File f = jfc.getSelectedFile();
+            if (f.isDirectory()) {
+                //search for class and jar files that are instance of PluginTestCase or PluginTestSuite
+
+            }
+            else if (f.getName().toLowerCase().endsWith(".jar")) {
+                searchJarFile(f);
+            }
+        }
+
     }
 }
