@@ -70,7 +70,7 @@
   <property category="sys" name="InstanceVisibility" value="2"/>
   <property category="sys" name="JDK" value="java 1.4.1_02-b06"/>
   <property category="sys" name="LastTag" value="0"/>
-  <property category="sys" name="Libraries" value="JBCL;BCEL;Servlet;COUGAAR_10"/>
+  <property category="sys" name="Libraries" value="JBCL;BCEL;Servlet;COUGAAR_10_4"/>
   <property category="sys" name="MakeStable" value="0"/>
   <property category="sys" name="OutPath" value="classes"/>
   <property category="sys" name="ServletContentType" value="HTML"/>
@@ -102,7 +102,7 @@
   </node>
   <node name="Copy Jar File" type="ExternalTask">
     <property category="external" name="executable" value="&quot;C:\Documents and Settings\David Craine\My Documents\InfoEther-CVS\CougaarUnit\copyfile.bat&quot;"/>
-    <property category="external" name="params" value="&quot;($ProjectDir)\cougaarUnit.jar&quot; &quot;c:\cougaar10\lib\cougaarUnit.jar&quot;"/>
+    <property category="external" name="params" value="&quot;($ProjectDir)\cougaarUnit.jar&quot; &quot;c:\cougaar10_4\lib\cougaarUnit.jar&quot;"/>
     <property category="external" name="phase" value="package"/>
   </node>
   <node name="CougaarUnitApp" type="Archive">

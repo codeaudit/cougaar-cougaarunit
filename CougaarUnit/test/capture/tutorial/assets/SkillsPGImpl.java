@@ -19,7 +19,7 @@
  * </copyright>
  */
 
-/* @generated Thu Mar 06 12:13:48 EST 2003 from properties.def - DO NOT HAND EDIT */
+/* @generated Thu May 22 12:07:08 EDT 2003 from properties.def - DO NOT HAND EDIT */
 /** Implementation of SkillsPG.
  *  @see SkillsPG
  *  @see NewSkillsPG

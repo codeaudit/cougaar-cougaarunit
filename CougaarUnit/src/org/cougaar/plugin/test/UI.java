@@ -115,6 +115,7 @@ public class UI extends JFrame {
   private static final String SOURCE_DATA_COL_TIME = "TIME";
   private JMenuItem jMenuItemClearResults = new JMenuItem();
   private MyClassLoader loader;
+    private JMenuItem jMenuItemClear = new JMenuItem();
   /**
    *
    * <p>Title: OutputTableModel</p>
@@ -517,7 +518,13 @@ public class UI extends JFrame {
         jMenuItemClearResults_actionPerformed(e);
       }
     });
-    jPanelDirJar.add(jLabelSelectDir, null);
+    jMenuItemClear.setText("Clear");
+        jMenuItemClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                jMenuItemClear_actionPerformed(e);
+            }
+        });
+        jPanelDirJar.add(jLabelSelectDir, null);
     jPanelDirJar.add(jComboBoxDirJar, null);
     this.getContentPane().add(jLabel1,  BorderLayout.NORTH);
     this.getContentPane().add(jTabbedPaneMain, BorderLayout.CENTER);
@@ -550,7 +557,9 @@ public class UI extends JFrame {
     jMenuFile.addSeparator();
     jMenuFile.add(jMenuItemExit);
     jMenuOptions.add(jMenuItemClearHistory);
-    jPopupMenuOutput.add(jMenuItemOuptutSave);
+    jPopupMenuOutput.add(jMenuItemClear);
+        jPopupMenuOutput.addSeparator();
+        jPopupMenuOutput.add(jMenuItemOuptutSave);
     jPopupMenuOutput.add(jMenuItemOutputPrint);
     jPopupMenuResults.add(jMenuItemResultsSave);
     jPopupMenuResults.add(jMenuItemResultsPrint);
@@ -669,11 +678,17 @@ public class UI extends JFrame {
     int ret = jfc.showOpenDialog(this);
     if (ret == JFileChooser.APPROVE_OPTION) {
       //update the combo box
-      String path  = jfc.getSelectedFile().getAbsolutePath();
-      if ((((DefaultComboBoxModel)jComboBoxDirJar.getModel()).getIndexOf(path)) == -1){
-        jComboBoxDirJar.addItem(path);
-      }
-      jComboBoxDirJar.setSelectedItem(path);
+        File selectedFile = jfc.getSelectedFile();
+        //There is some wierd behavior in the JFileChooser where if you enter into a directory and then press
+        //open it returns a path with the last directory repeated.  This next check is to eliminate that.
+        if (!selectedFile.exists()) {
+            selectedFile = selectedFile.getParentFile();
+        }
+        String path  = selectedFile.getAbsolutePath();
+        if ((((DefaultComboBoxModel)jComboBoxDirJar.getModel()).getIndexOf(path)) == -1){
+            jComboBoxDirJar.addItem(path);
+        }
+        jComboBoxDirJar.setSelectedItem(path);
     }
   }
 
@@ -1173,6 +1188,10 @@ public class UI extends JFrame {
     outputTableModel.clear();
     jTableResults.updateUI();
   }
+
+    void jMenuItemClear_actionPerformed(ActionEvent e) {
+        jTextPaneOutput.setText("");
+    }
 }
 
 

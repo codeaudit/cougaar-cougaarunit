@@ -41,39 +41,6 @@ public class Launcher {
 
     private String testJarFile="";
 
-    private static String RUN_BAT_TEXT = "@echo OFF\n"+
-            "if \"%COUGAAR_INSTALL_PATH%\"==\"\" goto AIP_ERROR\n" +
-            "if \"%1\"==\"\" goto ARG_ERROR\n"+
-            "set LIBPATHS=%COUGAAR_INSTALL_PATH%\\lib\\bootstrap.jar\n"+
-            "set MYPROPERTIES= -Dorg.cougaar.class.path=%COUGAAR_INSTALL_PATH%\\lib\\CougaarUnit.jar -Dorg.cougaar.system.path=%COUGAAR_INSTALL_PATH%\\sys -Dorg.cougaar.install.path=%COUGAAR_INSTALL_PATH% -Dorg.cougaar.core.servlet.enable=true -Dorg.cougaar.lib.web.scanRange=100 -Dorg.cougaar.lib.web.http.port=8800 -Dorg.cougaar.lib.web.https.port=-1 -Dorg.cougaar.lib.web.https.clientAuth=true -Xbootclasspath/p:%COUGAAR_INSTALL_PATH%\\lib\\javaiopatch.jar\n"+
-            "set MYMEMORY=\n"+
-            "set MYCLASSES=org.cougaar.bootstrap.Bootstrapper org.cougaar.core.node.Node\n"+
-            "set MYARGUMENTS= -c -n \"%1\"\n"+
-            "@ECHO ON\n"+
-            "java.exe %MYPROPERTIES% %MYMEMORY% -classpath %LIBPATHS% %MYCLASSES% %MYARGUMENTS% %2 %3\n"+
-            "goto QUIT\n"+
-            ":AIP_ERROR\n"+
-            "echo Please set COUGAAR_INSTALL_PATH\n"+
-            "goto QUIT\n"+
-            ":ARG_ERROR\n"+
-            "echo Run requires an argument  eg: Run ExerciseOneNode\n"+
-            "goto QUIT\n"+
-            ":QUIT\n";
-
-    private static String RUN_SH_TEXT = "#!/bin/sh\n"+
-                                        "if [ \"$COUGAAR_INSTALL_PATH\" = \"\" ]\n"+
-                                        "then\n"+
-                                        "echo Please set COUGAAR_INSTALL_PATH\n"+
-                                        "exit 2\n"+
-                                        "fi\n"+
-                                        "LIBPATHS=$COUGAAR_INSTALL_PATH/lib/bootstrap.jar\n"+
-                                        "MYPROPERTIES=\"-Dorg.cougaar.class.path=$COUGAAR_INSTALL_PATH/lib/CougaarUnit.jar -Dorg.cougaar.system.path=$COUGAAR_INSTALL_PATH/sys -Dorg.cougaar.install.path=$COUGAAR_INSTALL_PATH -Dorg.cougaar.core.servlet.enable=true -Dorg.cougaar.lib.web.scanRange=100 -Dorg.cougaar.lib.web.http.port=8800 -Dorg.cougaar.lib.web.https.port=-1 -Dorg.cougaar.lib.web.https.clientAuth=true -Xbootclasspath/p:$COUGAAR_INSTALL_PATH/lib/javaiopatch.jar\"\n"+
-                                        "MYMEMORY=\n"+
-                                        "MYCLASSES=\"org.cougaar.bootstrap.Bootstrapper org.cougaar.core.node.Node\"\n"+
-                                        "MYARGUMENTS=\"-c -n $1\"\n"+
-                                        "java $MYPROPERTIES $MYMEMORY -classpath $LIBPATHS $MYCLASSES $MYARGUMENTS $2 $3\n";
-
-
     static {
         //initilaize the currentOS setting
         String osName = System.getProperty("os.name").toLowerCase();
@@ -161,7 +128,7 @@ public class Launcher {
         System.out.println("exiting Cougaar system...");
         System.out.flush();
         retCode = p.waitFor();   //wait for this process to terminate
-System.out.println("*********************RETURN CODE: " + retCode);
+
         return retCode;
     }
 
@@ -276,7 +243,6 @@ System.out.println("*********************RETURN CODE: " + retCode);
             catch (Exception ex) {
                 System.out.println("Error running test: " + ex);
             }
-
         }
     }
 
