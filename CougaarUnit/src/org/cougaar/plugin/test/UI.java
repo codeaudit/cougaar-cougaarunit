@@ -431,7 +431,7 @@ public class UI extends JFrame {
   }
 
   private void processResult(String s) {
-    jTextPaneOutput.setText(s);
+    //jTextPaneOutput.setText(s);
     //find the beginning of the xml output
     int index = s.indexOf("<?xml");
     String xmlStr = s.substring(index);
@@ -587,8 +587,9 @@ public class UI extends JFrame {
      * Write the bytes to the output text pane
      * @param bytes
      */
-    public void write(byte[] bytes) {
-      jTextPaneOutput.setText(jTextPaneOutput.getText()+new String(bytes));
+    public void write(byte[] bytes) throws IOException  {
+      super.write(bytes);
+      jTextPaneOutput.setText(jTextPaneOutput.getText()+new String(bytes)+"\n");
     }
   }
 }
