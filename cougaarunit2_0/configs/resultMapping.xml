@@ -1,0 +1,32 @@
+<!DOCTYPE databases PUBLIC "-//EXOLAB/Castor Mapping DTD Version 1.0//EN"
+                           "http://castor.exolab.org/mapping.dtd">
+
+<mapping>
+	<class name="org.cougaar.cougaarunit.vo.TestResult">
+		<map-to xml="TEST"/>
+		<field name="idList" 
+			   type="org.cougaar.cougaarunit.vo.TestResultId"
+			   collection="vector">
+			<bind-xml name="ID"/>
+		</field>
+		<field name="name" type="java.lang.String">
+			<bind-xml name="name" node="attribute"/>
+		</field>
+	</class>
+	
+	<class name="org.cougaar.cougaarunit.vo.TestResultId">
+		<map-to xml="ID"/>
+		<field name="command" type="java.lang.String">
+			<bind-xml name="COMMAND" node="element"/>
+		</field>
+		<field name="description" type="java.lang.String">
+			<bind-xml name="DESCRIPTION" node="element"/>
+		</field>
+		<field name="phase" type="java.lang.String">
+			<bind-xml name="PHASE" node="element"/>
+		</field>
+		<field name="result" type="java.lang.String">
+			<bind-xml name="RESULT" node="element"/>
+		</field>
+	</class>
+</mapping>
