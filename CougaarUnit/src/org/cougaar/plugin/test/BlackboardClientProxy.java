@@ -22,68 +22,87 @@ import java.util.*;
  */
 public class BlackboardClientProxy implements BlackboardClient
 {
-    private BlackboardClient actualPlugin;
-    private static Vector pluginList = new Vector();
+  private BlackboardClient actualPlugin;
+  private static Vector pluginList = new Vector();
 
-    /**
-     * This method is added for testing
-     */
-    public void registerClass() {
-        pluginList.add(actualPlugin);
+  private void setParameters(ComponentPlugin plugin, String[] params) {
+    ArrayList list = new ArrayList(params.length);
+    for (int i=0; i<params.length; i++) {
+      list.add(params[i]);
+    }
+    plugin.setParameter(list);
 
-        //if this is an instance of the TestPlugin then we need to call it to find out the class name of the plugin
-        //that is to be tested
-        if (actualPlugin instanceof PluginTestCase) {
-            String targetPluginClassName = ((PluginTestCase)actualPlugin).getPluginClass();
-            if (targetPluginClassName == null) throw new RuntimeException("You must implement the getPluginClass()) method");
-            //now we need to see if that plugin has already been loaded
-            for (Enumeration plugins = pluginList.elements(); plugins.hasMoreElements(); ) {
-                Object obj = plugins.nextElement();
-                if (obj.getClass().getName().equals(targetPluginClassName)) {
-                    //if the target plugin has been loaded then we can start the tests
-                    ((PluginTestCase)actualPlugin).startTests();
-                    return;
-                }
-            }
+  }
+
+  /**
+   * This method is added for testing
+   */
+  public void registerClass() {
+    pluginList.add(actualPlugin);
+
+    //if this is an instance of the TestPlugin then we need to call it to find out the class name of the plugin
+    //that is to be tested
+    if (actualPlugin instanceof PluginTestCase) {
+      String targetPluginClassName = ((PluginTestCase)actualPlugin).getPluginClass();
+      if (targetPluginClassName == null) throw new RuntimeException("You must implement the getPluginClass()) method");
+      //now we need to see if that plugin has already been loaded
+      for (Enumeration plugins = pluginList.elements(); plugins.hasMoreElements(); ) {
+        Object obj = plugins.nextElement();
+        if (obj.getClass().getName().equals(targetPluginClassName)) {
+          //set the parameters on the tartget plugin
+          if (obj instanceof ComponentPlugin) {
+            String[] params = ((PluginTestCase)actualPlugin).getPluginParameters();
+            setParameters((ComponentPlugin)obj, params);
+          }
+          //if the target plugin has been loaded then we can start the tests
+          ((PluginTestCase)actualPlugin).startTests();
+          return;
         }
-        else {  //for any other class we need to check the pluginList to see if the TestPlugin has already been loaded
-            for (Enumeration plugins = pluginList.elements(); plugins.hasMoreElements(); ) {
-                Object obj = plugins.nextElement();
-                if (obj instanceof PluginTestCase) {
-                    //now we need to get the target plugin class name from the test plugin and see if this current class
-                    //is the one we're looking for
-                    String targetPluginClassName = ((PluginTestCase)obj).getPluginClass();
-                    if (targetPluginClassName == null) throw new RuntimeException("You must implement the getPluginClass()) method");
-                    if (actualPlugin.getClass().getName().equals(targetPluginClassName)) {
-                        //if this current class is the target plugin, then start the tests
-                        ((PluginTestCase)obj).startTests();
-                        return;
-                    }
-                }
+      }
+    }
+    else {  //for any other class we need to check the pluginList to see if the TestPlugin has already been loaded
+      for (Enumeration plugins = pluginList.elements(); plugins.hasMoreElements(); ) {
+        Object obj = plugins.nextElement();
+        if (obj instanceof PluginTestCase) {
+          //now we need to get the target plugin class name from the test plugin and see if this current class
+          //is the one we're looking for
+          String targetPluginClassName = ((PluginTestCase)obj).getPluginClass();
+          if (targetPluginClassName == null) throw new RuntimeException("You must implement the getPluginClass()) method");
+          if (actualPlugin.getClass().getName().equals(targetPluginClassName)) {
+            //set the parameters on the tartget plugin
+            if (actualPlugin instanceof ComponentPlugin) {
+              String[] params = ((PluginTestCase)obj).getPluginParameters();
+              setParameters((ComponentPlugin)actualPlugin, params);
             }
-
+            //if this current class is the target plugin, then start the tests
+            ((PluginTestCase)obj).startTests();
+            return;
+          }
         }
-    }
+      }
 
-    public BlackboardClientProxy(BlackboardClient actualPlugin) {
-        this.actualPlugin = actualPlugin;
     }
+  }
 
-    public boolean triggerEvent(Object event) {
-        return actualPlugin.triggerEvent(event);
-    }
+  public BlackboardClientProxy(BlackboardClient actualPlugin) {
+    this.actualPlugin = actualPlugin;
+  }
 
-    /**
-     * When a plugin is loaded the Blackboard service will call this function.  So,
-     * this is what we trigger off of.
-     * @return String blackboard client name
-     */
-    public synchronized String getBlackboardClientName() {
-        registerClass();
-        return actualPlugin.getBlackboardClientName();
-    }
+  public boolean triggerEvent(Object event) {
+    return actualPlugin.triggerEvent(event);
+  }
 
-    public long currentTimeMillis() {
-        return actualPlugin.currentTimeMillis();
-    }
+  /**
+   * When a plugin is loaded the Blackboard service will call this function.  So,
+   * this is what we trigger off of.
+   * @return String blackboard client name
+   */
+  public synchronized String getBlackboardClientName() {
+    registerClass();
+    return actualPlugin.getBlackboardClientName();
+  }
+
+  public long currentTimeMillis() {
+    return actualPlugin.currentTimeMillis();
+  }
 }

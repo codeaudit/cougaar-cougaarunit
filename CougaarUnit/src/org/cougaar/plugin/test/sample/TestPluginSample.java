@@ -44,6 +44,4 @@ public class TestPluginSample extends PluginTestCase {
     public String getPluginClass() {
         return "org.cougaar.plugin.test.sample.SamplePlugin";
     }
-
-
 }

@@ -22,6 +22,7 @@ public abstract class PluginTestCase extends ComponentPlugin {
         PluginTestResult.setTestName(this.getClass().getName());
     }
 
+
     public void setDescription(String s) {
         this.description = s;
     }
@@ -214,6 +215,13 @@ public abstract class PluginTestCase extends ComponentPlugin {
      */
     abstract public void validateExecution();
 
+    /**
+     * Subclasses may override this if the source plugin requires parameters
+     * @return
+     */
+    public String[] getPluginParameters() {
+      return new String[] {};
+    }
 
     /**
      *
@@ -234,7 +242,7 @@ public abstract class PluginTestCase extends ComponentPlugin {
                 validateSubscriptions();
                 validateExecution();
                 String reportFormat = System.getProperty("org.cougaar.plugin.test.output.format");
-                if (reportFormat == null) reportFormat = "text";
+                if (reportFormat == null) reportFormat = "xml";
                 if (reportFormat.equals("text")) {
                   System.out.println(PluginTestResult.getReportAsString());  //print the test results to stdout
                 }
