@@ -59,8 +59,8 @@ public class BlackboardServiceProxy implements BlackboardService {
      */
     public boolean testSubscriptions(Object obj) {
         boolean ret = false;
-        for (Enumeration enum = predicates.elements(); enum.hasMoreElements(); ) {
-            UnaryPredicate up = (UnaryPredicate)enum.nextElement();
+        for (Enumeration e = predicates.elements(); e.hasMoreElements(); ) {
+            UnaryPredicate up = (UnaryPredicate)e.nextElement();
             ret = up.execute(obj);
             if (ret) break;
         }

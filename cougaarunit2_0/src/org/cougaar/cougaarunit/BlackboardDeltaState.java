@@ -52,8 +52,8 @@ public class BlackboardDeltaState implements Serializable {
         }
         else {
             Vector targetStateChanges = new Vector(bbs.stateChanges);  //create a copy of the stateChanges object in the bbs
-            for (Enumeration enum = stateChanges.elements(); enum.hasMoreElements(); ) {
-                PublishAction pa1 = (PublishAction)enum.nextElement();
+            for (Enumeration e = stateChanges.elements(); e.hasMoreElements(); ) {
+                PublishAction pa1 = (PublishAction)e.nextElement();
                 //now loop through the targetStateChanges vector to see if we get a match
                 for (Enumeration enum2 = targetStateChanges.elements(); enum2.hasMoreElements(); ) {
                     PublishAction pa2 = (PublishAction)enum2.nextElement();

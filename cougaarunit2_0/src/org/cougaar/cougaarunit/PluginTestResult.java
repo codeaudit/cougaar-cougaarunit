@@ -208,8 +208,8 @@ public class PluginTestResult {
      * @return true if every test passed, false if at least one test failed
      */
     public static boolean getOverallResult() {
-        for (Enumeration enum = entries.elements(); enum.hasMoreElements(); ) {
-            if (!(((TestResultEntry)enum.nextElement()).testResult))
+        for (Enumeration e = entries.elements(); e.hasMoreElements(); ) {
+            if (!(((TestResultEntry)e.nextElement()).testResult))
                 return false;
         }
         return true;
@@ -251,8 +251,8 @@ public class PluginTestResult {
     public static String getReportAsString() {
         StringBuffer result = new StringBuffer();
         result.append("Test Name: " + testName+"\n");
-        for (Enumeration enum = entries.elements(); enum.hasMoreElements(); ) {
-            TestResultEntry tre = (TestResultEntry)enum.nextElement();
+        for (Enumeration e = entries.elements(); e.hasMoreElements(); ) {
+            TestResultEntry tre = (TestResultEntry)e.nextElement();
             result.append("ID: " + String.valueOf(tre.id)+
                           "\nPhase: "+ getPhaseAsString(tre.testPhase)+
                           "\nCommand: "+getCommandAsString(tre.testCommand)+
