@@ -171,6 +171,7 @@ public class PluginTestResult {
     public static String getReportAsXML() {
         StringBuffer result = new StringBuffer();
         result.append("<?xml version=\"1.0\"?>\n");
+        result.append("<?xml-stylesheet type=\"text/xsl\" href=\"../cougaar_unit_results.xsl\"?>");
         result.append("<TEST Name=\""+testName+"\">\n");
         for (Enumeration enum = entries.elements(); enum.hasMoreElements(); ) {
             TestResultEntry tre = (TestResultEntry)enum.nextElement();

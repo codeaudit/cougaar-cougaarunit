@@ -21,7 +21,7 @@ public abstract class PluginTestCase extends ComponentPlugin {
   private String description;
   protected LoggingService logging;
   protected boolean started;
-  
+  protected String RESULTS_DIRECTORY = "test_results";
   public void setStarted(boolean b){
   	this.started = b;
   }
@@ -308,11 +308,22 @@ public abstract class PluginTestCase extends ComponentPlugin {
           }
           String reportFormat = System.getProperty("org.cougaar.plugin.test.output.format");
           String reportResult="";
+          //make results directory if not present
+          try{
+          	File dir = new File(RESULTS_DIRECTORY);
+          	if(dir.exists()==false){
+          		dir.mkdir();
+          	}
+          }catch(Exception e){
+          	if(logging.isErrorEnabled()){
+          		logging.error("Error creating results directory",e);
+          	}
+          }
           if (reportFormat == null) reportFormat = "xml";
           if (reportFormat.equals("text")) {
             reportResult=(PluginTestResult.getReportAsString());  //print the test results to stdout
             try{
-            	File txtFile = new File(description+".txt");
+            	File txtFile = new File(RESULTS_DIRECTORY + File.separator+description+".txt");
 				if(logging.isInfoEnabled()){
 					logging.info("Writing results to :" + txtFile.getAbsolutePath());
 				}
@@ -328,7 +339,7 @@ public abstract class PluginTestCase extends ComponentPlugin {
           else if (reportFormat.equals("xml")) {
             reportResult=(PluginTestResult.getReportAsXML());  //print the test results to stdout as xml
             try{
-            	File xmlFile = new File(description+".xml");
+            	File xmlFile = new File(RESULTS_DIRECTORY + File.separator+description+".xml");
             	if(logging.isInfoEnabled()){
             		logging.info("Writing results to :" + xmlFile.getAbsolutePath());
             	}
