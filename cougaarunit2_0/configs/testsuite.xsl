@@ -46,9 +46,12 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
  	  	<xsl:for-each select="testsuite/testcase">
 	 	  	<tr>
 	 	  		<td colspan="3"><h4>
-	 	  			<a href="test.html">
+	 	  			<a>
+		 	  			<xsl:attribute name="href">
+		 	  				<xsl:value-of select="@name"/>.html
+		 	  			</xsl:attribute>
 	 	  				<xsl:value-of select="@name"/>
-	 	  			</a>
+ 	  				</a>
 	 	  			</h4>
 	 	  		</td>
  		  	</tr>
