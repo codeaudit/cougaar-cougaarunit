@@ -34,7 +34,10 @@ public class SamplePluginTest extends PluginTestCase {
 			logging.info("Validating Execution");
 		}
 		// TODO Auto-generated method stub
-		
+		Task checkInTask = makeTask("VERB",  null, null);
+		BlackboardDeltaState bbds = new BlackboardDeltaState();
+		bbds.add(new PublishAction(PublishAction.ADD,checkInTask));
+		this.assertPublishAdd(checkInTask,bbds,1000,false,false);
 	}
 
 	/* (non-Javadoc)
