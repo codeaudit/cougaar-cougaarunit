@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <parameters>
 	<parameter name="-Xbootclasspath/p">
-		<value>-Xbootclasspath/p:COUGAAR_INSTALL_PATH\lib\javaiopatch.jar</value>
+		<value>-Xbootclasspath/p:COUGAAR_INSTALL_PATH/lib/javaiopatch.jar</value>
 	</parameter>
 	<parameter name="-Dorg.cougaar.system.path">
-		<value>COUGAAR_INSTALL_PATH\sys</value>
+		<value>COUGAAR_INSTALL_PATH/sys</value>
 	</parameter>
 	<parameter name="-Dorg.cougaar.install.path">
 		<value>COUGAAR_INSTALL_PATH</value>
