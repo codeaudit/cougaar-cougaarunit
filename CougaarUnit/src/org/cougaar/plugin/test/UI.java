@@ -34,6 +34,8 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.event.CellEditorListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.util.HashMap;
+import java.net.URLClassLoader;
+import java.net.URL;
 
 /**
  * <p>Title: </p>
@@ -140,11 +142,11 @@ public class UI extends JFrame {
 
   class OutputCellRenderer extends DefaultTableCellRenderer {
     public Component getTableCellRendererComponent(JTable table,
-                                               Object value,
-                                               boolean isSelected,
-                                               boolean hasFocus,
-                                               int row,
-                                               int column) {
+        Object value,
+        boolean isSelected,
+        boolean hasFocus,
+        int row,
+        int column) {
       Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
       if (table.getColumnName(column).equals(OutputTableModel.COLUMN_RESULT)) {
         c = new JButton(value.toString());
@@ -198,6 +200,8 @@ public class UI extends JFrame {
       }
     });
     jTableResults.updateUI();
+
+
   }
 
   private void jbInit() throws Exception {
@@ -494,15 +498,24 @@ public class UI extends JFrame {
     Launcher launcher = new Launcher();
     launcher.setOutputStyle(Launcher.OUTPUT_STYLE_XML);
     Object[] testSuites = jListTestSuites.getSelectedValues();
+    MyClassLoader loader = null;
+    try {
+      loader = MyClassLoader.getInstance(new URL[]{new URL("file", "localhost", jTextFieldDirJar.getText())});
+    }
+    catch (Exception e1) {
+      e1.printStackTrace();
+      return;
+    }
 
     for (int i=0; i<testSuites.length; i++) {
       try {
         baos = new ByteArrayOutputStream(256);
-        Class clazz = Class.forName((String)testSuites[i]);
+        Class clazz = loader.loadClass((String)testSuites[i]);
         Thread t = new Thread(new LauncherRunnable("Executing test suite", launcher, clazz, baos));
         t.start();
       }
-      catch (ClassNotFoundException ex) {
+      catch (Exception ex) {
+        ex.printStackTrace();
       }
     }
 
@@ -510,14 +523,20 @@ public class UI extends JFrame {
     for (int i=0; i<testCases.length; i++) {
       try {
         baos = new ByteArrayOutputStream(256);
-        Class clazz = Class.forName((String)testCases[i]);
+        Class clazz = loader.loadClass((String)testCases[i]);
         Thread t = new Thread(new LauncherRunnable("Executing test class", launcher, clazz, baos));
         t.start();
       }
-      catch (ClassNotFoundException ex) {
+      catch (Exception ex) {
+        ex.printStackTrace();
       }
     }
   }
+
+  void jMenuItem1_actionPerformed(ActionEvent e) {
+    System.exit(0);
+  }
+
 
   class LauncherRunnable implements Runnable {
     Launcher launcher;
@@ -556,9 +575,6 @@ public class UI extends JFrame {
     }
   }
 
-  void jMenuItem1_actionPerformed(ActionEvent e) {
-    System.exit(0);
-  }
 }
 
 class ResultStates {
@@ -582,3 +598,30 @@ class ResultStates {
   }
 }
 
+
+class MyClassLoader extends URLClassLoader {
+  private static MyClassLoader me;
+
+  public MyClassLoader(URL[] urls) {
+    super(urls);
+  }
+
+  public static MyClassLoader getInstance() {
+    if (me == null)
+      me = new MyClassLoader(null);
+    return me;
+  }
+
+  public static MyClassLoader getInstance(URL[] urls) {
+    if (me == null)
+      me = new MyClassLoader(urls);
+    else {
+      if (urls != null) {
+        for (int i=0; i<urls.length; i++) {
+          me.addURL(urls[i]);
+        }
+      }
+    }
+    return me;
+  }
+}

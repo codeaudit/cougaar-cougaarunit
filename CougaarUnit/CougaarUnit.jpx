@@ -5,7 +5,7 @@
   <property category="lh.cmdline" name="parameters" value=""/>
   <property category="runtime" name="ConfigurationCount" value="1"/>
   <property category="runtime" name="DefaultConfiguration" value="1"/>
-  <property category="runtime.0" name="BuildTargetOnRun" value="com.borland.jbuilder.build.ProjectBuilder$ProjectBuildAction;rebuild"/>
+  <property category="runtime.0" name="BuildTargetOnRun" value="&lt;None&gt;"/>
   <property category="runtime.0" name="ConfigurationName" value="Launcher"/>
   <property category="runtime.0" name="RunnableType" value="com.borland.jbuilder.runtime.ApplicationRunner"/>
   <property category="runtime.0" name="application.class" value="org.cougaar.plugin.test.Launcher"/>
@@ -19,7 +19,7 @@
   <property category="runtime.0" name="server.name" value="Tomcat 4.0"/>
   <property category="runtime.0" name="server.vmparameters" value=""/>
   <property category="runtime.0" name="test.harness" value="com.borland.jbuilder.unittest.JBTestRunner"/>
-  <property category="runtime.1" name="BuildTargetOnRun" value="com.borland.jbuilder.build.ProjectBuilder$ProjectBuildAction;make"/>
+  <property category="runtime.1" name="BuildTargetOnRun" value="&lt;None&gt;"/>
   <property category="runtime.1" name="ConfigurationName" value="Untitled Runtime Configuration"/>
   <property category="runtime.1" name="RunnableType" value="com.borland.jbuilder.runtime.ApplicationRunner"/>
   <property category="runtime.1" name="application.class" value="org.cougaar.plugin.test.UI"/>
@@ -67,21 +67,26 @@
   <property category="team" name="ignorePath.0" value="bak"/>
   <property category="team" name="ignorePath.1" value="classes"/>
   <node name="CougaarUnit" type="Archive">
-    <property category="archiving" name="archiverClass" value="com.borland.jbuilder.wizard.archive.ApplicationArchiver"/>
-    <property category="archiving" name="executableEnabled.1" value="0"/>
-    <property category="archiving" name="executableEnabled.2" value="0"/>
-    <property category="archiving" name="executableEnabled.3" value="0"/>
+    <property category="archiving" name="archiverClass" value="com.borland.jbuilder.wizard.archive.ExecutableArchiver"/>
+    <property category="archiving" name="executableEnabled.1" value="1"/>
+    <property category="archiving" name="executableEnabled.2" value="1"/>
+    <property category="archiving" name="executableEnabled.3" value="1"/>
     <property category="archiving" name="executableEnabled.4" value="0"/>
     <property category="archiving" name="executableEnabled.5" value="0"/>
-    <property category="archiving" name="executableFiles.1" value="CougaarUnitW.exe"/>
-    <property category="archiving" name="executableFiles.2" value="CougaarUnit.exe"/>
-    <property category="archiving" name="executableFiles.3" value="CougaarUnit-linux"/>
-    <property category="archiving" name="executableFiles.4" value="CougaarUnit-solaris"/>
-    <property category="archiving" name="executableFiles.5" value="CougaarUnit-mac"/>
+    <property category="archiving" name="executableFiles.1" value=""/>
+    <property category="archiving" name="executableFiles.2" value=""/>
+    <property category="archiving" name="executableFiles.3" value=""/>
+    <property category="archiving" name="executableFiles.4" value=""/>
+    <property category="archiving" name="executableFiles.5" value=""/>
     <property category="archiving" name="libraryStates.1" value="1:JBCL"/>
-    <property category="archiving" name="libraryStates.2" value="1:BCEL"/>
-    <property category="archiving" name="manifestMainClass" value="org.cougaar.plugin.test.Launcher"/>
-    <property category="archiving" name="targetPath" value="C%|/COUGAAR941/lib/CougaarUnit.jar"/>
+    <property category="archiving" name="libraryStates.2" value="1:Data Express"/>
+    <property category="archiving" name="libraryStates.3" value="1:BCEL"/>
+    <property category="archiving" name="libraryStates.4" value="1:COUGAAR_941"/>
+    <property category="archiving" name="manifestMainClass" value="org.cougaar.plugin.test.UI"/>
+    <property category="archiving" name="targetPath" value="CougaarUnit.jar"/>
+  </node>
+  <node name="CougaarUnit" type="Archive">
+    <property category="archiving" name="targetPath" value="C%|/Cougaar941/lib/CougaarUnit.jar"/>
   </node>
   <node name="Signer" type="ExternalTask">
     <property category="external" name="executable" value="C:\Home\signit.bat"/>
