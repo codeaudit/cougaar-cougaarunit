@@ -51,18 +51,17 @@ public class Launcher {
                                        ":QUIT\n";
 
     private static String RUN_SH_TEXT = "#!/bin/sh\n"+
-                                        "# @echo OFF\n"+
                                         "if [ \"$COUGAAR_INSTALL_PATH\" = \"\" ]\n"+
                                         "then\n"+
                                         "echo Please set COUGAAR_INSTALL_PATH\n"+
                                         "exit 2\n"+
                                         "fi\n"+
                                         "LIBPATHS=$COUGAAR_INSTALL_PATH/lib/bootstrap.jar\n"+
-                                        "MYPROPERTIES= -Dorg.cougaar.class.path=$COUGAAR_INSTALL_PATH%\\lib\\CougaarUnit.jar -Dorg.cougaar.system.path=$COUGAAR_INSTALL_PATH%\\sys -Dorg.cougaar.install.path=$COUGAAR_INSTALL_PATH% -Dorg.cougaar.core.servlet.enable=true -Dorg.cougaar.lib.web.scanRange=100 -Dorg.cougaar.lib.web.http.port=8800 -Dorg.cougaar.lib.web.https.port=-1 -Dorg.cougaar.lib.web.https.clientAuth=true -Xbootclasspath/p:$COUGAAR_INSTALL_PATH\\lib\\javaiopatch.jar\n"+
+                                        "MYPROPERTIES=\"-Dorg.cougaar.class.path=$COUGAAR_INSTALL_PATH/lib/CougaarUnit.jar -Dorg.cougaar.system.path=$COUGAAR_INSTALL_PATH/sys -Dorg.cougaar.install.path=$COUGAAR_INSTALL_PATH -Dorg.cougaar.core.servlet.enable=true -Dorg.cougaar.lib.web.scanRange=100 -Dorg.cougaar.lib.web.http.port=8800 -Dorg.cougaar.lib.web.https.port=-1 -Dorg.cougaar.lib.web.https.clientAuth=true -Xbootclasspath/p:$COUGAAR_INSTALL_PATH/lib/javaiopatch.jar\"\n"+
                                         "MYMEMORY=\n"+
-                                        "MYCLASSES=org.cougaar.bootstrap.Bootstrapper org.cougaar.core.node.Node\n"+
-                                        "MYARGUMENTS= -c -n \"%1\"\n"+
-                                        "java %MYPROPERTIES% %MYMEMORY% -classpath %LIBPATHS% %MYCLASSES% %MYARGUMENTS% $2 $3";
+                                        "MYCLASSES=\"org.cougaar.bootstrap.Bootstrapper org.cougaar.core.node.Node\"\n"+
+                                        "MYARGUMENTS=\"-c -n $1\"\n"+
+                                        "java $MYPROPERTIES $MYMEMORY -classpath $LIBPATHS $MYCLASSES $MYARGUMENTS $2 $3\n";
 
 
     private static void writeNodeIni() throws Exception {
@@ -111,6 +110,10 @@ public class Launcher {
         else if (System.getProperty("os.name").toLowerCase().indexOf("linux") != -1) {  //is this a Linux environment?
             shellFile = new File("Run.sh");
             shellFileText = RUN_SH_TEXT;
+            if (!shellFile.exists()) {
+              shellFile.createNewFile();
+              Runtime.getRuntime().exec("chmod +x " + shellFile.getName());
+            }
         }
         else throw new Exception("Unsupported platfrom");
 
@@ -118,7 +121,8 @@ public class Launcher {
         fw.write(shellFileText);
         fw.flush();
         fw.close();
-        Process p = Runtime.getRuntime().exec(shellFile.getName() + " TestNode");
+        System.out.println("execing: " + "./"+shellFile.getName() + " TestNode");
+        Process p = Runtime.getRuntime().exec("./"+shellFile.getName() + " TestNode");
 
         BufferedReader is= new BufferedReader(new InputStreamReader(p.getInputStream()));
         String line;
@@ -128,7 +132,6 @@ public class Launcher {
     }
 
     public static void main(String[] args) {
-        System.out.println(System.getProperties());
         if (args[0] != null) {
             try {
                 //determine if args[0] is a PluginTestSuite or a PluginTestCase
@@ -146,7 +149,7 @@ public class Launcher {
                             }
                         }
                         catch (Exception ex) {
-                            System.out.println("Invalud test class object.");
+                            System.out.println("Invalid test class object.");
                         }
                     }
                 }
