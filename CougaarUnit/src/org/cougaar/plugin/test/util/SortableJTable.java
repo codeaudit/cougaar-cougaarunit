@@ -9,6 +9,7 @@ import java.awt.event.MouseAdapter;
 import java.util.Comparator;
 import java.util.Vector;
 import java.util.Collections;
+import java.util.StringTokenizer;
 
 /**
  * <p>Title: CougaarUnit</p>
@@ -34,6 +35,7 @@ public class SortableJTable extends JTable {
 
   private void init() {
     getTableHeader().addMouseListener(new ColumnHeaderListener());
+    this.setDefaultRenderer(Object.class, new JListRenderer());
   }
 
   public void sortAllRowsBy(DefaultTableModel model, int colIndex, boolean ascending) {
@@ -42,8 +44,6 @@ public class SortableJTable extends JTable {
     model.fireTableStructureChanged();
     this.updateUI();
   }
-
-
 
   public static void main(String[] args) {
     JFrame f = new JFrame("test");
@@ -79,7 +79,6 @@ public class SortableJTable extends JTable {
       if (vColIndex == -1) {
         return;
       }
-
       SortableJTable.this.sortAllRowsBy((DefaultTableModel)table.getModel(), vColIndex, true);
     }
   }
@@ -146,4 +145,36 @@ public class SortableJTable extends JTable {
     }
   }
 
+  public class JListRenderer implements TableCellRenderer {
+
+    public JListRenderer() {
+    }
+
+    public Component getTableCellRendererComponent(JTable jTable,
+        Object obj, boolean isSelected, boolean hasFocus, int row,
+        int column) {
+      Vector v = new Vector();
+      Component c = null;
+      StringTokenizer st = new StringTokenizer((String)obj, "\n");
+      int lines = st.countTokens();
+      //if there are multiple lines then we want to return a JList component
+      if (lines > 1) {
+        while (st.hasMoreTokens()) {
+          v.addElement(st.nextToken());
+        }
+        c = new JList(v);
+        ((JList)c).setVisibleRowCount(lines);
+
+        int height_wanted = (int)c.getPreferredSize().getHeight();
+        if (height_wanted != jTable.getRowHeight(row) && height_wanted > 0)
+          jTable.setRowHeight(row, height_wanted);
+      }
+      else {//otherwise let's just return a text field
+        c = new JTextField((String)obj);
+        ((JTextField)c).setBorder(null);
+      }
+
+      return c;
+    }
+  }
 }

@@ -26,6 +26,7 @@ import com.klg.jclass.table.data.JCEditableVectorDataSource;
 import com.klg.jclass.table.JCTableEnum;
 import com.klg.jclass.table.data.JCVectorDataSource;
 import org.cougaar.plugin.test.util.*;
+import com.borland.jbcl.layout.*;
 
 /**
  * <p>Title: UI</p>
@@ -64,8 +65,8 @@ public class UI extends JFrame {
   private JSplitPane jSplitPane1 = new JSplitPane();
   OutputTableModel outputTableModel = new OutputTableModel();
   private TitledBorder titledBorder5;
-  StreamedDataTableModel streamedDataTableModel = new StreamedDataTableModel();
-  DefaultTableModel altStreamedDataTableModel = new DefaultTableModel();
+  StreamedDataTableModel timeDataTableModel = new StreamedDataTableModel();
+  DefaultTableModel sourceDataTableModel = new DefaultTableModel();
   private JButton jButtonSearch = new JButton();
   private JTabbedPane jTabbedPane1 = new JTabbedPane();
   private JTable jTableResults = new JTable(outputTableModel);
@@ -99,12 +100,16 @@ public class UI extends JFrame {
   private JPanel jPanelObjectStreamEditor = new JPanel();
   private BorderLayout borderLayout5 = new BorderLayout();
   private JMenuItem jMenuItemOpenDataFile = new JMenuItem();
-  private SortableJTable jTableStreamedData = new SortableJTable(streamedDataTableModel);
-  private JScrollPane jScrollPaneStreamedData = new JScrollPane();
   private JPanel jPanelViews = new JPanel();
   private ButtonGroup buttonGroup1 = new ButtonGroup();
   private JRadioButton jRadioButtonTimeView = new JRadioButton();
   private JRadioButton jRadioButtonSourceView = new JRadioButton();
+  private JPanel jPanelTableViews = new JPanel();
+  private SortableJTable jTableTimeData = new SortableJTable(timeDataTableModel);
+  private JScrollPane jScrollPaneTimeData = new JScrollPane();
+  private OverlayLayout2 overlayLayout21 = new OverlayLayout2();
+  private JScrollPane jScrollPaneSourceData = new JScrollPane();
+  private SortableJTable jTableSourceData = new SortableJTable(sourceDataTableModel);
 
   /**
    *
@@ -208,25 +213,10 @@ class StreamedDataTableModel extends DefaultTableModel  {
     }
   }
 
-  public class TextAreaRenderer extends JTextArea
-      implements TableCellRenderer {
 
-    public TextAreaRenderer() {
-      setLineWrap(true);
-      setWrapStyleWord(false);
-      setOpaque(true);
-    }
 
-    public Component getTableCellRendererComponent(JTable jTable,
-        Object obj, boolean isSelected, boolean hasFocus, int row,
-        int column) {
-      setText((String)obj);
-      int height_wanted = (int)getPreferredSize().getHeight();
-      if (height_wanted != jTable.getRowHeight(row))
-        jTable.setRowHeight(row, height_wanted);
-      return this;
-    }
-  }
+
+
 
   /**
    * Constructor
@@ -305,16 +295,18 @@ class StreamedDataTableModel extends DefaultTableModel  {
     });
     jTableResults.updateUI();
 
-    jTableStreamedData.setDefaultRenderer(Object.class, new TextAreaRenderer());
-    jTableStreamedData.getColumn(streamedDataTableModel.COLUMN_ID).setPreferredWidth(5);
-    jTableStreamedData.getColumn(streamedDataTableModel.COLUMN_TIME).setPreferredWidth(50);
-    jTableStreamedData.getColumn(streamedDataTableModel.COLUMN_SOURCE).setPreferredWidth(100);
-    jTableStreamedData.getColumn(streamedDataTableModel.COLUMN_PUBLISH_ACTION).setPreferredWidth(75);
-    jTableStreamedData.getColumn(streamedDataTableModel.COLUMN_OBJECT).setPreferredWidth(100);
-    jTableStreamedData.updateUI();
+    jTableTimeData.getColumn(timeDataTableModel.COLUMN_ID).setPreferredWidth(5);
+    jTableTimeData.getColumn(timeDataTableModel.COLUMN_TIME).setPreferredWidth(50);
+    jTableTimeData.getColumn(timeDataTableModel.COLUMN_SOURCE).setPreferredWidth(100);
+    jTableTimeData.getColumn(timeDataTableModel.COLUMN_PUBLISH_ACTION).setPreferredWidth(75);
+    jTableTimeData.getColumn(timeDataTableModel.COLUMN_OBJECT).setPreferredWidth(100);
+    jTableTimeData.updateUI();
 
     jRadioButtonTimeView.setSelected(true);
     readFileHistory();
+
+    jScrollPaneSourceData.setVisible(false);
+    jScrollPaneTimeData.setVisible(true);
   }
 
   /**
@@ -454,7 +446,7 @@ class StreamedDataTableModel extends DefaultTableModel  {
         jRadioButtonSourceView_actionPerformed(e);
       }
     });
-    jScrollPaneStreamedData.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+    jPanelTableViews.setLayout(overlayLayout21);
     jPanelDirJar.add(jLabelSelectDir, null);
     jPanelDirJar.add(jComboBoxDirJar, null);
     this.getContentPane().add(jLabel1,  BorderLayout.NORTH);
@@ -474,9 +466,7 @@ class StreamedDataTableModel extends DefaultTableModel  {
     jSplitPaneTests.add(jScrollPaneTestSuites, JSplitPane.TOP);
     jSplitPaneTests.add(jScrollPaneTestCases, JSplitPane.BOTTOM);
     jTabbedPaneMain.add(jPanelObjectStreamEditor,  "Object Stream Editor");
-    jPanelObjectStreamEditor.add(jScrollPaneStreamedData,  BorderLayout.CENTER);
-    jPanelObjectStreamEditor.add(jPanelViews, BorderLayout.NORTH);
-    jScrollPaneStreamedData.getViewport().add(jTableStreamedData, null);
+    jPanelObjectStreamEditor.add(jPanelViews,  BorderLayout.NORTH);
     jScrollPaneTestCases.getViewport().add(jListTestCases, null);
     jScrollPaneTestSuites.getViewport().add(jListTestSuites, null);
     jTabbedPane1.add(jScrollPaneResults,   "Results");
@@ -499,8 +489,13 @@ class StreamedDataTableModel extends DefaultTableModel  {
     jTabbedPane1.setSelectedComponent(jScrollPaneResults);
     jPanelViews.add(jRadioButtonTimeView, null);
     jPanelViews.add(jRadioButtonSourceView, null);
+    jPanelObjectStreamEditor.add(jPanelTableViews, BorderLayout.CENTER);
+    jPanelTableViews.add(jScrollPaneSourceData, null);
+    jPanelTableViews.add(jScrollPaneTimeData, null);
+    jScrollPaneTimeData.getViewport().add(jTableTimeData, null);
     buttonGroup1.add(jRadioButtonTimeView);
     buttonGroup1.add(jRadioButtonSourceView);
+    jScrollPaneSourceData.getViewport().add(jTableSourceData, null);
 
   }
 
@@ -950,8 +945,8 @@ class StreamedDataTableModel extends DefaultTableModel  {
       ObjectInputStream ois = new ObjectInputStream(fis);
       Object obj = ois.readObject();
       Vector v = (Vector)obj;
-      buildDataModel(v);
-      buildAlternateDataModel(v);
+      buildTimeDataModel(v);
+      buildSourceDataModel(v);
     }
     catch (Exception e) {
       MessageDialog md = new MessageDialog(this, "Error", "Unable to process this file: " + e.toString());
@@ -959,22 +954,22 @@ class StreamedDataTableModel extends DefaultTableModel  {
     }
   }
 
-  private void buildDataModel(Vector v) {
+  private void buildTimeDataModel(Vector v) {
     for (int i=0; i<v.size(); i++ ) {
       CapturedPublishAction cpa = (CapturedPublishAction)v.elementAt(i);
-      streamedDataTableModel.addRow(new Object[] {String.valueOf(i), String.valueOf(cpa.timeStamp), cpa.publishingSource, String.valueOf(cpa.getActionString()), cpa.publishedObject});
+      timeDataTableModel.addRow(new Object[] {String.valueOf(i), String.valueOf(cpa.timeStamp), cpa.publishingSource, String.valueOf(cpa.getActionString()), cpa.publishedObject});
     }
-    this.jTableStreamedData.updateUI();
+    this.jTableTimeData.updateUI();
   }
 
-  private void buildAlternateDataModel(Vector v) {
+  private void buildSourceDataModel(Vector v) {
     Vector cols = new Vector();
     cols.addElement("TIME");
     //calculate the column names
     for (int i=0; i<v.size(); i++) {
       CapturedPublishAction cpa = (CapturedPublishAction)v.elementAt(i);
       if (!cols.contains(cpa.publishingSource)) {
-        cols.addElement(cpa.publishingSource);
+          cols.addElement(cpa.publishingSource);
       }
     }
 
@@ -992,12 +987,29 @@ class StreamedDataTableModel extends DefaultTableModel  {
         rows.put(String.valueOf(cpa.timeStamp), row);
       }
       String currentVal = (String)row[cols.indexOf(cpa.publishingSource)];
-      String newVal = (currentVal.equals(""))?cpa.getActionString() + " " + cpa.publishedObject:currentVal+"\n"+cpa.getActionString() + " " + cpa.publishedObject;
+      //adjust the published object name to remove the path portion
+      String objStr = cpa.publishedObject.toString();
+      int index = objStr.lastIndexOf(".");
+      if (index != -1) {
+        objStr = objStr.substring(index+1);
+      }
+      String newVal = (currentVal.equals(""))?cpa.getActionString() + " " + objStr:currentVal+"\n"+cpa.getActionString() + " " + objStr;
       row[cols.indexOf(cpa.publishingSource)] = newVal;
     }
-    altStreamedDataTableModel.setColumnIdentifiers(cols);
+
+    //adjust the column ids to only include the class name and not the whole path
+    Vector colIds = new Vector();
+    for (Enumeration i = cols.elements(); i.hasMoreElements(); ) {
+      String s = (String)i.nextElement();
+      int index = s.lastIndexOf(".");
+      if (index != -1) {
+        s = s.substring(index+1);
+      }
+      colIds.addElement(s);
+    }
+    sourceDataTableModel.setColumnIdentifiers(colIds);
     for (Iterator i = rows.values().iterator(); i.hasNext(); ) {
-      altStreamedDataTableModel.addRow((Object[])i.next());
+      sourceDataTableModel.addRow((Object[])i.next());
     }
   }
 
@@ -1013,13 +1025,13 @@ class StreamedDataTableModel extends DefaultTableModel  {
   }
 
   void jRadioButtonTimeView_actionPerformed(ActionEvent e) {
-    jTableStreamedData.setModel(streamedDataTableModel);
-    jTableStreamedData.updateUI();
+    jScrollPaneTimeData.setVisible(true);
+    jScrollPaneSourceData.setVisible(false);
   }
 
   void jRadioButtonSourceView_actionPerformed(ActionEvent e) {
-    jTableStreamedData.setModel(altStreamedDataTableModel);
-    jTableStreamedData.updateUI();
+    jScrollPaneTimeData.setVisible(false);
+    jScrollPaneSourceData.setVisible(true);
   }
 }
 
