@@ -1,6 +1,7 @@
 package org.cougaar.plugin.test.capture;
 
 import java.io.Serializable;
+import java.io.IOException;
 
 /**
  * <p>Title: </p>
@@ -23,6 +24,10 @@ public class CapturedPublishAction implements Serializable {
     public int action;
     public String publishingSource;
     public long timeStamp;
+
+    public CapturedPublishAction(int action, Object publishedObject, String publishingSource) {
+
+    }
 
     public CapturedPublishAction(int action, String publishedObject, String publishingSource) {
         this.action = action;
@@ -50,4 +55,12 @@ public class CapturedPublishAction implements Serializable {
     public String getActionString() {
       return CapturedPublishAction.getActionString(action);
     }
+
+    /*private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+
+    }
+    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+
+    }*/
+
 }
