@@ -113,6 +113,7 @@ public class UI extends JFrame {
 
   private static final String SOURCE_DATA_COL_ID = "ID";
   private static final String SOURCE_DATA_COL_TIME = "TIME";
+  private JMenuItem jMenuItemClearResults = new JMenuItem();
   /**
    *
    * <p>Title: OutputTableModel</p>
@@ -181,6 +182,10 @@ class TimeDataTableModel extends DefaultTableModel  {
 
     public Object getCellAncillaryData(int row, int col) {
       return ancillaryData.get(String.valueOf(row)+String.valueOf(col));
+    }
+
+    public void clear() {
+      data.removeAllElements();
     }
   }
 
@@ -460,6 +465,12 @@ class TimeDataTableModel extends DefaultTableModel  {
     jSplitPaneViews.setOrientation(JSplitPane.VERTICAL_SPLIT);
     jTableSourceData.setSelectionForeground(Color.yellow);
     jTableSourceData.setRowSelectionAllowed(true);
+    jMenuItemClearResults.setText("Clear");
+    jMenuItemClearResults.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        jMenuItemClearResults_actionPerformed(e);
+      }
+    });
     jPanelDirJar.add(jLabelSelectDir, null);
     jPanelDirJar.add(jComboBoxDirJar, null);
     this.getContentPane().add(jLabel1,  BorderLayout.NORTH);
@@ -497,6 +508,8 @@ class TimeDataTableModel extends DefaultTableModel  {
     jPopupMenuOutput.add(jMenuItemOutputPrint);
     jPopupMenuResults.add(jMenuItemResultsSave);
     jPopupMenuResults.add(jMenuItemResultsPrint);
+    jPopupMenuResults.addSeparator();
+    jPopupMenuResults.add(jMenuItemClearResults);
     jSplitPane1.setDividerLocation(200);
     jSplitPaneTests.setDividerLocation(250);
     jTabbedPane1.setSelectedComponent(jScrollPaneResults);
@@ -1067,6 +1080,11 @@ class TimeDataTableModel extends DefaultTableModel  {
     jScrollPaneTimeData.setVisible(false);
     jScrollPaneSourceData.setVisible(true);
     jTableSourceData.sortAllRowsBy(sourceDataTableModel, 0, true);
+  }
+
+  void jMenuItemClearResults_actionPerformed(ActionEvent e) {
+    outputTableModel.clear();
+    jTableResults.updateUI();
   }
 }
 
