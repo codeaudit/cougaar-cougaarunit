@@ -121,4 +121,5 @@
   <file path="src/New.xml"/>
   <file path="RunTest.bat"/>
   <file path="src/TestOutput.xml"/>
+  <file path="src/tutorial/TutorialTestSuite.java"/>
 </project>

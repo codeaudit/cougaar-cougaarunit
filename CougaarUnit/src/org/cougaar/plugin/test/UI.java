@@ -124,7 +124,7 @@ public class UI extends JFrame {
    * @version 1.0
    */
 
-class TimeDataTableModel extends DefaultTableModel  {
+  class TimeDataTableModel extends DefaultTableModel  {
     static final String COLUMN_PUBLISH_ACTION = "PUBLISH ACTION";
     static final String COLUMN_SOURCE = "SOURCE";
     static final String COLUMN_OBJECT = "OBJECT";
@@ -253,7 +253,7 @@ class TimeDataTableModel extends DefaultTableModel  {
           // Make the jPopupMenu visible relative to the current mouse position in the container.
           jPopupMenuResults.show(jTableResults, e.getX(), e.getY());
         }
-        else {
+        else {//otherwise if the click was on the results column, then display the results detail dialog
           int col = jTableResults.getSelectedColumn();
           if ((col != -1) && jTableResults.getColumnName(col).equals(OutputTableModel.COLUMN_RESULT)) {
             ResultsDialog rd = new ResultsDialog();
@@ -735,62 +735,65 @@ class TimeDataTableModel extends DefaultTableModel  {
     //jTextPaneOutput.setText(s);
     //find the beginning of the xml output
     int index = s.indexOf("<?xml");
-    String xmlStr = s.substring(index);
-    xmlStr = xmlStr.substring(0, xmlStr.lastIndexOf("</TEST>")+7);
-    try {
-      InputSource is = new InputSource(new StringReader(xmlStr));
-      DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-      Document doc = builder.parse(is);
+    int rowNum = 0;
+    while (index != -1 ) {
+      int endIndex = s.indexOf("</TEST>", index)+7;
+      String xmlStr = s.substring(index, endIndex);
+      try {
+        InputSource is = new InputSource(new StringReader(xmlStr));
+        DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        Document doc = builder.parse(is);
 
-      //get the test name
-      Element root = doc.getDocumentElement();
-      String testName = root.getAttributes().getNamedItem("Name").getNodeValue();
-      //get the list of test ids
-      NodeList idList = root.getElementsByTagName("ID");
-      int rowNum = 0;
-      for (int i=0; i<idList.getLength(); i++) {
-        Object[] results = new Object[6];
-        results[0] = testName;
-        org.w3c.dom.Node idNode = (org.w3c.dom.Node)idList.item(i);
-        String id = idNode.getAttributes().getNamedItem("Value").getNodeValue();
-        NodeList subNodes = idNode.getChildNodes();
-        results[1] = id;
-        ResultStates resultStates = null;
-        for (int j = 0; j<subNodes.getLength(); j++) {
-          org.w3c.dom.Node n = subNodes.item(j);
-          String nodeName = n.getNodeName();
-          if (nodeName.equals("PHASE"))
-            results[2] = n.getFirstChild().getNodeValue();
-          else if (nodeName.equals("COMMAND"))
-            results[3] = n.getFirstChild().getNodeValue();
-          else if (nodeName.equals("DESCRIPTION"))
-            results[4] = n.getFirstChild().getNodeValue();
-          else if (nodeName.equals("RESULT"))
-            results[5] = n.getFirstChild().getNodeValue();
-          else if (nodeName.equals("EXPECTED_STATE")) {
-            if (resultStates == null) resultStates = new ResultStates();
-            NodeList nl = n.getChildNodes().item(0).getChildNodes();
-            for (int k=0; k<nl.getLength(); k++) {
-              resultStates.addExpectedResult(nl.item(k).getChildNodes().item(0).getFirstChild().getNodeValue(), nl.item(k).getChildNodes().item(1).getFirstChild().getNodeValue());
+        //get the test name
+        Element root = doc.getDocumentElement();
+        String testName = root.getAttributes().getNamedItem("Name").getNodeValue();
+        //get the list of test ids
+        NodeList idList = root.getElementsByTagName("ID");
+        for (int i=0; i<idList.getLength(); i++) {
+          Object[] results = new Object[6];
+          results[0] = testName;
+          org.w3c.dom.Node idNode = (org.w3c.dom.Node)idList.item(i);
+          String id = idNode.getAttributes().getNamedItem("Value").getNodeValue();
+          NodeList subNodes = idNode.getChildNodes();
+          results[1] = id;
+          ResultStates resultStates = null;
+          for (int j = 0; j<subNodes.getLength(); j++) {
+            org.w3c.dom.Node n = subNodes.item(j);
+            String nodeName = n.getNodeName();
+            if (nodeName.equals("PHASE"))
+              results[2] = n.getFirstChild().getNodeValue();
+            else if (nodeName.equals("COMMAND"))
+              results[3] = n.getFirstChild().getNodeValue();
+            else if (nodeName.equals("DESCRIPTION"))
+              results[4] = n.getFirstChild().getNodeValue();
+            else if (nodeName.equals("RESULT"))
+              results[5] = n.getFirstChild().getNodeValue();
+            else if (nodeName.equals("EXPECTED_STATE")) {
+              if (resultStates == null) resultStates = new ResultStates();
+              NodeList nl = n.getChildNodes().item(0).getChildNodes();
+              for (int k=0; k<nl.getLength(); k++) {
+                resultStates.addExpectedResult(nl.item(k).getChildNodes().item(0).getFirstChild().getNodeValue(), nl.item(k).getChildNodes().item(1).getFirstChild().getNodeValue());
+              }
             }
-          }
-          else if (nodeName.equals("ACTUAL_STATE")) {
-            if (resultStates == null) resultStates = new ResultStates();
-            NodeList nl = n.getChildNodes().item(0).getChildNodes();
-            for (int k=0; k<nl.getLength(); k++) {
-              resultStates.addActualResult(nl.item(k).getChildNodes().item(0).getFirstChild().getNodeValue(), nl.item(k).getChildNodes().item(1).getFirstChild().getNodeValue());
+            else if (nodeName.equals("ACTUAL_STATE")) {
+              if (resultStates == null) resultStates = new ResultStates();
+              NodeList nl = n.getChildNodes().item(0).getChildNodes();
+              for (int k=0; k<nl.getLength(); k++) {
+                resultStates.addActualResult(nl.item(k).getChildNodes().item(0).getFirstChild().getNodeValue(), nl.item(k).getChildNodes().item(1).getFirstChild().getNodeValue());
+              }
             }
-          }
 
+          }
+          outputTableModel.addRow(results);
+          outputTableModel.addCellAncillaryData(rowNum, 5, resultStates);
+          rowNum++;
+          jTableResults.updateUI();
         }
-        outputTableModel.addRow(results);
-        outputTableModel.addCellAncillaryData(rowNum, 5, resultStates);
-        rowNum++;
-        jTableResults.updateUI();
       }
-    }
-    catch (Exception e) {
-      e.printStackTrace();
+      catch (Exception e) {
+        e.printStackTrace();
+      }
+      index = s.indexOf("<?xml", endIndex);
     }
   }
 
@@ -1014,7 +1017,7 @@ class TimeDataTableModel extends DefaultTableModel  {
     for (int i=0; i<v.size(); i++) {
       CapturedPublishAction cpa = (CapturedPublishAction)v.elementAt(i);
       if (!cols.contains(cpa.publishingSource)) {
-          cols.addElement(cpa.publishingSource);
+        cols.addElement(cpa.publishingSource);
       }
     }
 
@@ -1035,13 +1038,13 @@ class TimeDataTableModel extends DefaultTableModel  {
       String newVal = (currentVal.equals(""))?cpa.getActionString() + " " + cpa.publishedObject:currentVal+"\n"+cpa.getActionString() + " " + cpa.publishedObject;
       row[cols.indexOf(cpa.publishingSource)] = newVal;*/
       Object[] row = new Object[cols.size()];
-      for (int j=2; j<cols.size(); j++) { //initialize the row
-        row[j] = "";
-      }
-      row[0] = String.valueOf(i);
-      row[1] = String.valueOf(cpa.timeStamp-baseTime);
-      row[cols.indexOf(cpa.publishingSource)] = cpa.getActionString() + " " + cpa.publishedObject;
-      rows.addElement(row);
+        for (int j=2; j<cols.size(); j++) { //initialize the row
+          row[j] = "";
+        }
+        row[0] = String.valueOf(i);
+        row[1] = String.valueOf(cpa.timeStamp-baseTime);
+        row[cols.indexOf(cpa.publishingSource)] = cpa.getActionString() + " " + cpa.publishedObject;
+        rows.addElement(row);
     }
 
     //adjust the column ids to only include the class name and not the whole path
@@ -1160,12 +1163,12 @@ class MyClassLoader extends URLClassLoader {
     try {
       File f = new File(dir);
       String[] files = f.list(new FilenameFilter() {
-        public boolean accept(File dir, String name) {
-          if (name.toLowerCase().endsWith(".jar")) {
-            return true;
-          }
-          return false;
-        }
+                              public boolean accept(File dir, String name) {
+                              if (name.toLowerCase().endsWith(".jar")) {
+                                return true;
+                              }
+                              return false;
+                              }
       });
       for (int i=0; i<files.length; i++ ) {
         this.addURL(new URL("file", "localhost", dir+"\\"+files[i]));
@@ -1173,7 +1176,7 @@ class MyClassLoader extends URLClassLoader {
 
     }
     catch (Exception e) {
-    e.printStackTrace();
+      e.printStackTrace();
     }
   }
 
@@ -1234,4 +1237,3 @@ class PrintableComponent implements Printable {
     return Printable.PAGE_EXISTS;
   }
 }
-
