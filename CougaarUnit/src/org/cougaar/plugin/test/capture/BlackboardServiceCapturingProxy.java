@@ -28,7 +28,7 @@ import java.io.ByteArrayOutputStream;
 public class BlackboardServiceCapturingProxy implements BlackboardService {
 
     BlackboardService actualBlackboardService;
-    Object requestingClient;
+    String requestingClient;
     static Vector objectStream = new Vector(250);
 
     /**
@@ -37,22 +37,12 @@ public class BlackboardServiceCapturingProxy implements BlackboardService {
      */
     public BlackboardServiceCapturingProxy(BlackboardService actualBlackboardService, Object requestingClient){
         this.actualBlackboardService = actualBlackboardService;
-        this.requestingClient = requestingClient;
+        this.requestingClient = requestingClient.toString();
     }
 
 
-    public String getSerializedData() {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        for (Enumeration e = objectStream.elements(); e.hasMoreElements(); ) {
-            try {
-                ObjectOutputStream oos = new ObjectOutputStream(baos);
-                oos.writeObject(e.nextElement());
-            }
-            catch (Exception e1) {
-                e1.printStackTrace();
-            }
-        }
-        return baos.toString();
+    public Vector getSerializedData() {
+      return objectStream;
     }
 
     /**
@@ -172,7 +162,7 @@ public class BlackboardServiceCapturingProxy implements BlackboardService {
      * @return
      */
     public boolean publishAdd(Object parm1) {
-        objectStream.add(new CapturedPublishAction(CapturedPublishAction.ACTION_ADD, parm1, requestingClient));
+        objectStream.add(new CapturedPublishAction(CapturedPublishAction.ACTION_ADD, parm1.getClass().getName(), requestingClient));
         return actualBlackboardService.publishAdd(parm1);
     }
 
@@ -182,7 +172,7 @@ public class BlackboardServiceCapturingProxy implements BlackboardService {
      * @return
      */
     public boolean publishRemove(Object parm1) {
-      objectStream.add(new CapturedPublishAction(CapturedPublishAction.ACTION_REMOVE, parm1, requestingClient));
+      objectStream.add(new CapturedPublishAction(CapturedPublishAction.ACTION_REMOVE, parm1.getClass().getName(), requestingClient));
       return actualBlackboardService.publishRemove(parm1);
     }
 
@@ -192,7 +182,7 @@ public class BlackboardServiceCapturingProxy implements BlackboardService {
      * @return
      */
     public boolean publishChange(Object parm1) {
-        objectStream.add(new CapturedPublishAction(CapturedPublishAction.ACTION_CHANGE, parm1, requestingClient));
+        objectStream.add(new CapturedPublishAction(CapturedPublishAction.ACTION_CHANGE, parm1.getClass().getName(), requestingClient));
         return actualBlackboardService.publishChange(parm1);
     }
 
@@ -203,7 +193,7 @@ public class BlackboardServiceCapturingProxy implements BlackboardService {
      * @return
      */
     public boolean publishChange(Object parm1, Collection parm2) {
-        objectStream.add(new CapturedPublishAction(CapturedPublishAction.ACTION_CHANGE, parm1, requestingClient));
+        objectStream.add(new CapturedPublishAction(CapturedPublishAction.ACTION_CHANGE, parm1.getClass().getName(), requestingClient));
         return actualBlackboardService.publishChange(parm1, parm2);
     }
 

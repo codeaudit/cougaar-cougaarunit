@@ -8,6 +8,9 @@ import org.cougaar.core.blackboard.BlackboardClient;
 import java.sql.Date;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.Enumeration;
+import java.io.ObjectOutputStream;
+import java.util.Vector;
 
 /**
  * <p>Title: CougaarUnit</p>
@@ -37,11 +40,12 @@ public class BlackboardCaptureServletComponent extends BaseServletComponent impl
       throw new Exception("Error getting reference to BlackboardCaptureServletComponent");
     }
     if (me.blackboard instanceof BlackboardServiceCapturingProxy) {
-      String data = ((BlackboardServiceCapturingProxy)me.blackboard).getSerializedData();
+      Vector data = ((BlackboardServiceCapturingProxy)me.blackboard).getSerializedData();
       try {
         File f = new File(path);
         FileOutputStream fos = new FileOutputStream(f);
-        fos.write(data.getBytes());
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+        oos.writeObject(data);
         fos.flush();
         fos.close();
       }

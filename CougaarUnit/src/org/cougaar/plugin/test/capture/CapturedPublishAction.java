@@ -16,13 +16,28 @@ public class CapturedPublishAction implements Serializable {
     public final static int ACTION_CHANGE =2 ;
     public final static int ACTION_REMOVE = 3;
 
-    Object publishedObject;
-    int action;
-    String publishingSource;
+    public Object publishedObject;
+    public int action;
+    public String publishingSource;
+    public long timeStamp;
 
-    public CapturedPublishAction(int action, Object publishedObject, Object publishingSource) {
+    public CapturedPublishAction(int action, Object publishedObject, String publishingSource) {
         this.action = action;
         this.publishedObject = publishedObject;
-        this.publishingSource = publishingSource.getClass().getName();
+        this.publishingSource = publishingSource;
+        this.timeStamp = System.currentTimeMillis();
+    }
+    /**
+     * Get the string representation of an action
+     * @param actionID
+     * @return
+     */
+    public String getActionString() {
+     switch (action) {
+         case ACTION_ADD: return "ADD";
+         case ACTION_REMOVE: return "REMOVE";
+         case ACTION_CHANGE: return "CHANGE";
+     }
+     return "";
     }
 }

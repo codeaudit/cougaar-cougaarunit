@@ -17,6 +17,15 @@ import org.apache.bcel.*;
 import org.apache.bcel.classfile.*;
 import org.w3c.dom.*;
 import org.xml.sax.*;
+import com.borland.jbcl.control.MessageDialog;
+import java.io.FileInputStream;
+import org.cougaar.plugin.test.capture.CapturedPublishAction;
+import java.io.FilenameFilter;
+import com.klg.jclass.table.JCTable;
+import com.klg.jclass.table.data.JCEditableVectorDataSource;
+import com.klg.jclass.table.JCTableEnum;
+import com.klg.jclass.table.data.JCVectorDataSource;
+import org.cougaar.plugin.test.util.SortableJTable;
 
 /**
  * <p>Title: UI</p>
@@ -91,8 +100,8 @@ public class UI extends JFrame {
   private JSplitPane jSplitPane2 = new JSplitPane();
   private JScrollPane jScrollPaneStreamedData = new JScrollPane();
   private JScrollPane jScrollPane2 = new JScrollPane();
-  private JTable jTableStreamedData = new JTable(streamedDataTableModel);
-
+  private SortableJTable jTableStreamedData = new SortableJTable(streamedDataTableModel);
+  private JMenuItem jMenuItemOpenDataFile = new JMenuItem();
 
   /**
    *
@@ -104,32 +113,36 @@ public class UI extends JFrame {
    * @version 1.0
    */
 
-  class StreamedDataTableModel extends AbstractTableModel {
+class StreamedDataTableModel extends DefaultTableModel  {
     static final String COLUMN_PUBLISH_ACTION = "PUBLISH ACTION";
+    static final String COLUMN_SOURCE = "SOURCE";
     static final String COLUMN_OBJECT = "OBJECT";
     static final String COLUMN_ID = "ID";
-    protected final String[] columnNames = {COLUMN_ID, COLUMN_PUBLISH_ACTION, COLUMN_OBJECT};
-    Vector data = new Vector();
+    static final String COLUMN_TIME = "TIME";
+    protected final String[] columnNames = {COLUMN_ID, COLUMN_TIME, COLUMN_SOURCE, COLUMN_PUBLISH_ACTION, COLUMN_OBJECT};
+
+    //Vector data = new Vector();
     public int getColumnCount() {
       return columnNames.length;
     }
-    public int getRowCount() {
-      return data.size();
-    }
+    //public int getRowCount() {
+    //  return data.size();
+    // }
 
     public String getColumnName(int col) {
       return columnNames[col];
     }
 
-    public Object getValueAt(int row, int col) {
-      if (data.size() > 0)
-        return ((Object[])data.elementAt(row))[col];
-      return null;
-    }
+    //public Object getValueAt(int row, int col) {
+      //if (data.size() > 0)
+        //return ((Object[])data.elementAt(row))[col];
+      //return null;
+   // }
 
-    public void addRow(Object[] row) {
-      data.add(row);
-    }
+   // public void addRow(Object[] row) {
+     // data.add(row);
+    //}
+
   }
 
   class OutputTableModel extends AbstractTableModel {
@@ -284,9 +297,14 @@ public class UI extends JFrame {
     });
     jTableResults.updateUI();
 
+    jTableStreamedData.getColumn(streamedDataTableModel.COLUMN_ID).setPreferredWidth(5);
+    jTableStreamedData.getColumn(streamedDataTableModel.COLUMN_TIME).setPreferredWidth(50);
+    jTableStreamedData.getColumn(streamedDataTableModel.COLUMN_SOURCE).setPreferredWidth(100);
+    jTableStreamedData.getColumn(streamedDataTableModel.COLUMN_PUBLISH_ACTION).setPreferredWidth(75);
+    jTableStreamedData.getColumn(streamedDataTableModel.COLUMN_OBJECT).setPreferredWidth(100);
+    jTableStreamedData.updateUI();
+
     readFileHistory();
-
-
   }
 
   /**
@@ -409,6 +427,12 @@ public class UI extends JFrame {
     });
     jPanelObjectStreamEditor.setLayout(borderLayout5);
     jSplitPane2.setOrientation(JSplitPane.VERTICAL_SPLIT);
+    jMenuItemOpenDataFile.setText("Open Data File");
+    jMenuItemOpenDataFile.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        jMenuItemOpenDataFile_actionPerformed(e);
+      }
+    });
     jPanelDirJar.add(jLabelSelectDir, null);
     jPanelDirJar.add(jComboBoxDirJar, null);
     this.getContentPane().add(jLabel1,  BorderLayout.NORTH);
@@ -441,6 +465,8 @@ public class UI extends JFrame {
     jMenuBarMain.add(jMenuFile);
     jMenuBarMain.add(jMenuOptions);
     jMenuBarMain.add(jMenuHelp);
+    jMenuFile.add(jMenuItemOpenDataFile);
+    jMenuFile.addSeparator();
     jMenuFile.add(jMenuItemExit);
     jMenuOptions.add(jMenuItemClearHistory);
     jPopupMenuOutput.add(jMenuItemOuptutSave);
@@ -466,6 +492,7 @@ public class UI extends JFrame {
     ui.center();
     ui.show();
   }
+
 
   /**
    * Search a jar file for PluginTestCase classes and PluginTestSuite classes.
@@ -888,6 +915,39 @@ public class UI extends JFrame {
   void jMenuItemOuptutSave_actionPerformed(ActionEvent e) {
     saveToFile(this.jTextPaneOutput.getText());
   }
+
+  /**
+   * Parse the data file and add the contents to the streamedDataTableModel
+   * @param dataFile
+   */
+  private void parseDataFile(File dataFile) {
+    try {
+      FileInputStream fis = new FileInputStream(dataFile);
+      ObjectInputStream ois = new ObjectInputStream(fis);
+      Object obj = ois.readObject();
+      Vector v = (Vector)obj;
+      for (int i=0; i<v.size(); i++ ) {
+        CapturedPublishAction cpa = (CapturedPublishAction)v.elementAt(i);
+        streamedDataTableModel.addRow(new Object[] {String.valueOf(i), String.valueOf(cpa.timeStamp), cpa.publishingSource, String.valueOf(cpa.getActionString()), cpa.publishedObject});
+      }
+      this.jTableStreamedData.updateUI();
+    }
+    catch (Exception e) {
+      MessageDialog md = new MessageDialog(this, "Error", "Unable to process this file: " + e.toString());
+      md.show();
+    }
+  }
+
+  void jMenuItemOpenDataFile_actionPerformed(ActionEvent e) {
+    JFileChooser jfc = new JFileChooser();
+    jfc.setDialogTitle("Select the data file to edit");
+    jfc.setDialogType(JFileChooser.OPEN_DIALOG);
+    int ret = jfc.showOpenDialog(this);
+    if (ret == JFileChooser.APPROVE_OPTION) {
+      parseDataFile(jfc.getSelectedFile());
+    }
+    this.jTabbedPaneMain.setSelectedComponent(this.jPanelObjectStreamEditor);
+  }
 }
 
 
@@ -941,7 +1001,7 @@ class MyClassLoader extends URLClassLoader {
 
   public static MyClassLoader getInstance() {
     if (me == null)
-      me = new MyClassLoader(null);
+      me = new MyClassLoader(new URL[] {});
     return me;
   }
 
@@ -957,6 +1017,28 @@ class MyClassLoader extends URLClassLoader {
     }
     return me;
   }
+
+  public void addJarsFromDir(String dir) {
+    try {
+      File f = new File(dir);
+      String[] files = f.list(new FilenameFilter() {
+        public boolean accept(File dir, String name) {
+          if (name.toLowerCase().endsWith(".jar")) {
+            return true;
+          }
+          return false;
+        }
+      });
+      for (int i=0; i<files.length; i++ ) {
+        this.addURL(new URL("file", "localhost", dir+"\\"+files[i]));
+      }
+
+    }
+    catch (Exception e) {
+    e.printStackTrace();
+    }
+  }
+
 }
 
 
@@ -1014,3 +1096,4 @@ class PrintableComponent implements Printable {
     return Printable.PAGE_EXISTS;
   }
 }
+
