@@ -1,4 +1,4 @@
-package org.cougaar.plugin.test;
+package org.cougaar.plugin.test.sample;
 
 import org.cougaar.core.plugin.ComponentPlugin;
 import java.net.URLClassLoader;

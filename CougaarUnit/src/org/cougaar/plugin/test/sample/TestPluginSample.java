@@ -1,4 +1,10 @@
-package org.cougaar.plugin.test;
+package org.cougaar.plugin.test.sample;
+
+import org.cougaar.plugin.test.PluginTestCase;
+import org.cougaar.plugin.test.BlackboardDeltaState;
+import org.cougaar.plugin.test.PublishAction;
+
+
 
 public class TestPluginSample extends PluginTestCase {
     public void validateSubscriptions() {
