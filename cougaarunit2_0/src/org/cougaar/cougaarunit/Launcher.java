@@ -87,16 +87,16 @@ public class Launcher {
    
    
     private void createLogProps() throws Exception {
-//        File logPropsFile;
-//        logPropsFile = new File("logging.props");
-//        logPropsFile.createNewFile();
-//        FileWriter fw = new FileWriter(logPropsFile);
-//        fw.write("log4j.rootCategory=INFO,A1,A2\n"
-//            + "log4j.appender.A1=org.apache.log4j.ConsoleAppender\n"
-//            + "log4j.appender.A1.layout=org.apache.log4j.PatternLayout\n"
-//            + "log4j.appender.A1.layout.ConversionPattern=%m%n\n"
-//            + "log4j.appender.A2=org.cougaar.plugin.test.ErrorDetectionAppender");
-//        fw.close();
+        File logPropsFile;
+        logPropsFile = new File("log.properties");
+        logPropsFile.createNewFile();
+        FileWriter fw = new FileWriter(logPropsFile);
+        fw.write("log4j.rootCategory=INFO,A1\n"//,A2\n"
+            + "log4j.appender.A1=org.apache.log4j.ConsoleAppender\n"
+            + "log4j.appender.A1.layout=org.apache.log4j.PatternLayout\n"
+            + "log4j.appender.A1.layout.ConversionPattern=%m%n\n");
+            //+ "log4j.appender.A2=org.cougaar.plugin.test.ErrorDetectionAppender");
+        fw.close();
     }
 
 
@@ -113,7 +113,7 @@ public class Launcher {
                 } else if (testType == TEST_CASE_TYPE) {
 					Launcher launcher = new Launcher(_class);
 					launcher.createLogProps();
-                    launcher.launchCougaar(System.err);
+                    launcher.launchCougaar(System.out);
                 } else if (testType == TEST_SUITE_TYPE) {
                     //process test suite
 					PluginTestSuite testSuite = (PluginTestSuite)_class.newInstance();

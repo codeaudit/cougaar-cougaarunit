@@ -37,7 +37,6 @@ public class BlackboardClientProxy implements BlackboardClient
     //if this is an instance of the TestPlugin then we need to call it to find out the class name of the plugin
     //that is to be tested
     if (actualPlugin instanceof PluginTestCase) {
-    	System.err.println("starting plugin testcase");
       String targetPluginClassName = ((PluginTestCase)actualPlugin).getPluginClass();
       if (targetPluginClassName == null) throw new RuntimeException("You must implement the getPluginClass()) method");
       //now we need to see if that plugin has already been loaded

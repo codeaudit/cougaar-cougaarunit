@@ -1,6 +1,7 @@
 package org.cougaar.cougaarunit;
 
 import org.cougaar.core.plugin.ComponentPlugin;
+import org.cougaar.core.service.LoggingService;
 
 
 /**
@@ -13,7 +14,17 @@ import org.cougaar.core.plugin.ComponentPlugin;
  */
 public abstract class PluginTestCase extends ComponentPlugin {
   private String description;
-
+  protected LoggingService logging;
+  
+  /**
+   * Set LoggingService
+   * @param s
+   */
+  public void setLoggingService(LoggingService s){
+  	this.logging = s;
+  }
+  
+ 
   /**
    * keep a static reference to the latest instance of this class
    */
@@ -252,28 +263,41 @@ public abstract class PluginTestCase extends ComponentPlugin {
    * methods.  These methods are called via a separate thread.
    */
   public void startTests() {
-    System.out.println("STARTING TESTS...");
+  	if(logging.isInfoEnabled()){
+    	logging.info("STARTING TESTS...");
+  	}
     //determine the report format
 
     Thread t = new Thread(new Runnable() {
       public void run() {
         try {Thread.currentThread().sleep(5000);} catch (Exception e){}  //for now we add a delay to let the source plugin start
         try {
-          System.out.println("VALIDATING SUBSCRIPTIONS...");
+        	if(logging.isInfoEnabled()){
+          		logging.info("VALIDATING SUBSCRIPTIONS...");
+        	}
           validateSubscriptions();
-          System.out.println("VALIDATING EXECUTION...");
+          	if(logging.isInfoEnabled()){
+          		logging.info("VALIDATING EXECUTION...");
+          	}
+          
           validateExecution();
-          System.out.println("PROCESSING RESULTS...");
+          if(logging.isInfoEnabled()){
+          	logging.info("PROCESSING RESULTS...");
+          }
           String reportFormat = System.getProperty("org.cougaar.plugin.test.output.format");
+          String reportResult="";
           if (reportFormat == null) reportFormat = "xml";
           if (reportFormat.equals("text")) {
-            System.out.println(PluginTestResult.getReportAsString());  //print the test results to stdout
+            reportResult=(PluginTestResult.getReportAsString());  //print the test results to stdout
           }
           else if (reportFormat.equals("xml")) {
-            System.out.println(PluginTestResult.getReportAsXML());  //print the test results to stdout as xml
+            reportResult=(PluginTestResult.getReportAsXML());  //print the test results to stdout as xml
           }
           else {
-            System.out.println(PluginTestResult.getReportAsString());  //print the test results to stdout
+            reportResult=(PluginTestResult.getReportAsString());  //print the test results to stdout
+          }
+          if(logging.isInfoEnabled()){
+          	logging.info(reportResult);
           }
         }
         catch (Error err) {

@@ -49,7 +49,7 @@ public class PluginServiceFilter
   {
     public PluginServiceFilterBinder(BinderFactory bf, Object child) {
       super(bf,child);
-      System.err.println("testing");
+      
     }
 
     // this method specifies a binder proxy to use, so as to avoid exposing the binder
