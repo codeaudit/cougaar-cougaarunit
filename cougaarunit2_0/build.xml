@@ -5,7 +5,7 @@
 <!-- ================================================================= -->
 
 <project name="cougaarunit" default="compile" basedir=".">
-	<taskdef name="cunit" classname="org.cougaar.cougaarunit.ant.CUnitTask"/>
+	
     <!-- Allow project to override any of these properties with a build.properties file -->
     <property file="${basedir}/build.properties"/>
 
@@ -42,6 +42,14 @@
 
     <!--junit info-->
     <property name="junit.results" value="test-results"/>
+    
+    <!-- task defs -->
+    <taskdef name="cunit" classname="org.cougaar.cougaarunit.ant.CUnitTask">
+	    <classpath>
+             <pathelement location="${project.jarfile}"/>
+        </classpath>
+	</taskdef>
+    
     <!-- =============================================================== -->
     <!-- The Classpath                                                   -->
     <!-- =============================================================== -->
