@@ -103,23 +103,46 @@ public class Launcher {
     public static void main(String[] args) {
         if (args[0] != null) {
             try {
-                //setClassLoader();
-                //get an instance of the PluginTestCase
-                PluginTestCase tpc = (PluginTestCase)Class.forName(args[0]).newInstance();
-                //get the class of the source plugin
-                String sourcePluginStr = tpc.getPluginClass();
-                //now we need to generate the ini files for launching cougaar
-                writeNodeIni();
-                //now we write the agent ini file
-                writeAgentIni(args[0], sourcePluginStr);
-                //launch Cougaar
-                launchCougaar();
-
+                //determine if args[0] is a PluginTestSuite or a PluginTestCase
+                Class clazz = Class.forName(args[0]);
+                if (clazz.getSuperclass().equals(PluginTestSuite.class)) {
+                    PluginTestSuite pts = (PluginTestSuite)clazz.newInstance();
+                    for (Iterator tests = pts.getTestClasses(); tests.hasNext(); ) {
+                        try {
+                            Class testClass = (Class)tests.next();
+                            if (testClass.isInstance(PluginTestCase.class)) {
+                                runTestCase((PluginTestCase)testClass.newInstance());
+                            }
+                            else {
+                                System.out.println("Invalid Test Case object found in Test Suite.");
+                            }
+                        }
+                        catch (Exception ex) {
+                            System.out.println("Invalud test class object.");
+                        }
+                    }
+                }
+                else if (clazz.getSuperclass().equals(PluginTestCase.class)) {
+                    runTestCase((PluginTestCase)clazz.newInstance());
+                }
+                else {
+                    System.out.println("Unknown test class type: " + clazz.getName());
+                }
             }
             catch (Exception ex) {
                 System.out.println("Error running test: " + ex);
             }
 
         }
+    }
+
+    private static void runTestCase(PluginTestCase tpc) throws Exception {
+        String sourcePluginStr = tpc.getPluginClass();
+        //now we need to generate the ini files for launching cougaar
+        writeNodeIni();
+        //now we write the agent ini file
+        writeAgentIni(tpc.getClass().getName(), sourcePluginStr);
+        //launch Cougaar
+        launchCougaar();
     }
 }
