@@ -16,6 +16,9 @@
 	
 	<class name="org.cougaar.cougaarunit.vo.TestResultId">
 		<map-to xml="ID"/>
+		<field name="id" type="java.lang.String">
+			<bind-xml name="value" node="attribute"/>
+		</field>
 		<field name="command" type="java.lang.String">
 			<bind-xml name="COMMAND" node="element"/>
 		</field>
