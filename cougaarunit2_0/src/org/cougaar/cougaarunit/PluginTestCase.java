@@ -1,5 +1,9 @@
 package org.cougaar.cougaarunit;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+
 import org.cougaar.core.plugin.ComponentPlugin;
 import org.cougaar.core.service.LoggingService;
 
@@ -289,15 +293,41 @@ public abstract class PluginTestCase extends ComponentPlugin {
           if (reportFormat == null) reportFormat = "xml";
           if (reportFormat.equals("text")) {
             reportResult=(PluginTestResult.getReportAsString());  //print the test results to stdout
+            try{
+            	File txtFile = new File(description+".txt");
+				if(logging.isInfoEnabled()){
+					logging.info("Writing results to :" + txtFile.getAbsolutePath());
+				}
+				BufferedWriter writer = new BufferedWriter(new FileWriter(txtFile));
+				writer.write(reportResult);
+				writer.close();
+            }catch(Exception e){
+            	if(logging.isErrorEnabled()){
+            		logging.error("Error writing text file",e);
+            	}
+            }
           }
           else if (reportFormat.equals("xml")) {
             reportResult=(PluginTestResult.getReportAsXML());  //print the test results to stdout as xml
+            try{
+            	File xmlFile = new File(description+".xml");
+            	if(logging.isInfoEnabled()){
+            		logging.info("Writing results to :" + xmlFile.getAbsolutePath());
+            	}
+            	BufferedWriter writer = new BufferedWriter(new FileWriter(xmlFile));
+            	writer.write(reportResult);
+            	writer.close();
+            }catch(Exception e){
+            	if(logging.isErrorEnabled()){
+            		logging.error("Error writing xml file",e);
+            	}
+            }
           }
           else {
             reportResult=(PluginTestResult.getReportAsString());  //print the test results to stdout
           }
           if(logging.isInfoEnabled()){
-          	logging.info(reportResult);
+          	//logging.info(reportResult);
           }
         }
         catch (Error err) {
