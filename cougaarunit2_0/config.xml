@@ -6,13 +6,13 @@
       <modificationset quietperiod="30" >
          <cvs cvsroot=":extssh:abrams@cougaar.org:/cvsroot/cougaarunit" />
       </modificationset>
-      <schedule interval="30" >
+      <schedule interval="2000" >
          <ant buildfile="build.xml" target="masterbuild" multiple="5" />
          <ant buildfile="build.xml" target="cleanbuild" multiple="1"/>
       </schedule>
-      <schedule interval="1000">
-<!--	  <maven goal="test|site:deploy" projectfile="/home/mabrams/projects/csi_core/project.xml" mavenscript="/home/mabrams/maven-1.0-rc1/bi/maven" multiple="1"> -->
-	  </maven>
+<!--      <schedule interval="1000">
+	  <maven goal="test|site:deploy" projectfile="/home/mabrams/projects/csi_core/project.xml" mavenscript="/home/mabrams/maven-1.0-rc1/bi/maven" multiple="1"> 
+	  </maven>-->
       </schedule>
       <log dir="logs">
          <merge dir="test-results"/>
