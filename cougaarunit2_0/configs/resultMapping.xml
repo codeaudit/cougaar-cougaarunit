@@ -31,5 +31,26 @@
 		<field name="result" type="java.lang.String">
 			<bind-xml name="RESULT" node="element"/>
 		</field>
+		<field name="expectedState"
+			type="org.cougaar.cougaarunit.vo.ExpectedBlackboardState">
+			<bind-xml name="EXPECTED_STATE"/>
+		</field>
+		<field name="actualState"
+			type="org.cougaar.cougaarunit.vo.ActualBlackboardState">
+			<bind-xml name="ACTUAL_STATE"/>
+		</field>
+	</class>
+	
+	<class name="org.cougaar.cougaarunit.vo.ActualBlackboardState">
+		<map-to xml="ACTUAL_STATE"/>
+		<field name="blackboardDeltaState" type="java.lang.String">
+			<bind-xml name="BLACKBOARD_DELTA_STATE" node="element"/>
+		</field>
+	</class>
+	<class name="org.cougaar.cougaarunit.vo.ExpectedBlackboardState">
+		<map-to xml="EXPECTED_STATE"/>
+		<field name="blackboardDeltaState" type="java.lang.String">
+			<bind-xml name="BLACKBOARD_DELTA_STATE" node="element"/>
+		</field>
 	</class>
 </mapping>
