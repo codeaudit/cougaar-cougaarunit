@@ -48,6 +48,7 @@ public class Launcher {
     private static final int TEST_SUITE_TYPE = 1;
     private static final int TEST_CASE_TYPE = 2;
     private static final String COUGAAR_UNIT_PROPS = "cougaar_unit.properties";
+    private static final String SHOW_OUTPUT = "org.cougaar.cougaarunit.showoutput";
 
     //Result Codes
     public static final int COUGAAR_ERROR_CODE = -2;
@@ -59,8 +60,8 @@ public class Launcher {
 
     /** DOCUMENT ME! */
     public static final int OUTPUT_STYLE_XML = 1;
+    private static boolean writeToOutput = false;
     private Class testClass;
-    private boolean writeToOutput= false;
 
     public Launcher(Class testClassName) {
         this.testClass = testClassName;
@@ -103,8 +104,9 @@ public class Launcher {
                         (new String(lineData).toUpperCase().indexOf("ERROR") >= 0)) {
                     retCode = COUGAAR_ERROR_CODE;
                 }
-                if(writeToOutput){
-                	os.write(lineData);
+
+                if (writeToOutput) {
+                    os.write(lineData);
                 }
             }
 
@@ -115,14 +117,18 @@ public class Launcher {
                         (new String(lineData).toUpperCase().indexOf("ERROR") >= 0)) {
                     retCode = COUGAAR_ERROR_CODE;
                 }
-                if(writeToOutput){
-                	os.write(lineData);
+
+                if (writeToOutput) {
+                    os.write(lineData);
                 }
             }
-            if(retCode==COUGAAR_ERROR_CODE){
-            	p.destroy();
-            	return COUGAAR_ERROR_CODE;
+
+            if (retCode == COUGAAR_ERROR_CODE) {
+                p.destroy();
+
+                return COUGAAR_ERROR_CODE;
             }
+
             //os.write('\n');
         }
 
@@ -130,9 +136,11 @@ public class Launcher {
         System.out.flush();
 
         int processCode = p.waitFor(); //wait for this process to terminate
-        if(processCode!=0){
-        	return COUGAAR_ERROR_CODE;
+
+        if (processCode != 0) {
+            return COUGAAR_ERROR_CODE;
         }
+
         //test result of test case
         TestResult testResult = null;
         String fileName = PluginTestCase.RESULTS_DIRECTORY + File.separator +
@@ -195,8 +203,8 @@ public class Launcher {
             "# ----- Configure the Rolling Log File\n" + "#\n" +
             "# Configure a Rolling Log File Appender\n" +
             "log4j.appender.rolling=org.apache.log4j.RollingFileAppender\n" +
-            "log4j.appender.rolling.File="+this.testClass.getName()+".log\n" +
-            "# Define the logfile size\n" +
+            "log4j.appender.rolling.File=" + this.testClass.getName() +
+            ".log\n" + "# Define the logfile size\n" +
             "log4j.appender.rolling.MaxFileSize=1024KB\n" +
             "# Keep a backup file\n" +
             "log4j.appender.rolling.MaxBackupIndex=1\n" +
@@ -212,6 +220,12 @@ public class Launcher {
         if (args.length > 0) {
             try {
                 try {
+                    if ((System.getProperty(SHOW_OUTPUT) != null) &&
+                            System.getProperty(SHOW_OUTPUT).toUpperCase()
+                                      .equals("TRUE")) {
+                        writeToOutput = true;
+                    }
+
                     Properties p = new Properties();
 
                     if (System.getProperty("org.cougaarunit.configfile") != null) {
@@ -247,12 +261,13 @@ public class Launcher {
 
                     int returnCode = launcher.launchCougaar(System.out);
                     System.out.println("Return code:" + returnCode);
-                    if(returnCode==TEST_PASS_CODE){
-                    	System.out.println("Test Passed");
-                    	System.exit(0);
-                    }else{
-                    	System.out.println("Test Failed");
-                    	System.exit(1);
+
+                    if (returnCode == TEST_PASS_CODE) {
+                        System.out.println("Test Passed");
+                        System.exit(0);
+                    } else {
+                        System.out.println("Test Failed");
+                        System.exit(1);
                     }
                 } else if (testType == TEST_SUITE_TYPE) {
                     //process test suite
@@ -260,21 +275,26 @@ public class Launcher {
                     Class[] _classes = testSuite.getTestClasses();
 
                     if ((_classes != null) && (_classes.length > 0)) {
-                    	boolean pass = true;
+                        boolean pass = true;
+
                         for (int i = 0; i < _classes.length; i++) {
                             Launcher launcher = new Launcher(_classes[i]);
                             launcher.createLogProps();
+
                             int returnCode = launcher.launchCougaar(System.out);
-                            if(returnCode!=TEST_PASS_CODE){
-                            	pass = false;
-}
+
+                            if (returnCode != TEST_PASS_CODE) {
+                                pass = false;
+                            }
                         }
-                        if(pass){
-                        	System.out.println("All tests in suite passed");
-                        	System.exit(0);
-                        }else{
-                        	System.out.println("All tests in suite DID NOT pass");
-                        	System.exit(1);
+
+                        if (pass) {
+                            System.out.println("All tests in suite passed");
+                            System.exit(0);
+                        } else {
+                            System.out.println(
+                                "All tests in suite DID NOT pass");
+                            System.exit(1);
                         }
                     } else {
                         System.err.println("Test suite with no test cases");
