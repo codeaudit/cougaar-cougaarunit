@@ -95,6 +95,10 @@ public class PluginServiceFilter
         }
         return null;
       }
+      protected Object getClientProxy(Object client, Class serviceClass) {
+          System.out.println("client: " + client + ", serviceClass: " + serviceClass);
+          return super.getClientProxy(client, serviceClass);
+      }
     }
   }
 }
