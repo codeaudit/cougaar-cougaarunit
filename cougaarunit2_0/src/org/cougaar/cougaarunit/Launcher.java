@@ -38,7 +38,10 @@ import org.xml.sax.InputSource;
  * </p>
  * 
  * <p>
- * Description: Launches the Cougaar plugin test environment
+ * Description: Launches the Cougaar plugin test environment.
+ * Takes org.cougaar.cougaarunit.showoutput as a parameter for printing the output
+ * of the cougaar process to the output stream. Default is false. E.G. -Dorg.cougaar.cougaarunit.showoutput=true
+ * Takes org.cougaar.install.path as the location of the cougaar install path. E.G. -Dorg.cougaar.install.path=/etc/cougaar
  * </p>
  * 
  * <p>
