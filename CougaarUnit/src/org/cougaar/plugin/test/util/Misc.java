@@ -21,27 +21,37 @@ import java.util.Enumeration;
  */
 
 public class Misc {
+
   public static String getEnv(String str) {
     String ret= "";
     //get the os version
-    String s = System.getProperty("os.name");
+    String os = System.getProperty("os.name");
     String fileName;
-    if (s.toLowerCase().indexOf("windows") != -1) {
+    String echoCommand;
+    String execCommand;
+    if (os.toLowerCase().indexOf("windows") != -1) {
       fileName = "env.bat";
+      echoCommand = "@echo %"+str+"%\n";
+      execCommand = fileName;
     }
-    else if (s.toLowerCase().indexOf("linux") != -1) {
+    else if (os.toLowerCase().indexOf("linux") != -1) {
       fileName = "env.sh";
+      echoCommand = "echo $"+str+"\n";
+      execCommand="./"+fileName;
     }
     else
       return "";
 
-      File f = new File("env.bat");
+    File f = new File(fileName);
     try {
       FileWriter fw = new FileWriter(f);
-      fw.write("@echo %"+str+"%\n");
+      fw.write(echoCommand);
       fw.flush();
       fw.close();
-      Process p = Runtime.getRuntime().exec("env.bat");
+      if(os.toLowerCase().indexOf("linux") != -1) {
+        Runtime.getRuntime().exec("chmod +x "+ fileName);
+      }
+      Process p = Runtime.getRuntime().exec(execCommand);
       BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
       String line;
       while ((line = br.readLine()) != null) {
@@ -65,11 +75,11 @@ public class Misc {
   }
 
   private static FileFilter dirFilter = new FileFilter() {
-      public boolean accept(File pathName) {
-        if (pathName.isDirectory()) return true;
-        return false;
-      }
-    };
+    public boolean accept(File pathName) {
+      if (pathName.isDirectory()) return true;
+      return false;
+    }
+  };
 
   public static Vector listFilesRecursively(File dir, FileFilter filter) {
     Vector v = new Vector();

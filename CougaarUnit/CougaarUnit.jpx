@@ -95,6 +95,11 @@
       <property category="servletrun" name="servlet.ContextRunDebug" value="true"/>
     </file>
   </node>
+  <node name="Copy App File" type="ExternalTask">
+    <property category="external" name="executable" value="&quot;C:\Documents and Settings\David Craine\My Documents\InfoEther-CVS\CougaarUnit\copyfile.bat&quot;"/>
+    <property category="external" name="params" value="&quot;($ProjectDir)\CougaarUnitApp-linux&quot; c:\share\CougaarUnitApp-linux"/>
+    <property category="external" name="phase" value="package"/>
+  </node>
   <node name="Copy Jar File" type="ExternalTask">
     <property category="external" name="executable" value="&quot;C:\Documents and Settings\David Craine\My Documents\InfoEther-CVS\CougaarUnit\copyfile.bat&quot;"/>
     <property category="external" name="params" value="&quot;($ProjectDir)\cougaarUnit.jar&quot; &quot;c:\cougaar10\lib\cougaarUnit.jar&quot;"/>
@@ -104,12 +109,12 @@
     <property category="archiving" name="archiverClass" value="com.borland.jbuilder.wizard.archive.ApplicationArchiver"/>
     <property category="archiving" name="executableEnabled.1" value="0"/>
     <property category="archiving" name="executableEnabled.2" value="1"/>
-    <property category="archiving" name="executableEnabled.3" value="0"/>
+    <property category="archiving" name="executableEnabled.3" value="1"/>
     <property category="archiving" name="executableEnabled.4" value="0"/>
     <property category="archiving" name="executableEnabled.5" value="0"/>
     <property category="archiving" name="executableFiles.1" value="CougaarUnit2W.exe"/>
-    <property category="archiving" name="executableFiles.2" value="CougaarUnitApp.exe"/>
-    <property category="archiving" name="executableFiles.3" value="CougaarUnit2-linux"/>
+    <property category="archiving" name="executableFiles.2" value=""/>
+    <property category="archiving" name="executableFiles.3" value=""/>
     <property category="archiving" name="executableFiles.4" value="CougaarUnit2-solaris"/>
     <property category="archiving" name="executableFiles.5" value="CougaarUnit2-mac"/>
     <property category="archiving" name="extraDeployRoots.1" value="C:images.*"/>

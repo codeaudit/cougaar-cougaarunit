@@ -330,7 +330,7 @@ public class UI extends JFrame {
   }
 
   private void setupIcons() {
-    URL url = getClass().getClassLoader().getResource("images/App.gif");
+    URL url = getClass().getClassLoader().getResource("images/app.gif");
     Image icon = Toolkit.getDefaultToolkit().getImage(url);
     this.setIconImage(icon);
     this.setTitle("CougaarUnit");
@@ -879,10 +879,11 @@ public class UI extends JFrame {
   }
 
   private void configClassLoader()  {
+
     loader = MyClassLoader.getInstance();
     String cip = Misc.getEnv("COUGAAR_INSTALL_PATH");
-    loader.addJarsFromDir(cip+"\\lib");
-    loader.addJarsFromDir(cip+"\\sys");
+    loader.addJarsFromDir(cip+"/lib");
+    loader.addJarsFromDir(cip+"/sys");
   }
 
   /**
