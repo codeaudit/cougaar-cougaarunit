@@ -70,13 +70,13 @@
   <dependencies>
     <dependency>
     	<groupId>cougaar</groupId>
-    	<artifactId>cougaar_core</artifactId>
+    	<artifactId>core</artifactId>
     	<version>10.4.6</version>    
     	<url>http://pumax/maven/</url>
     </dependency>
     <dependency>
     	<groupId>cougaar</groupId>
-    	<artifactId>cougaar_util</artifactId>
+    	<artifactId>util</artifactId>
     	<version>10.4.6</version>    
     	<url>http://pumax/maven/</url>
     </dependency>
