@@ -10,7 +10,7 @@ import org.cougaar.planning.ldm.plan.Task;
 import org.cougaar.planning.ldm.plan.PlanElement;
 import org.cougaar.planning.ldm.plan.AllocationResult;
 import org.cougaar.planning.ldm.plan.Expansion;
-import org.cougaar.core.domain.RootFactory;
+import org.cougaar.planning.ldm.PlanningFactory;
 
 
 /**
@@ -42,34 +42,34 @@ public class DevelopmentExpanderTestCase extends PluginTestCase {
 
   public void validateSubscriptions() {
     //test subscription for code tasks
-    Workflow wf = domainService.getFactory().newWorkflow();
+    Workflow wf = ((PlanningFactory)domainService.getFactory("planning")).newWorkflow();
     Task codeTask = makeTask("CODE", null, wf);
     subscriptionAssert(codeTask, true);
 
     //test the DESIGN plan element subscription
     AllocationResult estAR = null;
     Task designTask = makeTask("DESIGN", codeTask, wf);
-    Expansion deisgnExp = domainService.getFactory().createExpansion(designTask.getPlan(), designTask, wf, estAR);
+    Expansion deisgnExp = ((PlanningFactory)domainService.getFactory("planning")).createExpansion(designTask.getPlan(), designTask, wf, estAR);
     subscriptionAssert(deisgnExp, true);
 
     //test the DEVELOP expansion
     Task developTask = makeTask("DEVELOP", designTask, wf);
-    Expansion developExp = domainService.getFactory().createExpansion(developTask.getPlan(), designTask, wf, estAR);
+    Expansion developExp = ((PlanningFactory)domainService.getFactory("planning")).createExpansion(developTask.getPlan(), designTask, wf, estAR);
     subscriptionAssert(developExp, true);
 
     //test the DEVELOP expansion
     Task testTask = makeTask("TEST", developTask, wf);
-    Expansion testExp = domainService.getFactory().createExpansion(testTask.getPlan(), designTask, wf, estAR);
+    Expansion testExp = ((PlanningFactory)domainService.getFactory("planning")).createExpansion(testTask.getPlan(), designTask, wf, estAR);
     subscriptionAssert(testExp, true);
   }
 
   public void validateExecution() {
-    Workflow wf = domainService.getFactory().newWorkflow();
+    Workflow wf = ((PlanningFactory)domainService.getFactory("planning")).newWorkflow();
     Task codeTask = makeTask("CODE", null, wf);  //this is the task that we're going to assert onto the blackboard
 
     Task designTask = makeTask("DESIGN", codeTask, wf);  //this is one of the expected resulting tasks
     AllocationResult estAR = null;
-    Expansion designExp = domainService.getFactory().createExpansion(designTask.getPlan(), codeTask, wf, estAR);  //this is the other expected result
+    Expansion designExp = ((PlanningFactory)domainService.getFactory("planning")).createExpansion(designTask.getPlan(), codeTask, wf, estAR);  //this is the other expected result
 
     BlackboardDeltaState bds = new BlackboardDeltaState();
     bds.add(new PublishAction(PublishAction.ADD, designTask, ObjectComparators.TASK_VERB_COMPARATOR));
@@ -79,7 +79,7 @@ public class DevelopmentExpanderTestCase extends PluginTestCase {
   }
 
   private NewTask makeTask(String verb, Task parent_task, Workflow wf) {
-    RootFactory factory = domainService.getFactory();
+    PlanningFactory factory = (PlanningFactory)domainService.getFactory("planning");
     NewTask new_task = factory.newTask();
 
     // Set the verb as given

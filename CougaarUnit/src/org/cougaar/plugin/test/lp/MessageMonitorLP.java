@@ -1,11 +1,11 @@
 package org.cougaar.plugin.test.lp;
 
 import org.cougaar.core.domain.MessageLogicProvider;
-import org.cougaar.planning.ldm.plan.Directive;
 import java.util.Collection;
 import org.cougaar.plugin.test.capture.CapturedPublishAction;
 import org.cougaar.plugin.test.ClassStringRendererRegistry;
 import org.cougaar.plugin.test.capture.BlackboardServiceCapturingProxy;
+import org.cougaar.core.blackboard.Directive;
 
 /**
  * <p>Title: CougaarUnit</p>
@@ -22,7 +22,7 @@ public class MessageMonitorLP implements MessageLogicProvider {
   }
 
   public void execute(Directive parm1, Collection parm2) {
-    CapturedPublishAction cpe = new CapturedPublishAction(CapturedPublishAction.ACTION_INTERAGENT_TRANSFER, ClassStringRendererRegistry.render(parm1), parm1.getSource().cleanToString());
+    CapturedPublishAction cpe = new CapturedPublishAction(CapturedPublishAction.ACTION_INTERAGENT_TRANSFER, ClassStringRendererRegistry.render(parm1), parm1.getSource().toString());
     BlackboardServiceCapturingProxy.addToObjectStream(cpe);
   }
 

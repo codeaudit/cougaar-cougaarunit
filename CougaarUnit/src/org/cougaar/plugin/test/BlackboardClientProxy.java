@@ -3,7 +3,6 @@ package org.cougaar.plugin.test;
 import org.cougaar.util.*;
 import org.cougaar.core.plugin.*;
 import org.cougaar.core.service.BlackboardService;
-import org.cougaar.core.agent.ClusterIdentifier;
 import org.cougaar.core.component.*;
 import org.cougaar.core.service.AlarmService;
 import java.util.Collection;
@@ -80,15 +79,6 @@ public class BlackboardClientProxy implements BlackboardClient
    */
   public BlackboardClientProxy(BlackboardClient actualPlugin) {
     this.actualPlugin = actualPlugin;
-  }
-
-  /**
-   * Proxied method
-   * @param event
-   * @return
-   */
-  public boolean triggerEvent(Object event) {
-    return actualPlugin.triggerEvent(event);
   }
 
   /**

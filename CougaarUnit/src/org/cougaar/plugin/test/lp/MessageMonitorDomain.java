@@ -22,17 +22,15 @@
 package org.cougaar.plugin.test.lp;
 
 import java.util.*;
-import org.cougaar.core.agent.ClusterServesLogicProvider;
-
-import org.cougaar.core.blackboard.LogPlan;
-import org.cougaar.core.blackboard.XPlanServesBlackboard;
-
 import org.cougaar.core.component.BindingSite;
-
 import org.cougaar.core.domain.DomainAdapter;
 import org.cougaar.core.domain.DomainBindingSite;
-
 import org.cougaar.glm.ldm.lps.*;
+import org.cougaar.core.mts.MessageAddress;
+import org.cougaar.core.domain.RootPlan;
+import org.cougaar.planning.ldm.PlanningFactory;
+import org.cougaar.core.service.DomainService;
+
 
 /**
  * COUGAAR Domain package definition.
@@ -40,6 +38,8 @@ import org.cougaar.glm.ldm.lps.*;
 
 public class MessageMonitorDomain extends DomainAdapter {
   public static final String NAME = "message_monitor".intern();
+  private MessageAddress self;
+  private DomainService domainService;
 
   public String getDomainName() {
     return NAME;
@@ -47,11 +47,14 @@ public class MessageMonitorDomain extends DomainAdapter {
 
   public MessageMonitorDomain() {
     super();
-
   }
 
   public void initialize() {
     super.initialize();
+  }
+
+  public void setDomainService(DomainService domainService) {
+    this.domainService = domainService;
   }
 
   public void load() {
@@ -69,43 +72,19 @@ public class MessageMonitorDomain extends DomainAdapter {
   }
 
   protected void loadXPlan() {
-    DomainBindingSite bindingSite = (DomainBindingSite) getBindingSite();
-
-    if (bindingSite == null) {
-      throw new RuntimeException("Binding site for the domain has not be set.\n" +
-                             "Unable to initialize domain XPlan without a binding site.");
-    }
-
-    Collection xPlans = bindingSite.getXPlans();
-    LogPlan logPlan = null;
-
-    for (Iterator iterator = xPlans.iterator(); iterator.hasNext();) {
-      XPlanServesBlackboard  xPlan = (XPlanServesBlackboard) iterator.next();
-      if (xPlan instanceof LogPlan) {
-        // Note that this means there are 2 paths to the plan.
-        // Is this okay?
-        logPlan = (LogPlan) logPlan;
-        break;
-      }
-    }
-
-    if (logPlan == null) {
-      logPlan = new LogPlan();
-    }
-
-    setXPlan(logPlan);
   }
 
   protected void loadLPs() {
-    DomainBindingSite bindingSite = (DomainBindingSite) getBindingSite();
+    RootPlan rootplan = (RootPlan) getXPlanForDomain("root");
+     if (rootplan == null) {
+       throw new RuntimeException("Missing \"root\" plan!");
+     }
 
-    if (bindingSite == null) {
-      throw new RuntimeException("Binding site for the domain has not be set.\n" +
-                             "Unable to initialize domain LPs without a binding site.");
+     PlanningFactory ldmf = (PlanningFactory)
+       domainService.getFactory("planning");
+     if (ldmf == null) {
+       throw new RuntimeException("Missing \"planning\" factory!");
     }
-
-    ClusterServesLogicProvider cluster = bindingSite.getClusterServesLogicProvider();
-    LogPlan logPlan = (LogPlan) getXPlan();
 
     addLogicProvider(new MessageMonitorLP());
   }

@@ -165,9 +165,9 @@ public class BlackboardServiceCapturingProxy implements BlackboardService {
      * Proxied method
      * @return
      */
-    public boolean publishAdd(Object parm1) {
+    public void publishAdd(Object parm1) {
         objectStream.add(new CapturedPublishAction(CapturedPublishAction.ACTION_ADD, ClassStringRendererRegistry.render(parm1), requestingClient));
-        return actualBlackboardService.publishAdd(parm1);
+        actualBlackboardService.publishAdd(parm1);
     }
 
 
@@ -175,9 +175,9 @@ public class BlackboardServiceCapturingProxy implements BlackboardService {
      * Proxied method
      * @return
      */
-    public boolean publishRemove(Object parm1) {
+    public void publishRemove(Object parm1) {
       objectStream.add(new CapturedPublishAction(CapturedPublishAction.ACTION_REMOVE, ClassStringRendererRegistry.render(parm1), requestingClient));
-      return actualBlackboardService.publishRemove(parm1);
+      actualBlackboardService.publishRemove(parm1);
     }
 
     /**
@@ -185,9 +185,9 @@ public class BlackboardServiceCapturingProxy implements BlackboardService {
      * @param parm1
      * @return
      */
-    public boolean publishChange(Object parm1) {
+    public void publishChange(Object parm1) {
         objectStream.add(new CapturedPublishAction(CapturedPublishAction.ACTION_CHANGE, ClassStringRendererRegistry.render(parm1), requestingClient));
-        return actualBlackboardService.publishChange(parm1);
+        actualBlackboardService.publishChange(parm1);
     }
 
     /**
@@ -196,9 +196,9 @@ public class BlackboardServiceCapturingProxy implements BlackboardService {
      * @param parm2
      * @return
      */
-    public boolean publishChange(Object parm1, Collection parm2) {
+    public void publishChange(Object parm1, Collection parm2) {
         objectStream.add(new CapturedPublishAction(CapturedPublishAction.ACTION_CHANGE, ClassStringRendererRegistry.render(parm1), requestingClient));
-        return actualBlackboardService.publishChange(parm1, parm2);
+        actualBlackboardService.publishChange(parm1, parm2);
     }
 
     /**
@@ -313,5 +313,9 @@ public class BlackboardServiceCapturingProxy implements BlackboardService {
      */
     public Persistence getPersistence() {
         return actualBlackboardService.getPersistence();
+    }
+
+    public boolean isTransactionOpen() {
+      return actualBlackboardService.isTransactionOpen();
     }
 }

@@ -30,7 +30,6 @@ import org.cougaar.core.mts.Message;
 import org.cougaar.core.mts.MessageAddress;
 import org.cougaar.core.persist.*;
 import org.cougaar.core.blackboard.*;
-import org.cougaar.core.plugin.PluginManagerForBinder;
 import org.cougaar.core.service.BlackboardService;
 import org.cougaar.core.plugin.ComponentPlugin;
 import org.cougaar.core.service.DomainService;
@@ -59,26 +58,14 @@ public class BlackboardCaptureFilter
       super(bf,child);
     }
 
-    protected final PluginManagerForBinder getPluginManager() { return (PluginManagerForBinder)getContainer(); }
-
     // this method specifies a binder proxy to use, so as to avoid exposing the binder
     // itself to the lower level objects.
-    protected ContainerAPI createContainerProxy() { return new PluginFilteringBinderProxy(); }
+    protected ContainerAPI createContainerProxy() { return new ServiceFilterContainerProxy(); }
 
     // this method installs the "filtering" service broker
     protected ServiceBroker createFilteringServiceBroker(ServiceBroker sb) {
       return new PluginFilteringServiceBroker(sb);
     }
-
-    // this class implements a simple proxy for a plugin wrapper binder
-    protected class PluginFilteringBinderProxy
-        extends ServiceFilterContainerProxy
-        implements PluginManagerForBinder
-    {
-      public MessageAddress getAgentIdentifier() { return getPluginManager().getAgentIdentifier(); }
-      public ConfigFinder getConfigFinder() { return getPluginManager().getConfigFinder(); }
-    }
-
 
     // this class catches requests for blackboard services, and
     // installs its own service proxy.
@@ -95,9 +82,6 @@ public class BlackboardCaptureFilter
         if (service instanceof BlackboardService) {
           return new BlackboardServiceCapturingProxy((BlackboardService)service, client);
         }
-        //else if (service instanceof DomainService) {
-        //  return new DomainServiceProxy((DomainService)service);
-        //}
         return null;
       }
     }

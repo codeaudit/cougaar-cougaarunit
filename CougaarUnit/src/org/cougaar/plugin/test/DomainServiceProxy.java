@@ -2,7 +2,6 @@ package org.cougaar.plugin.test;
 
 import org.cougaar.core.service.DomainService;
 import org.cougaar.planning.ldm.plan.ClusterObjectFactory;
-import org.cougaar.core.domain.RootFactory;
 import org.cougaar.core.domain.Factory;
 import java.util.List;
 
@@ -30,43 +29,18 @@ public class DomainServiceProxy implements DomainService {
    * Proxied method
    * @return
    */
-  public ClusterObjectFactory getClusterObjectFactory() {
-    return actualDomainService.getClusterObjectFactory();
+  public Factory getFactory(String s) {
+    return actualDomainService.getFactory(s);
   }
 
   /**
    * Proxied method
    * @return
    */
-  public RootFactory getFactory() {
-    return actualDomainService.getFactory();
+  public Factory getFactory(Class clazz) {
+    return actualDomainService.getFactory(clazz);
   }
 
-  /**
-   * Proxied method
-   * @return
-   */
-  public RootFactory getLdmFactory() {
-    return actualDomainService.getLdmFactory();
-  }
-
-  /**
-   * Proxied method
-   * @param parm1
-   * @return
-   */
-  public Factory getFactory(String parm1) {
-    return actualDomainService.getFactory(parm1);
-  }
-
-  /**
-   * Proxied method
-   * @param parm1
-   * @return
-   */
-  public Factory getFactory(Class parm1) {
-    return actualDomainService.getFactory(parm1);
-  }
 
   /**
    * Proxied method

@@ -190,8 +190,8 @@ public class BlackboardServiceProxy implements BlackboardService {
      * Proxied method
      * @return
      */
-    public boolean publishAdd(Object parm1) {
-        return publishAdd(parm1, false);
+    public void publishAdd(Object parm1) {
+        publishAdd(parm1, false);
     }
 
     /**
@@ -201,19 +201,19 @@ public class BlackboardServiceProxy implements BlackboardService {
      * contain the object add actions that are posted in reaction to the test object.
      * @return
      */
-    public boolean publishAdd(Object parm1, boolean bypassDelta) {
+    public void publishAdd(Object parm1, boolean bypassDelta) {
         if (!bypassDelta)  {
             currentBlackboardDeltaState.add(new PublishAction(PublishAction.ADD, parm1));
         }
-        return actualBlackboardService.publishAdd(parm1);
+        actualBlackboardService.publishAdd(parm1);
     }
 
     /**
      * Proxied method
      * @return
      */
-    public boolean publishRemove(Object parm1) {
-      return publishRemove(parm1, false);
+    public void publishRemove(Object parm1) {
+      publishRemove(parm1, false);
     }
 
     /**
@@ -223,11 +223,11 @@ public class BlackboardServiceProxy implements BlackboardService {
      * contain the object remove actions that are posted in reaction to the test object.
      * @return
      */
-    public boolean publishRemove(Object parm1, boolean bypassDelta) {
+    public void publishRemove(Object parm1, boolean bypassDelta) {
         if (!bypassDelta) {
             currentBlackboardDeltaState.add(new PublishAction(PublishAction.REMOVE, parm1));
         }
-        return actualBlackboardService.publishRemove(parm1);
+        actualBlackboardService.publishRemove(parm1);
 
     }
 
@@ -236,8 +236,8 @@ public class BlackboardServiceProxy implements BlackboardService {
      * @param parm1
      * @return
      */
-    public boolean publishChange(Object parm1) {
-        return publishChange(parm1, false);
+    public void publishChange(Object parm1) {
+        publishChange(parm1, false);
     }
 
     /**
@@ -247,11 +247,11 @@ public class BlackboardServiceProxy implements BlackboardService {
      * contain the object change actions that are posted in reaction to the test object.
      * @return
      */
-    public boolean publishChange(Object parm1, boolean bypassDelta) {
+    public void publishChange(Object parm1, boolean bypassDelta) {
         if (!bypassDelta) {
             currentBlackboardDeltaState.add(new PublishAction(PublishAction.CHANGE, parm1));
         }
-        return actualBlackboardService.publishChange(parm1);
+        actualBlackboardService.publishChange(parm1);
 
     }
 
@@ -261,8 +261,8 @@ public class BlackboardServiceProxy implements BlackboardService {
      * @param parm2
      * @return
      */
-    public boolean publishChange(Object parm1, Collection parm2) {
-        return publishChange(parm1, parm2, false);
+    public void publishChange(Object parm1, Collection parm2) {
+        publishChange(parm1, parm2, false);
     }
 
     /**
@@ -272,11 +272,11 @@ public class BlackboardServiceProxy implements BlackboardService {
      * contain the object change actions that are posted in reaction to the test object.
      * @return
     */
-    public boolean publishChange(Object parm1, Collection parm2, boolean bypassDelta) {
+    public void publishChange(Object parm1, Collection parm2, boolean bypassDelta) {
       if (!bypassDelta) {
         currentBlackboardDeltaState.add(new PublishAction(PublishAction.CHANGE, parm1));
       }
-      return actualBlackboardService.publishChange(parm1, parm2);
+      actualBlackboardService.publishChange(parm1, parm2);
     }
 
     /**
@@ -284,6 +284,14 @@ public class BlackboardServiceProxy implements BlackboardService {
      */
     public void openTransaction() {
       actualBlackboardService.openTransaction();
+    }
+
+    /**
+     * Proxued method
+     * @return
+     */
+    public boolean isTransactionOpen() {
+      return actualBlackboardService.isTransactionOpen();
     }
 
     /**
