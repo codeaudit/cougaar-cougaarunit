@@ -1,0 +1,143 @@
+<?xml version="1.0"?>
+<project>
+  <pomVersion>3</pomVersion>
+  <name>cougaarunit</name>
+  <id>cougaarunit</id>
+  <currentVersion>2.0</currentVersion>
+  <organization>
+    <name>Cougaar Software Inc.</name>
+    <url>http://www.cougaarsoftware.com</url>
+  </organization>
+  <inceptionYear>2003</inceptionYear>
+  <package>com.cougaarsoftware.core</package>
+
+  <shortDescription>cougaar unit test framework</shortDescription>
+
+ 
+
+  <description>
+   CougaarUnit provides an unit test framework for Cougaar components.  The CougaarUnit
+   framework allows developers to create plugin test cases and sweets for verifiy 
+   unit level functionality.  These tests can be run in an automated fashion to support
+   continous integration efforts.  
+  </description>
+  
+  <siteAddress>
+		http://cougaarunit.cougaar.org/
+  </siteAddress>
+  
+  <siteDirectory>
+		
+  </siteDirectory>
+
+  <repository>
+    <connection>
+      scm:cvs:pserver:${maven.username}@cougaar.org:/cvsroot/cougaarunit:cougaarunit2_0
+   </connection>
+  </repository>
+
+  <versions>
+    <version>
+      <id>2.0</id>
+      <name>2.0</name>
+      <tag>HEAD</tag>
+    </version>
+  </versions>
+
+ 
+  <developers>
+
+    <developer>
+      <name>Matt Abrams</name>
+      <id>mabrams</id>
+      <email>mabrams@cougaarsoftware.com</email>
+      <organization>CSI</organization>
+    </developer>
+     <developer>
+      <name>Tim Tschampel</name>
+      <id>ttschampel</id>
+      <email>ttschampel@cougaarsoftware.com</email>
+      <organization>CSI</organization>
+    </developer>
+      <developer>
+      <name>David Craine</name>
+      <id>craine</id>
+      <email>craine@cougaar.org</email>
+      <organization>InfoEther, LLC</organization>
+    </developer>
+  </developers>
+
+  <dependencies>
+    <dependency>
+    	<groupId>cougaar</groupId>
+    	<artifactId>cougaar_core</artifactId>
+    	<version>10.4.6</version>    
+    	<url>http://pumax/maven/</url>
+    </dependency>
+    <dependency>
+    	<groupId>cougaar</groupId>
+    	<artifactId>cougaar_util</artifactId>
+    	<version>10.4.6</version>    
+    	<url>http://pumax/maven/</url>
+    </dependency>
+    <dependency>
+	<groupId>cougaar</groupId>
+	<artifactId>planning</artifactId>
+	<version>10.4.6</version>
+	<url>http://pumax/maven/</url>
+    </dependency>
+    <dependency>
+		<groupId>castor</groupId>
+		<artifactId>castor</artifactId>
+		<version>0.9.5</version>
+		<jar>castor-0.9.5-xml.jar</jar>
+		<url>http://www.ibiblio.org/maven</url>
+    </dependency>
+  </dependencies>
+
+  <build>
+
+    <nagEmailAddress>
+      mabrams@cougaarsoftware.com
+    </nagEmailAddress>
+
+    <sourceDirectory>src</sourceDirectory>
+    <unitTestSourceDirectory>test</unitTestSourceDirectory>
+
+    <aspectSourceDirectory/>
+
+    <!-- Unit test cases -->
+    <unitTest>
+      <includes>
+        <include>**/*Test.java</include>
+      </includes>
+    </unitTest>
+              
+    <!-- J A R  R E S O U R C E S -->
+    <!-- Resources that are packaged up inside the JAR file -->
+    <resources>
+     
+    </resources>
+
+    <!-- Integration unit test cases -->
+    <integrationUnitTest/>
+
+    <jars>
+    </jars>
+  </build>
+  
+  <reports>
+		<report>maven-jdepend-plugin</report>
+		<report>maven-checkstyle-plugin</report>
+		<report>maven-pmd-plugin</report>
+		<report>maven-statcvs-plugin</report>
+		<report>maven-changelog-plugin</report>
+		<report>maven-developer-activity-plugin</report>
+		<report>maven-file-activity-plugin</report>	
+		<report>maven-junit-report-plugin</report>
+		<report>maven-javadoc-plugin</report>
+		<report>maven-jxr-plugin</report>
+		<report>maven-tasklist-plugin</report>
+		<report>maven-linkcheck-plugin</report>
+	</reports>
+</project>
