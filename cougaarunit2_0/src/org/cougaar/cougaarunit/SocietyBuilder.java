@@ -119,6 +119,7 @@ public class SocietyBuilder {
     	String testPluginName = pluginTestCase.getClass().getName();
     	String pluginBeingTested = pluginTestCase.getPluginClass();
         Agent agent = new Agent("TestAgent");
+        System.getProperty("org.cougaar.cougaarunit.defaultagent", "org.cougaar.core.agent.SimpleAgent");
         agent.setClassName("org.cougaar.core.agent.SimpleAgent");
         Component comp = new ComponentImpl(testPluginName);
         comp.setInsertionpoint(PluginBase.INSERTION_POINT);
