@@ -283,7 +283,7 @@ public class BlackboardServiceProxy implements BlackboardService {
      * Proxied method
      */
     public void openTransaction() {
-        actualBlackboardService.openTransaction();
+      actualBlackboardService.openTransaction();
     }
 
     /**

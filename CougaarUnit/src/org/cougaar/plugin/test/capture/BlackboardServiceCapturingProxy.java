@@ -202,6 +202,7 @@ public class BlackboardServiceCapturingProxy implements BlackboardService {
      * Proxied method
      */
     public void openTransaction() {
+      System.out.println("open transaction: " + requestingClient);
         actualBlackboardService.openTransaction();
     }
 
