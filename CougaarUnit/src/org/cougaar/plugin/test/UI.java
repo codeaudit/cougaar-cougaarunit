@@ -13,6 +13,8 @@ import java.io.FileFilter;
 import org.apache.bcel.classfile.*;
 import org.apache.bcel.Repository;
 import javax.swing.ProgressMonitor;
+import java.io.PrintStream;
+import java.io.OutputStream;
 
 /**
  * <p>Title: </p>
@@ -54,7 +56,7 @@ public class UI extends JFrame {
     private TitledBorder titledBorder3;
     private BorderLayout borderLayout4 = new BorderLayout();
     private JScrollPane jScrollPane3 = new JScrollPane();
-    private JTextArea jTextArea1 = new JTextArea();
+    private JTextArea jTextAreaOutput = new JTextArea();
     private Border border4;
     private TitledBorder titledBorder4;
     private JButton jButtonSearch = new JButton();
@@ -120,7 +122,7 @@ public class UI extends JFrame {
         jScrollPaneTestCases.setPreferredSize(new Dimension(268, 230));
         jSplitPaneTests.setPreferredSize(new Dimension(543, 230));
         jSplitPaneTests.setContinuousLayout(true);
-        jTextArea1.setPreferredSize(new Dimension(70, 125));
+        jTextAreaOutput.setPreferredSize(new Dimension(70, 125));
         jScrollPane3.setBorder(titledBorder4);
         this.addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -150,7 +152,7 @@ public class UI extends JFrame {
         jScrollPaneTestSuites.getViewport().add(jListTestSuites, null);
         jSplitPaneTests.add(jScrollPaneTestCases, JSplitPane.BOTTOM);
         jPanel1.add(jScrollPane3,  BorderLayout.SOUTH);
-        jScrollPane3.getViewport().add(jTextArea1, null);
+        jScrollPane3.getViewport().add(jTextAreaOutput, null);
         jScrollPaneTestCases.getViewport().add(jListTestCases, null);
         jSplitPaneTests.setDividerLocation(250);
     }
@@ -262,7 +264,40 @@ public class UI extends JFrame {
     }
 
     void jButtonRun_actionPerformed(ActionEvent e) {
+        MyPrintStream mps = new MyPrintStream(System.out);
+        Launcher launcher = new Launcher();
         Object[] testSuites = jListTestSuites.getSelectedValues();
+        for (int i=0; i<testSuites.length; i++) {
+            try {
+                Class clazz = Class.forName((String)testSuites[i]);
+                try {launcher.runTestSuite((PluginTestSuite)clazz.newInstance(), mps);} catch (Exception e1 ){System.out.println(e);}
+            }
+            catch (ClassNotFoundException ex) {
+            }
+        }
+
+        Object[] testCases = jListTestCases.getSelectedValues();
+        for (int i=0; i<testCases.length; i++) {
+            try {
+                Class clazz = Class.forName((String)testCases[i]);
+                try {launcher.runTestCase((PluginTestCase)clazz.newInstance(), mps);} catch (Exception e1 ){System.out.println(e);}
+            }
+            catch (ClassNotFoundException ex) {
+            }
+        }
+
+
+    }
+
+    class MyPrintStream extends PrintStream {
+        public MyPrintStream(OutputStream os) {
+            super(os);
+        }
+
+        public void println(String s) {
+            super.println(s);
+            jTextAreaOutput.append(s);
+        }
 
     }
 }

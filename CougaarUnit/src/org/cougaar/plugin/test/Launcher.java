@@ -80,7 +80,7 @@ public class Launcher {
             currentOS = PLATFORM_OTHER;
     }
 
-    private static void writeNodeIni() throws Exception {
+    private void writeNodeIni() throws Exception {
         File nodeFile = new File("TestNode.ini");
         FileWriter fw = new FileWriter(nodeFile);
         fw.write("[ Clusters ]\n");
@@ -93,7 +93,7 @@ public class Launcher {
         fw.close();
     }
 
-    private static void writeAgentIni(String testPluginStr, String sourcePluginStr) throws Exception {
+    private void writeAgentIni(String testPluginStr, String sourcePluginStr) throws Exception {
         File agentFile = new File("TestAgent.ini");
         FileWriter fw = new FileWriter(agentFile);
         fw.write("[ Cluster ]\n");
@@ -115,7 +115,7 @@ public class Launcher {
      * Here is where we launch the cougaar environment once the node and
      * agent ini files have been configured.  This method presumes that
      */
-    private static void launchCougaar(OutputStream os) throws Exception {
+    private void launchCougaar(OutputStream os) throws Exception {
         File shellFile = null;
         String shellFileText = null;
         String execStr = null;
@@ -155,28 +155,15 @@ public class Launcher {
 
     public static void main(String[] args) {
         if (args[0] != null) {
+            Launcher launcher = new Launcher();
             try {
                 //determine if args[0] is a PluginTestSuite or a PluginTestCase
                 Class clazz = Class.forName(args[0]);
                 if (clazz.getSuperclass().equals(PluginTestSuite.class)) {
-                    PluginTestSuite pts = (PluginTestSuite)clazz.newInstance();
-                    Class[] testClasses = pts.getTestClasses();
-                    for (int i=0; i<testClasses.length; i++) {
-                        try {
-                            if (testClasses[i].getSuperclass().equals(PluginTestCase.class)) {
-                                runTestCase((PluginTestCase)testClasses[i].newInstance(), System.out);
-                            }
-                            else {
-                                System.out.println("Invalid Test Case object found in Test Suite.");
-                            }
-                        }
-                        catch (Exception ex) {
-                            System.out.println("Invalid test class object.");
-                        }
-                    }
+                    launcher.runTestSuite((PluginTestSuite)clazz.newInstance(), System.out);
                 }
                 else if (clazz.getSuperclass().equals(PluginTestCase.class)) {
-                    runTestCase((PluginTestCase)clazz.newInstance(), System.out);
+                    launcher.runTestCase((PluginTestCase)clazz.newInstance(), System.out);
                 }
                 else {
                     System.out.println("Unknown test class type: " + clazz.getName());
@@ -189,13 +176,31 @@ public class Launcher {
         }
     }
 
-    private static void runTestCase(PluginTestCase tpc, OutputStream os) throws Exception {
+    protected void runTestSuite(PluginTestSuite pts, PrintStream ps) throws Exception {
+        Class[] testClasses = pts.getTestClasses();
+        for (int i=0; i<testClasses.length; i++) {
+            try {
+                if (testClasses[i].getSuperclass().equals(PluginTestCase.class)) {
+                    runTestCase((PluginTestCase)testClasses[i].newInstance(), ps);
+                }
+                else {
+                    System.out.println("Invalid Test Case object found in Test Suite.");
+                }
+            }
+            catch (Exception ex) {
+                System.out.println("Invalid test class object.");
+            }
+        }
+    }
+
+
+    protected void runTestCase(PluginTestCase tpc, PrintStream ps) throws Exception {
         String sourcePluginStr = tpc.getPluginClass();
         //now we need to generate the ini files for launching cougaar
         writeNodeIni();
         //now we write the agent ini file
         writeAgentIni(tpc.getClass().getName(), sourcePluginStr);
         //launch Cougaar
-        launchCougaar(os);
+        launchCougaar(ps);
     }
 }
