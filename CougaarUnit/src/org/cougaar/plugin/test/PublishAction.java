@@ -97,7 +97,7 @@ public class PublishAction  {
         return ((Class)obj).getName();
       }
       else
-        return obj.getClass().getName();
+        return ClassStringRendererRegistry.render(obj);
     }
 
 
