@@ -30,7 +30,7 @@ public abstract class PluginTestCase extends ComponentPlugin {
             */
     public void subscriptionAssert(Object obj, boolean expectedResult) {
         boolean result = ((TestBlackboardService)blackboard).testSubscriptions(obj);
-        PluginTestResult.addEntry(PluginTestResult.PHASE_TEST_SUBSCRIPTION, PluginTestResult.COMMAND_SUBSCRIPTION_ASSERT, result, obj.getClass().getName());
+        PluginTestResult.addEntry(PluginTestResult.PHASE_TEST_SUBSCRIPTION, PluginTestResult.COMMAND_SUBSCRIPTION_ASSERT, !(result^expectedResult), obj.getClass().getName());
     }
 
     /**
@@ -68,16 +68,18 @@ public abstract class PluginTestCase extends ComponentPlugin {
             * @param expectedResult - Indicates whether this test is expected to pass or fail
             true - pass
             false - fail
+     * @param expectedResult  what the expected outcome should be
+     * @param ordered whether the comparison of the BlackboardDeltaState object should be order dependednt
             */
-    public void assertPublishAdd(Object obj, BlackboardDeltaState bbs, long waitTime, boolean expectedResult) {
+    public void assertPublishAdd(Object obj, BlackboardDeltaState bbs, long waitTime, boolean expectedResult, boolean ordered) {
         blackboard.openTransaction();
         ((TestBlackboardService)blackboard).publishAdd(obj);
         blackboard.closeTransaction();
         if (bbs != null) {
             try {
                 Thread.currentThread().sleep(waitTime > 0?waitTime:0);   //wait the designated amount of time
-                boolean result = bbs.compare(((TestBlackboardService)blackboard).getCurrentBlackboardDeltaState(), expectedResult);
-                PluginTestResult.addEntry(PluginTestResult.PHASE_TEST_EXECUTION, PluginTestResult.COMMAND_ASSERT_PUBLISH_ADD, result, obj.getClass().getName());
+                boolean result = bbs.compare(((TestBlackboardService)blackboard).getCurrentBlackboardDeltaState(), ordered);
+                PluginTestResult.addEntry(PluginTestResult.PHASE_TEST_EXECUTION, PluginTestResult.COMMAND_ASSERT_PUBLISH_ADD, !(result^expectedResult), obj.getClass().getName());
                 ((TestBlackboardService)blackboard).resetBlackboardDeltaState();   //reset the blackboard state
             }
             catch (InterruptedException ex) {
@@ -100,15 +102,18 @@ public abstract class PluginTestCase extends ComponentPlugin {
             * @param expectedResult - Indicates whether this test is expected to pass or fail
             true - pass
             false - fail
+     * @param expectedResult  what the expected outcome should be
+     * @param ordered whether the comparison of the BlackboardDeltaState object should be order dependednt
+
             */
-    public void assertPublishChange(Object obj, BlackboardDeltaState bbs, long waitTime, boolean expectedResult) {
+    public void assertPublishChange(Object obj, BlackboardDeltaState bbs, long waitTime, boolean expectedResult, boolean ordered) {
         blackboard.openTransaction();
         ((TestBlackboardService)blackboard).publishChange(obj);
         blackboard.closeTransaction();
         if (bbs != null) {
             try {
                 Thread.currentThread().sleep(waitTime > 0?waitTime:0);   //wait the designated amount of time
-                boolean result = bbs.compare(((TestBlackboardService)blackboard).getCurrentBlackboardDeltaState(), expectedResult);
+                boolean result = bbs.compare(((TestBlackboardService)blackboard).getCurrentBlackboardDeltaState(), ordered);
                 PluginTestResult.addEntry(PluginTestResult.PHASE_TEST_EXECUTION, PluginTestResult.COMMAND_ASSERT_PUBLISH_CHANGE, result, obj.getClass().getName());
                 ((TestBlackboardService)blackboard).resetBlackboardDeltaState();   //reset the blackboard state
             }
@@ -132,16 +137,18 @@ public abstract class PluginTestCase extends ComponentPlugin {
             * @param expectedResult - Indicates whether this test is expected to pass or fail
             true - pass
             false - fail
+     * @param expectedResult  what the expected outcome should be
+     * @param ordered whether the comparison of the BlackboardDeltaState object should be order dependednt
             */
-    public void assertPublishRemove(Object obj, BlackboardDeltaState bbs, long waitTime, boolean expectedResult) {
+    public void assertPublishRemove(Object obj, BlackboardDeltaState bbs, long waitTime, boolean expectedResult, boolean ordered) {
         blackboard.openTransaction();
         ((TestBlackboardService)blackboard).publishRemove(obj);
         blackboard.closeTransaction();
         if (bbs != null) {
             try {
                 Thread.currentThread().sleep(waitTime > 0?waitTime:0);   //wait the designated amount of time
-                boolean result = bbs.compare(((TestBlackboardService)blackboard).getCurrentBlackboardDeltaState(), expectedResult);
-                PluginTestResult.addEntry(PluginTestResult.PHASE_TEST_EXECUTION, PluginTestResult.COMMAND_ASSERT_PUBLISH_REMOVE, result, obj.getClass().getName());
+                boolean result = bbs.compare(((TestBlackboardService)blackboard).getCurrentBlackboardDeltaState(), ordered);
+                PluginTestResult.addEntry(PluginTestResult.PHASE_TEST_EXECUTION, PluginTestResult.COMMAND_ASSERT_PUBLISH_REMOVE, !(result^expectedResult), obj.getClass().getName());
                 ((TestBlackboardService)blackboard).resetBlackboardDeltaState();   //reset the blackboard state
             }
             catch (InterruptedException ex) {
@@ -182,6 +189,7 @@ public abstract class PluginTestCase extends ComponentPlugin {
         System.out.println("STARTING TESTS...");
         Thread t = new Thread(new Runnable() {
             public void run() {
+                try {Thread.currentThread().sleep(5000);} catch (Exception e){}  //for now we add a delay to let the source plugin start
                 validateSubscriptions();
                 validateExecution();
                 System.out.println(PluginTestResult.getReportAsString());  //print the test results to stdout

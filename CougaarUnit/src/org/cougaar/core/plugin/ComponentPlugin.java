@@ -173,8 +173,7 @@ abstract public class ComponentPlugin   extends org.cougaar.util.GenericStateMod
   }*/
 
   public final void setBlackboardService(BlackboardService bs) {
-      blackboard = new org.cougaar.plugin.test.TestBlackboardService(bs);      //construct the test framework wrapper for the BlackboardService
-
+      blackboard = org.cougaar.plugin.test.TestBlackboardService.getInstance(bs);      //construct the test framework wrapper for the BlackboardService
   }
 
   public final void setAlarmService(AlarmService s) {

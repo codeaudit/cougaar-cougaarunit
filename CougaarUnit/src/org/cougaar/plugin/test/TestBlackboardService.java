@@ -27,10 +27,17 @@ public class TestBlackboardService implements BlackboardService {
     BlackboardService actualBlackboardService;
     Vector predicates = new Vector();
     BlackboardDeltaState currentBlackboardDeltaState = new BlackboardDeltaState();
+    private static TestBlackboardService instance;
 
-
-    public TestBlackboardService(BlackboardService actualBlackboardService) {
+    private TestBlackboardService(BlackboardService actualBlackboardService){
         this.actualBlackboardService = actualBlackboardService;
+    }
+
+    public static TestBlackboardService getInstance(BlackboardService actualBlackboardService) {
+        if (instance == null)
+            instance = new TestBlackboardService(actualBlackboardService);
+
+        return instance;
     }
 
     public void resetBlackboardDeltaState() {
@@ -57,7 +64,6 @@ public class TestBlackboardService implements BlackboardService {
     }
 
     public Subscription subscribe(UnaryPredicate parm1) {
-        //System.out.println("DETECTED SUBSCRIPTION: " + parm1);
         predicates.add(parm1);
         return actualBlackboardService.subscribe(parm1);
     }

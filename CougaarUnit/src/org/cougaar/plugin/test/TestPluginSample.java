@@ -6,12 +6,12 @@ public class TestPluginSample extends PluginTestCase {
         /*publishes this object to the blackboard and validates that the
         * plugin's subscription model passes the object through
         */
-        subscriptionAssert(new Object(), true);
+        subscriptionAssert(new TestBBMessageObject(), true);
 
         /*publishes this object to the blackboard and validates that the
         *plugin's subscription model filters out the object
         */
-        subscriptionAssert(new Object(), false);
+        subscriptionAssert(new TestBBMessageObject2(), false);
 
         /**
          *Also consider publishRemove and publishChange
@@ -27,8 +27,8 @@ public class TestPluginSample extends PluginTestCase {
         being added to to the blackboard.
         */
         BlackboardDeltaState bbs = new BlackboardDeltaState();
-        bbs.add(new PublishAction(PublishAction.ADD, Object.class));
-        assertPublishAdd(new Object(), bbs, 5000, true);
+        bbs.add(new PublishAction(PublishAction.ADD, TestBBMessageObject2.class));
+        assertPublishAdd(new TestBBMessageObject(), bbs, 5000, true, false);
         /**
          * PublishAdd, PublishRemove, or PublishChange objects in the blackboard and validate that some
          * resulting blackboard state (i.e., object added/removed/changed)
