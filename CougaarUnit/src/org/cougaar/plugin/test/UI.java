@@ -221,6 +221,38 @@ public class UI extends JFrame {
     }
   }
 
+  class SourceTableCellRenderer extends DefaultTableCellRenderer {
+    public Component getTableCellRendererComponent(JTable table,
+        Object value,
+        boolean isSelected,
+        boolean hasFocus,
+        int row,
+        int column) {
+      String normalValue = value.toString().trim();
+      Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+      c.setBackground(determineColor(table, value, row, column));
+      return c;
+    }
+
+    private Color determineColor(JTable table, Object value, int row, int column) {
+      String normalValue = value.toString().trim();
+      if (normalValue.equals("OPEN TRANSACTION") || normalValue.equals("CLOSE TRANSACTION")) {
+        return Color.green;
+      }
+      else if (row > 0) {
+        int count = row-1;
+        while (count >= 0) {
+          String prevValue = table.getValueAt(count, column).toString().trim();
+          if (prevValue.equals("OPEN TRANSACTION"))
+            return Color.green;
+          else if (prevValue.equals("CLOSE TRANSACTION"))
+            return Color.white;
+          count--;
+        }
+      }
+      return Color.white;
+    }
+  }
 
   /**
    * Constructor
@@ -327,6 +359,8 @@ public class UI extends JFrame {
 
     jScrollPaneSourceData.setVisible(false);
     jScrollPaneTimeData.setVisible(true);
+
+    jTableSourceData.setDefaultRenderer(Object.class, new SourceTableCellRenderer());
   }
 
   private void setupIcons() {

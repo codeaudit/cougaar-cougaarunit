@@ -6,6 +6,7 @@ import org.cougaar.plugin.test.util.Misc;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import com.borland.jbcl.control.MessageDialog;
 
 /**
  * <p>Title: CougaarUnit</p>
@@ -51,6 +52,11 @@ public class UIBootstrapper {
 
    static String getClassPath() {
      String cip = Misc.getEnv("COUGAAR_INSTALL_PATH");
+     if ((cip == null) || (cip.equals(""))) {
+       MessageDialog md = new MessageDialog(null, "Error", "The COUGAAR_INSTALL_PATH is not set");
+       md.show();
+       System.exit(1);
+     }
      String cp = buildClassPath(cip+fsep+"lib");
      cp += buildClassPath(cip+fsep+"sys");
      return cp;

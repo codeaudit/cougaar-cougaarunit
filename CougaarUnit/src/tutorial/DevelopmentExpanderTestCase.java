@@ -68,15 +68,15 @@ public class DevelopmentExpanderTestCase extends PluginTestCase {
     Task codeTask = makeTask("CODE", null, wf);  //this is the task that we're going to assert onto the blackboard
 
     Task designTask = makeTask("DESIGN", codeTask, wf);  //this is one of the expected resulting tasks
-    Task developTask = makeTask("DEVELOP", codeTask, wf);  //this is one of the expected resulting tasks
     Task testTask = makeTask("TEST", codeTask, wf);  //this is one of the expected resulting tasks
+    Task developTask = makeTask("DEVELOP", codeTask, wf);  //this is one of the expected resulting tasks
     AllocationResult estAR = null;
     Expansion designExp = ((PlanningFactory)domainService.getFactory("planning")).createExpansion(designTask.getPlan(), codeTask, wf, estAR);  //this is the other expected result
 
     BlackboardDeltaState bds = new BlackboardDeltaState();
     bds.add(new PublishAction(PublishAction.ADD, designTask, ObjectComparators.TASK_VERB_COMPARATOR));
-    bds.add(new PublishAction(PublishAction.ADD, developTask, ObjectComparators.TASK_VERB_COMPARATOR));
     bds.add(new PublishAction(PublishAction.ADD, testTask, ObjectComparators.TASK_VERB_COMPARATOR));
+    bds.add(new PublishAction(PublishAction.ADD, developTask, ObjectComparators.TASK_VERB_COMPARATOR));
     bds.add(new PublishAction(PublishAction.ADD, designExp, ObjectComparators.EXPANSION_COMPARATOR));
 
     assertPublishAdd(codeTask, bds, 5000, true, true);

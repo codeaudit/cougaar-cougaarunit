@@ -30,20 +30,24 @@ public class CapturedPublishAction implements Serializable {
         this.publishingSource = publishingSource;
         this.timeStamp = System.currentTimeMillis();
     }
+
+    public static String getActionString(int actionId) {
+      switch (actionId) {
+          case ACTION_ADD: return "ADD";
+          case ACTION_REMOVE: return "REMOVE";
+          case ACTION_CHANGE: return "CHANGE";
+          case ACTION_OPEN_TRANSACTION: return "OPEN TRANSACTION";
+          case ACTION_CLOSE_TRANSACTION: return "CLOSE TRANSACTION";
+          case ACTION_INTERAGENT_TRANSFER: return "INTERAGENT TRANSFER";
+      }
+     return "";
+    }
     /**
      * Get the string representation of an action
      * @param actionID
      * @return
      */
     public String getActionString() {
-     switch (action) {
-         case ACTION_ADD: return "ADD";
-         case ACTION_REMOVE: return "REMOVE";
-         case ACTION_CHANGE: return "CHANGE";
-         case ACTION_OPEN_TRANSACTION: return "OPEN TRANSACTION";
-         case ACTION_CLOSE_TRANSACTION: return "CLOSE TRANSACTION";
-         case ACTION_INTERAGENT_TRANSFER: return "INTERAGENT TRANSFER";
-     }
-     return "";
+      return CapturedPublishAction.getActionString(action);
     }
 }
