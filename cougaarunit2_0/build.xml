@@ -247,7 +247,7 @@
 	<cvs cvsroot="${cvs.repository}" package="${cvs.package}" dest=".."/>
     </target>
 
-    <target name="masterbuild" depends="checkout,compile,junit-test,jar"
+    <target name="masterbuild" depends="checkout,compile,junit-test,cunit-test,jar"
 	description="Cruise control master build"/>
 
     <target name="cleanbuild" depends="clean,masterbuild" description="Cruise control clean build"/>
