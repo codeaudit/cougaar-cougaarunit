@@ -29,7 +29,7 @@ public abstract class PluginTestCase extends ComponentPlugin {
             false - fail
             */
     public void subscriptionAssert(Object obj, boolean expectedResult) {
-        boolean result = ((TestBlackboardService)blackboard).testSubscriptions(obj);
+        boolean result = ((BlackboardServiceProxy)blackboard).testSubscriptions(obj);
         PluginTestResult.addEntry(PluginTestResult.PHASE_TEST_SUBSCRIPTION, PluginTestResult.COMMAND_SUBSCRIPTION_ASSERT, !(result^expectedResult), obj.getClass().getName());
     }
 
@@ -45,7 +45,7 @@ public abstract class PluginTestCase extends ComponentPlugin {
         if (bbs != null) {
             try {
                 Thread.currentThread().sleep(waitTime > 0?waitTime:0);   //wait the designated amount of time
-                boolean result = bbs.compare(((TestBlackboardService)blackboard).getCurrentBlackboardDeltaState(), expectedResult);
+                boolean result = bbs.compare(((BlackboardServiceProxy)blackboard).getCurrentBlackboardDeltaState(), expectedResult);
                 PluginTestResult.addEntry(PluginTestResult.PHASE_TEST_EXECUTION, PluginTestResult.INITIAL_STATE, result, "Initial State");
             }
             catch (InterruptedException ex) {
@@ -73,14 +73,14 @@ public abstract class PluginTestCase extends ComponentPlugin {
             */
     public void assertPublishAdd(Object obj, BlackboardDeltaState bbs, long waitTime, boolean expectedResult, boolean ordered) {
         blackboard.openTransaction();
-        ((TestBlackboardService)blackboard).publishAdd(obj);
+        ((BlackboardServiceProxy)blackboard).publishAdd(obj);
         blackboard.closeTransaction();
         if (bbs != null) {
             try {
                 Thread.currentThread().sleep(waitTime > 0?waitTime:0);   //wait the designated amount of time
-                boolean result = bbs.compare(((TestBlackboardService)blackboard).getCurrentBlackboardDeltaState(), ordered);
+                boolean result = bbs.compare(((BlackboardServiceProxy)blackboard).getCurrentBlackboardDeltaState(), ordered);
                 PluginTestResult.addEntry(PluginTestResult.PHASE_TEST_EXECUTION, PluginTestResult.COMMAND_ASSERT_PUBLISH_ADD, !(result^expectedResult), obj.getClass().getName());
-                ((TestBlackboardService)blackboard).resetBlackboardDeltaState();   //reset the blackboard state
+                ((BlackboardServiceProxy)blackboard).resetBlackboardDeltaState();   //reset the blackboard state
             }
             catch (InterruptedException ex) {
                 ex.printStackTrace();
@@ -108,14 +108,14 @@ public abstract class PluginTestCase extends ComponentPlugin {
             */
     public void assertPublishChange(Object obj, BlackboardDeltaState bbs, long waitTime, boolean expectedResult, boolean ordered) {
         blackboard.openTransaction();
-        ((TestBlackboardService)blackboard).publishChange(obj);
+        ((BlackboardServiceProxy)blackboard).publishChange(obj);
         blackboard.closeTransaction();
         if (bbs != null) {
             try {
                 Thread.currentThread().sleep(waitTime > 0?waitTime:0);   //wait the designated amount of time
-                boolean result = bbs.compare(((TestBlackboardService)blackboard).getCurrentBlackboardDeltaState(), ordered);
+                boolean result = bbs.compare(((BlackboardServiceProxy)blackboard).getCurrentBlackboardDeltaState(), ordered);
                 PluginTestResult.addEntry(PluginTestResult.PHASE_TEST_EXECUTION, PluginTestResult.COMMAND_ASSERT_PUBLISH_CHANGE, result, obj.getClass().getName());
-                ((TestBlackboardService)blackboard).resetBlackboardDeltaState();   //reset the blackboard state
+                ((BlackboardServiceProxy)blackboard).resetBlackboardDeltaState();   //reset the blackboard state
             }
             catch (InterruptedException ex) {
                 ex.printStackTrace();
@@ -142,14 +142,14 @@ public abstract class PluginTestCase extends ComponentPlugin {
             */
     public void assertPublishRemove(Object obj, BlackboardDeltaState bbs, long waitTime, boolean expectedResult, boolean ordered) {
         blackboard.openTransaction();
-        ((TestBlackboardService)blackboard).publishRemove(obj);
+        ((BlackboardServiceProxy)blackboard).publishRemove(obj);
         blackboard.closeTransaction();
         if (bbs != null) {
             try {
                 Thread.currentThread().sleep(waitTime > 0?waitTime:0);   //wait the designated amount of time
-                boolean result = bbs.compare(((TestBlackboardService)blackboard).getCurrentBlackboardDeltaState(), ordered);
+                boolean result = bbs.compare(((BlackboardServiceProxy)blackboard).getCurrentBlackboardDeltaState(), ordered);
                 PluginTestResult.addEntry(PluginTestResult.PHASE_TEST_EXECUTION, PluginTestResult.COMMAND_ASSERT_PUBLISH_REMOVE, !(result^expectedResult), obj.getClass().getName());
-                ((TestBlackboardService)blackboard).resetBlackboardDeltaState();   //reset the blackboard state
+                ((BlackboardServiceProxy)blackboard).resetBlackboardDeltaState();   //reset the blackboard state
             }
             catch (InterruptedException ex) {
                 ex.printStackTrace();
@@ -158,11 +158,11 @@ public abstract class PluginTestCase extends ComponentPlugin {
     }
 
     /**
-     * reset the state of the TestBlackboardService.  This clears whatever PublishAction objects it currently
+     * reset the state of the BlackboardServiceProxy.  This clears whatever PublishAction objects it currently
      * is tracking.
      */
     public void resetBlackboardDeltaState() {
-        ((TestBlackboardService)this.blackboard).resetBlackboardDeltaState();
+        ((BlackboardServiceProxy)this.blackboard).resetBlackboardDeltaState();
     }
 
      /**

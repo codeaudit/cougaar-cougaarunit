@@ -74,6 +74,7 @@ public class Launcher {
         fw.write("[ Plugins ]\n");
         fw.write("plugin = " + sourcePluginStr + "\n");
         fw.write("plugin = " + testPluginStr + "\n");
+        fw.write("Node.AgentManager.Agent.PluginManager.Binder(BINDER) = org.cougaar.plugin.test.PluginServiceFilter\n");
         fw.write("[ Policies ]\n");
         fw.write("[ Permission ]\n");
         fw.write("[ AuthorizedOperation ]\n");
