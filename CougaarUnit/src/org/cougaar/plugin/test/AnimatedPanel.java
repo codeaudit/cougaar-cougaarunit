@@ -8,10 +8,11 @@ import javax.swing.JFrame;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Random;
 
 /**
- * <p>Title: </p>
- * <p>Description: </p>
+ * <p>Title: AnimatedPanel</p>
+ * <p>Description: Provides a panel in which a selected animation can be displayed</p>
  * <p>Copyright: Copyright (c) 2002</p>
  * <p>Company: </p>
  * @author unascribed
@@ -23,6 +24,7 @@ public class AnimatedPanel extends JPanel implements Runnable {
   public final static int ANIMATION_POINTS_1 = 2;
   public final static int ANIMATION_POINTS_2 = 3;
   public final static int ANIMATION_CIRCLES = 4;
+  public final static int ANIMATION_FIREWORKS = 5;
 
   private BorderLayout borderLayout1 = new BorderLayout();
   private Thread myThread;
@@ -67,6 +69,7 @@ public class AnimatedPanel extends JPanel implements Runnable {
       case ANIMATION_POINTS_1: return new PointsAnimation();
       case ANIMATION_POINTS_2: return new PointsAnimation2();
       case ANIMATION_CIRCLES: return new CirclesAnimation();
+      case ANIMATION_FIREWORKS: return new FireworksAnimation();
       default: return new CirclesAnimation();
     }
   }
@@ -244,10 +247,188 @@ public class AnimatedPanel extends JPanel implements Runnable {
     f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     f.getContentPane().setLayout(new BorderLayout());
     AnimatedPanel ap = new AnimatedPanel();
-    ap.setAnimation(AnimatedPanel.ANIMATION_SPIRAL);
+    ap.setAnimation(AnimatedPanel.ANIMATION_FIREWORKS);
     f.getContentPane().add(ap, BorderLayout.CENTER);
     f.show();
     ap.start();
 
   }
+}
+
+class FireworksAnimation implements Animation {
+  public void renderTo(Graphics2D grp, JPanel offScreenPanel, Image offScreenImage) {
+    AnimationSpeed = 100;
+    RocketStyleVariability = 20;
+    MaxRocketNumber = 5;
+    MaxRocketExplosionEnergy = 500;
+    MaxRocketPatchNumber = 50;
+    MaxRocketPatchLength = 100;
+    Gravity = 20;
+    mx = offScreenPanel.getSize().width - 1;
+    my = offScreenPanel.getSize().height - 1;
+    rocket = new Rocket[MaxRocketNumber];
+
+    grp.setColor(Color.black);
+    grp.fillRect(0, 0, mx + 1, my + 1);
+
+    for(int i = 0; i < MaxRocketNumber; i++)
+      rocket[i] = new Rocket(mx, my, Gravity);
+
+
+    int k = (int)((Math.random() * (double)MaxRocketExplosionEnergy * 3D) / 4D) + MaxRocketExplosionEnergy / 4 + 1;
+    int l = (int)((Math.random() * (double)MaxRocketPatchNumber * 3D) / 4D) + MaxRocketPatchNumber / 4 + 1;
+    int i1 = (int)((Math.random() * (double)MaxRocketPatchLength * 3D) / 4D) + MaxRocketPatchLength / 4 + 1;
+    long l1 = (long)(Math.random() * 10000D);
+    do
+    {
+      try
+      {
+        Thread.sleep(100 / AnimationSpeed);
+      }
+      catch(InterruptedException _ex) { }
+      boolean flag = true;
+      for(int i = 0; i < MaxRocketNumber; i++)
+        flag = flag && rocket[i].sleep;
+
+      if(flag && Math.random() * 100D < (double)RocketStyleVariability)
+      {
+        k = (int)((Math.random() * (double)MaxRocketExplosionEnergy * 3D) / 4D) + MaxRocketExplosionEnergy / 4 + 1;
+        l = (int)((Math.random() * (double)MaxRocketPatchNumber * 3D) / 4D) + MaxRocketPatchNumber / 4 + 1;
+        i1 = (int)((Math.random() * (double)MaxRocketPatchLength * 3D) / 4D) + MaxRocketPatchLength / 4 + 1;
+        l1 = (long)(Math.random() * 10000D);
+      }
+      for(int j = 0; j < MaxRocketNumber; j++)
+      {
+        if(rocket[j].sleep && Math.random() * (double)MaxRocketNumber * (double)i1 < 1.0D)
+        {
+        rocket[j].init(k, l, i1, l1);
+        rocket[j].start();
+      }
+      rocket[j].show(grp);
+      offScreenPanel.getGraphics().drawImage(offScreenImage, 0, 0,
+          offScreenPanel);
+
+      }
+
+    } while(true);
+  }
+
+
+  public FireworksAnimation()
+  {
+  }
+
+  public int AnimationSpeed;
+  public int RocketStyleVariability;
+  public int MaxRocketNumber;
+  public int MaxRocketExplosionEnergy;
+  public int MaxRocketPatchNumber;
+  public int MaxRocketPatchLength;
+  public int Gravity;
+  public String RocketSoundtrack;
+  private int mx;
+  private int my;
+  private Thread thread;
+  private Rocket rocket[];
+}
+class Rocket
+{
+
+  public Rocket(int i, int j, int k)
+  {
+    sleep = true;
+    mx = i;
+    my = j;
+    gravity = k;
+  }
+
+  public void init(int i, int j, int k, long l)
+  {
+    energy = i;
+    patch = j;
+    length = k;
+    random = new Random(l);
+    vx = new int[patch];
+    vy = new int[patch];
+    red = (int)(random.nextDouble() * 128D) + 128;
+    blue = (int)(random.nextDouble() * 128D) + 128;
+    green = (int)(random.nextDouble() * 128D) + 128;
+    ox = (int)((Math.random() * (double)mx) / 2D) + mx / 4;
+    oy = (int)((Math.random() * (double)my) / 2D) + my / 4;
+    for(int i1 = 0; i1 < patch; i1++)
+    {
+      vx[i1] = (int)(Math.random() * (double)energy) - energy / 2;
+      vy[i1] = (int)((Math.random() * (double)energy * 7D) / 8D) - energy / 8;
+    }
+
+  }
+
+  public void start()
+  {
+    t = 0;
+    sleep = false;
+  }
+
+  public void show(Graphics g)
+  {
+    if(!sleep)
+    {
+      if(t < length)
+      {
+        int j = ((int)(random.nextDouble() * 64D) - 32) + red;
+        if(j >= 0 && j < 256)
+          red = j;
+        j = ((int)(random.nextDouble() * 64D) - 32) + blue;
+        if(j >= 0 && j < 256)
+          blue = j;
+        j = ((int)(random.nextDouble() * 64D) - 32) + green;
+        if(j >= 0 && j < 256)
+          green = j;
+        Color color = new Color(red, blue, green);
+        for(int i = 0; i < patch; i++)
+        {
+          double d = (double)t / 100D;
+          x = (int)((double)vx[i] * d);
+          y = (int)((double)vy[i] * d - (double)gravity * d * d);
+          g.setColor(color);
+          g.drawLine(ox + x, oy - y, ox + x, oy - y);
+          if(t >= length / 2)
+          {
+            for(int k = 0; k < 2; k++)
+            {
+              double d1 = (double)((t - length / 2) * 2 + k) / 100D;
+              x = (int)((double)vx[i] * d1);
+              y = (int)((double)vy[i] * d1 - (double)gravity * d1 * d1);
+              g.setColor(Color.black);
+              g.drawLine(ox + x, oy - y, ox + x, oy - y);
+            }
+
+          }
+        }
+
+        t++;
+        return;
+      }
+      sleep = true;
+    }
+  }
+
+  public boolean sleep;
+  private int energy;
+  private int patch;
+  private int length;
+  private int mx;
+  private int my;
+  private int gravity;
+  private int ox;
+  private int oy;
+  private int vx[];
+  private int vy[];
+  private int x;
+  private int y;
+  private int red;
+  private int blue;
+  private int green;
+  private int t;
+  private Random random;
 }

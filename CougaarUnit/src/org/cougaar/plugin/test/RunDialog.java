@@ -49,7 +49,7 @@ public class RunDialog extends JDialog {
 
   private void init2() {
     panel1.add(ap, BorderLayout.CENTER);
-    ap.setAnimation(AnimatedPanel.ANIMATION_SPIRAL);
+    ap.setAnimation(AnimatedPanel.ANIMATION_FIREWORKS);
 
   }
 

@@ -84,8 +84,6 @@ public class ResultsDialog extends JDialog {
     for (Enumeration enum = resultStates.expectedResults.elements(); enum.hasMoreElements(); ) {
       ResultStates.ResultState state = (ResultStates.ResultState)enum.nextElement();
       Object[] row = new Object[2];
-      System.out.println("state.id: "+ state.id);
-      System.out.println("state.result: "+ state.result);
       row[0] = state.id;
       row[1] = state.result;
       this.expectedResultsModel.addRow(row);
