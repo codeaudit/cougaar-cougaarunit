@@ -26,15 +26,19 @@ public class TestBlackboardService implements BlackboardService {
 
     BlackboardService actualBlackboardService;
     Vector predicates = new Vector();
-    BlackboardState currentBlackboardState = new BlackboardState();
+    BlackboardDeltaState currentBlackboardDeltaState = new BlackboardDeltaState();
 
 
     public TestBlackboardService(BlackboardService actualBlackboardService) {
         this.actualBlackboardService = actualBlackboardService;
     }
 
-    public void resetBlackboardState() {
-        currentBlackboardState.reset();
+    public void resetBlackboardDeltaState() {
+        currentBlackboardDeltaState.reset();
+    }
+
+    public BlackboardDeltaState getCurrentBlackboardDeltaState() {
+        return currentBlackboardDeltaState;
     }
 
     public boolean testSubscriptions(Object obj) {
@@ -110,18 +114,22 @@ public class TestBlackboardService implements BlackboardService {
     }
 
     public boolean publishAdd(Object parm1) {
+        currentBlackboardDeltaState.add(new PublishAction(PublishAction.ADD, parm1));
         return actualBlackboardService.publishAdd(parm1);
     }
 
     public boolean publishRemove(Object parm1) {
+        currentBlackboardDeltaState.add(new PublishAction(PublishAction.REMOVE, parm1));
         return actualBlackboardService.publishRemove(parm1);
     }
 
     public boolean publishChange(Object parm1) {
+        currentBlackboardDeltaState.add(new PublishAction(PublishAction.CHANGE, parm1));
         return actualBlackboardService.publishChange(parm1);
     }
 
     public boolean publishChange(Object parm1, Collection parm2) {
+        currentBlackboardDeltaState.add(new PublishAction(PublishAction.CHANGE, parm1));
         return actualBlackboardService.publishChange(parm1, parm2);
     }
 

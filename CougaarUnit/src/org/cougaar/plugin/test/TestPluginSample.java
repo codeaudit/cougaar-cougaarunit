@@ -26,7 +26,7 @@ public class TestPluginSample extends PluginTestCase {
         publish a FooObject1 object to the blackboard and validate that it results in a FooObject2 object
         being added to to the blackboard.
         */
-        BlackboardState bbs = new BlackboardState();
+        BlackboardDeltaState bbs = new BlackboardDeltaState();
         bbs.add(new PublishAction(PublishAction.ADD, Object.class));
         assertPublishAdd(new Object(), bbs, 5000, true);
         /**

@@ -17,6 +17,7 @@ public abstract class PluginTestCase extends ComponentPlugin {
      * keep a static reference to the latest instance of this class
      */
     public PluginTestCase() {
+        PluginTestResult.setTestName(this.getClass().getName());
     }
 
     /**
@@ -47,7 +48,19 @@ public abstract class PluginTestCase extends ComponentPlugin {
             true - pass
             false - fail
             */
-    public void assertPublishAdd(Object obj, BlackboardState bbs, long waitTime, boolean expectedResult) {
+    public void assertPublishAdd(Object obj, BlackboardDeltaState bbs, long waitTime, boolean expectedResult) {
+        ((TestBlackboardService)blackboard).publishAdd(obj);
+        if (bbs != null) {
+            try {
+                Thread.currentThread().sleep(waitTime > 0?waitTime:0);   //wait the designated amount of time
+                boolean result = bbs.compare(((TestBlackboardService)blackboard).getCurrentBlackboardDeltaState(), expectedResult);
+                PluginTestResult.addEntry(PluginTestResult.PHASE_TEST_EXECUTION, PluginTestResult.COMMAND_ASSERT_PUBLISH_ADD, result);
+                ((TestBlackboardService)blackboard).resetBlackboardDeltaState();   //reset the blackboard state
+            }
+            catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -65,7 +78,19 @@ public abstract class PluginTestCase extends ComponentPlugin {
             true - pass
             false - fail
             */
-    public void assertPublishChange(Object obj, BlackboardState bbs, long waitTime, boolean expectedResult) {
+    public void assertPublishChange(Object obj, BlackboardDeltaState bbs, long waitTime, boolean expectedResult) {
+        ((TestBlackboardService)blackboard).publishChange(obj);
+        if (bbs != null) {
+            try {
+                Thread.currentThread().sleep(waitTime > 0?waitTime:0);   //wait the designated amount of time
+                boolean result = bbs.compare(((TestBlackboardService)blackboard).getCurrentBlackboardDeltaState(), expectedResult);
+                PluginTestResult.addEntry(PluginTestResult.PHASE_TEST_EXECUTION, PluginTestResult.COMMAND_ASSERT_PUBLISH_CHANGE, result);
+                ((TestBlackboardService)blackboard).resetBlackboardDeltaState();   //reset the blackboard state
+            }
+            catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -83,15 +108,27 @@ public abstract class PluginTestCase extends ComponentPlugin {
             true - pass
             false - fail
             */
-    public void assertPublishRemove(Object obj, BlackboardState bbs, long waitTime, boolean expectedResult) {
+    public void assertPublishRemove(Object obj, BlackboardDeltaState bbs, long waitTime, boolean expectedResult) {
+        ((TestBlackboardService)blackboard).publishRemove(obj);
+        if (bbs != null) {
+            try {
+                Thread.currentThread().sleep(waitTime > 0?waitTime:0);   //wait the designated amount of time
+                boolean result = bbs.compare(((TestBlackboardService)blackboard).getCurrentBlackboardDeltaState(), expectedResult);
+                PluginTestResult.addEntry(PluginTestResult.PHASE_TEST_EXECUTION, PluginTestResult.COMMAND_ASSERT_PUBLISH_REMOVE, result);
+                ((TestBlackboardService)blackboard).resetBlackboardDeltaState();   //reset the blackboard state
+            }
+            catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
     /**
      * reset the state of the TestBlackboardService.  This clears whatever PublishAction objects it currently
      * is tracking.
      */
-    public void resetBlackboardState() {
-        ((TestBlackboardService)this.blackboard).resetBlackboardState();
+    public void resetBlackboardDeltaState() {
+        ((TestBlackboardService)this.blackboard).resetBlackboardDeltaState();
     }
 
      /**
@@ -115,12 +152,13 @@ public abstract class PluginTestCase extends ComponentPlugin {
      * @todo - this method will probably probably need to run in a separate thread
      */
     public void startTests() {
-        System.out.println("########################STARTING TESTS...");
+        System.out.println("STARTING TESTS...");
         Thread t = new Thread(new Runnable() {
             public void run() {
                 validateSubscriptions();
                 validateExecution();
-                System.exit(0);
+                System.out.println(PluginTestResult.getReportasString());  //print the test results to stdout
+                System.exit((PluginTestResult.getOverallResult())?0:1);  //exit code = 0 if all tests passed, otherwise 1
             }
         });
         t.start();
