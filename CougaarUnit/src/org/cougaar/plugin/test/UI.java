@@ -136,6 +136,7 @@ public class UI extends JFrame {
                                                int column) {
       Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
       if (table.getColumnName(column).equals(OutputTableModel.COLUMN_RESULT)) {
+        c = new JButton(value.toString());
         if (value.equals("pass"))
           c.setBackground(Color.green);
         else
@@ -147,7 +148,6 @@ public class UI extends JFrame {
       return c;
     }
   }
-
 
   public UI() {
     try {
@@ -169,11 +169,28 @@ public class UI extends JFrame {
     jTableResults.getColumn(OutputTableModel.COLUMN_COMMAND).setPreferredWidth(80);
     jTableResults.getColumn(OutputTableModel.COLUMN_DESCRIPTION).setPreferredWidth(100);
     jTableResults.getColumn(OutputTableModel.COLUMN_RESULT).setPreferredWidth(10);
+    jTableResults.addMouseListener(new MouseAdapter() {
+      public void mouseClicked(MouseEvent e) {
+        if (jTableResults.getColumnName(jTableResults.getSelectedColumn()).equals(OutputTableModel.COLUMN_RESULT)) {
+          ResultsDialog rd = new ResultsDialog();
+          rd.show();
+        }
+      }
+      public void mousePressed(MouseEvent e) {
+      }
+      public void mouseReleased(MouseEvent e) {
+      }
+      public void mouseEntered(MouseEvent e) {
+      }
+      public void mouseExited(MouseEvent e) {
+      }
+    });
     jTableResults.updateUI();
   }
 
   private void jbInit() throws Exception {
     this.setJMenuBar(jMenuBar1);
+    jTableResults.setRowSelectionAllowed(false);
     border1 = BorderFactory.createEtchedBorder(Color.white,new Color(178, 178, 178));
     titledBorder1 = new TitledBorder(border1,"Test Suites");
     border2 = BorderFactory.createEtchedBorder(Color.white,new Color(165, 163, 151));
@@ -232,7 +249,6 @@ public class UI extends JFrame {
         jButtonSearch_actionPerformed(e);
       }
     });
-    jTableResults.setRowSelectionAllowed(false);
     jScrollPaneResults.setBorder(null);
     jScrollPaneResults.setPreferredSize(new Dimension(70, 125));
     jSplitPaneTests.setPreferredSize(new Dimension(543, 230));
@@ -292,6 +308,7 @@ public class UI extends JFrame {
 
   public static void main(String[] args) {
     UI ui= new UI();
+    //((UI.OutputTableModel)ui.jTableResults.getModel()).addRow(new String[] {"1", "2", "3", "4", "5", "pass"});
     ui.pack();
     ui.setSize(800,600);
     ui.center();

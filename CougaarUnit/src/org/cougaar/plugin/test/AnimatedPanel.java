@@ -101,13 +101,13 @@ public class AnimatedPanel extends JPanel implements Runnable {
         pEnd = new Point2D.Double(Math.sin(theta)*length,
                                   Math.cos(theta)*length);
         grp.drawRect((int)(p.getX()+pEnd.getX()), (int)(p.getY()+pEnd.getY()), 1, 1);
-        offScreenPanel.getGraphics().drawImage(offScreenImage, 0, 0, offScreenPanel);
+        try {offScreenPanel.getGraphics().drawImage(offScreenImage, 0, 0, offScreenPanel);} catch (Exception e){}
         try {Thread.currentThread().sleep(10);} catch (Exception e){}
-        if (length > AnimatedPanel.this.getSize().width/2) {
+        if ((length > AnimatedPanel.this.getSize().width/2) || (length > AnimatedPanel.this.getSize().height/2)) {
           pEnd = new Point2D.Double(d.width/2, d.height/2);
           grp.setPaint(Color.BLACK);
           grp.fillRect(0,0, d.width, d.height);
-          offScreenPanel.getGraphics().drawImage(offScreenImage, 0, 0, offScreenPanel);
+          try {offScreenPanel.getGraphics().drawImage(offScreenImage, 0, 0, offScreenPanel);} catch (Exception e){}
           theta = 0;
           length = 1;
         }
