@@ -26,11 +26,15 @@ public class TestBlackboardService implements BlackboardService {
 
     BlackboardService actualBlackboardService;
     Vector predicates = new Vector();
-
+    BlackboardState currentBlackboardState = new BlackboardState();
 
 
     public TestBlackboardService(BlackboardService actualBlackboardService) {
         this.actualBlackboardService = actualBlackboardService;
+    }
+
+    public void resetBlackboardState() {
+        currentBlackboardState.reset();
     }
 
     public boolean testSubscriptions(Object obj) {

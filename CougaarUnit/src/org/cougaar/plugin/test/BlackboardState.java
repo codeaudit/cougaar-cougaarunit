@@ -1,5 +1,7 @@
 package org.cougaar.plugin.test;
 
+import java.util.Vector;
+
 /**
  * <p>Title: </p>
  * <p>Description:
@@ -14,10 +16,32 @@ package org.cougaar.plugin.test;
 
 public class BlackboardState {
 
+    Vector stateChanges = new Vector();
+
     public BlackboardState() {
     }
 
     public void add(PublishAction pa) {
+        stateChanges.add(pa);
+    }
+
+    /**
+     * compare this BlackboardState object another one
+     * @param bbs The BlackboardState object to compare to
+     * @param ordered Should the comparison include an order dependency: true = yes, false = no.
+     * @return boolean indicating whether the two BlackboardState objects match or not
+     *    true = match
+     *    false = no match
+     */
+    public boolean compare(BlackboardState bbs, boolean isOrdered) {
+        return false;
+    }
+
+    /**
+     * clears the contents of this blackboard state
+     */
+    public void reset() {
+        stateChanges.clear();
     }
 
 }

@@ -83,6 +83,14 @@ public abstract class PluginTestCase extends ComponentPlugin {
     public void assertPublishRemove(Object obj, BlackboardState bbs, long waitTime, boolean expectedResult) {
     }
 
+    /**
+     * reset the state of the TestBlackboardService.  This clears whatever PublishAction objects it currently
+     * is tracking.
+     */
+    public void resetBlackboardState() {
+        ((TestBlackboardService)this.blackboard).resetBlackboardState();
+    }
+
      /**
      * Subclasses use this method to implement assertions to test the subscriptions of the target plugin
      */

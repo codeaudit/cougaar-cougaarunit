@@ -14,6 +14,9 @@ package org.cougaar.plugin.test;
 
 public class PublishAction {
 
+    private int actionId;
+    private Object obj = null;
+
     public PublishAction() {
     }
     public static final int ADD = 1;
@@ -21,11 +24,15 @@ public class PublishAction {
     public static final int CHANGE = 3;
 
     public PublishAction(int actionId) {
+        this.actionId = actionId;
     }
 
     public PublishAction(int actionId, Object objRef) {
+        this.actionId = actionId;
+        this.obj = objRef;
     }
 
     public void add(Object objRef) {
+        this.obj = objRef;
     }
 }
