@@ -70,6 +70,10 @@ public class BlackboardDeltaState implements Serializable {
         return false;
     }
 
+    /**
+     * Render the contents of this object as XML
+     * @return
+     */
     public String getXML() {
       StringBuffer sb = new StringBuffer();
       sb.append("<BLACKBOARD_DELTA_STATE>");

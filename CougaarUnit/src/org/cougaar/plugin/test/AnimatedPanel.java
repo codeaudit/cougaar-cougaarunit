@@ -14,8 +14,8 @@ import java.util.Random;
  * <p>Title: AnimatedPanel</p>
  * <p>Description: Provides a panel in which a selected animation can be displayed</p>
  * <p>Copyright: Copyright (c) 2002</p>
- * <p>Company: </p>
- * @author unascribed
+ * <p>Company: InfoEther, LLC</p>
+ * @author David Craine
  * @version 1.0
  */
 
@@ -33,6 +33,9 @@ public class AnimatedPanel extends JPanel implements Runnable {
   private int currentAnimation = ANIMATION_CIRCLES;
   boolean running = false;
 
+  /**
+   * Standard constructor
+   */
   public AnimatedPanel() {
     try {
       jbInit();
@@ -43,10 +46,17 @@ public class AnimatedPanel extends JPanel implements Runnable {
     }
   }
 
+  /**
+   * UI component initialization
+   * @throws Exception
+   */
   void jbInit() throws Exception {
     this.setLayout(borderLayout1);
   }
 
+  /**
+   * Start the animation thread
+   */
   public void start() {
     if (!running) {
       myThread.start();
@@ -54,14 +64,22 @@ public class AnimatedPanel extends JPanel implements Runnable {
     }
   }
 
+  /**
+   * Set the animation to be displayed
+   * @param i animation id
+   */
   public void setAnimation(int i) {
     this.currentAnimation = i;
   }
 
+  /**
+   * Stop the animation thread
+   */
   public void stop() {
     myThread.interrupt();
     running = false;
   }
+
 
   private Animation getCurrentAnimation() {
     switch(currentAnimation) {
@@ -74,6 +92,10 @@ public class AnimatedPanel extends JPanel implements Runnable {
     }
   }
 
+  /**
+   * Runnable interface method
+   * Runs the animation
+   */
   public void run() {
     Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
     size = this.getSize();
@@ -82,6 +104,15 @@ public class AnimatedPanel extends JPanel implements Runnable {
     getCurrentAnimation().renderTo(grp, this, offScreenImage);
   }
 
+  /**
+   *
+   * <p>Title: SpiralAnimation</p>
+   * <p>Description: Aprial Anumation</p>
+   * <p>Copyright: Copyright (c) 2002</p>
+   * <p>Company: InfoEther, LLC</p>
+   * @author David Craine
+   * @version 1.0
+   */
   class SpiralAnimation implements Animation {
     Color[] colors = {Color.RED, Color.BLUE, Color.GREEN, Color.PINK, Color.CYAN, Color.LIGHT_GRAY, Color.MAGENTA, Color.ORANGE, Color.YELLOW, Color.WHITE};
 
@@ -119,6 +150,15 @@ public class AnimatedPanel extends JPanel implements Runnable {
     }
   }
 
+  /**
+   *
+   * <p>Title: CircleAnimation</p>
+   * <p>Description: Circle animation</p>
+   * <p>Copyright: Copyright (c) 2002</p>
+   * <p>Company: InfoEther, LLC</p>
+   * @author David Craine
+   * @version 1.0
+   */
   class CirclesAnimation implements Animation {
     public void renderTo(Graphics2D grp, JPanel offScreenPanel, Image offScreenImage) {
       Dimension d = AnimatedPanel.this.getSize();
@@ -135,6 +175,15 @@ public class AnimatedPanel extends JPanel implements Runnable {
     }
   }
 
+  /**
+   *
+   * <p>Title: PointsAnimation</p>
+   * <p>Description: Points animation</p>
+   * <p>Copyright: Copyright (c) 2002</p>
+   * <p>Company: InfoEther, LLC</p>
+   * @author David Craine
+   * @version 1.0
+   */
   class PointsAnimation implements Animation {
     public void renderTo(Graphics2D grp, JPanel offScreenPanel, Image offScreenImage) {
       Dimension d = AnimatedPanel.this.getSize();
@@ -176,6 +225,15 @@ public class AnimatedPanel extends JPanel implements Runnable {
     }
   }
 
+  /**
+   *
+   * <p>Title: PointsAnimation2</p>
+   * <p>Description: Another points animation</p>
+   * <p>Copyright: Copyright (c) 2002</p>
+   * <p>Company: InfoEther, LLC</p>
+   * @author David Craine
+   * @version 1.0
+   */
   class PointsAnimation2  implements Animation {
     Dimension d;
     int radius;
@@ -226,6 +284,15 @@ public class AnimatedPanel extends JPanel implements Runnable {
     }
   }
 
+  /**
+   *
+   * <p>Title: PointWrapper</p>
+   * <p>Description: Support class for the points animations</p>
+   * <p>Copyright: Copyright (c) 2002</p>
+   * <p>Company: InfoEther, LLC</p>
+   * @author David Craine
+   * @version 1.0
+   */
   class PointWrapper {
     private int rad;
     private Color c;
@@ -252,6 +319,10 @@ public class AnimatedPanel extends JPanel implements Runnable {
     }
   }
 
+  /**
+   * Main method used for testing
+   * @param args
+   */
   public static void main(String[] args) {
     JFrame f = new JFrame("Test");
     f.pack();
@@ -268,6 +339,15 @@ public class AnimatedPanel extends JPanel implements Runnable {
   }
 }
 
+/**
+ *
+ * <p>Title: FireworksAnimation</p>
+ * <p>Description: Fireworks animation</p>
+ * <p>Copyright: Copyright (c) 2002</p>
+ * <p>Company: InfoEther, LLC</p>
+ * @author David Craine
+ * @version 1.0
+ */
 class FireworksAnimation implements Animation {
   public void renderTo(Graphics2D grp, JPanel offScreenPanel, Image offScreenImage) {
     AnimationSpeed = 100;
@@ -344,6 +424,16 @@ class FireworksAnimation implements Animation {
   private Thread thread;
   private Rocket rocket[];
 }
+
+/**
+ *
+ * <p>Title: Rocket</p>
+ * <p>Description: Support class for the fireworks animation</p>
+ * <p>Copyright: Copyright (c) 2002</p>
+ * <p>Company: InfoEther, LLC</p>
+ * @author David Craine
+ * @version 1.0
+ */
 class Rocket
 {
 

@@ -5,11 +5,11 @@ import javax.swing.JPanel;
 import java.awt.Image;
 
 /**
- * <p>Title: </p>
- * <p>Description: </p>
+ * <p>Title: Animation</p>
+ * <p>Description: Interface used for implementing acnimations</p>
  * <p>Copyright: Copyright (c) 2002</p>
- * <p>Company: </p>
- * @author unascribed
+ * <p>Company: InfoEther, LLC</p>
+ * @author David Craine
  * @version 1.0
  */
 

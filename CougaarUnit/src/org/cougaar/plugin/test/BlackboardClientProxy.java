@@ -74,15 +74,25 @@ public class BlackboardClientProxy implements BlackboardClient
     }
   }
 
+  /**
+   * Constrcutor
+   * @param actualPlugin the BlackboardClient to proxy
+   */
   public BlackboardClientProxy(BlackboardClient actualPlugin) {
     this.actualPlugin = actualPlugin;
   }
 
+  /**
+   * Proxied method
+   * @param event
+   * @return
+   */
   public boolean triggerEvent(Object event) {
     return actualPlugin.triggerEvent(event);
   }
 
   /**
+   * Proxied method
    * When a plugin is loaded the Blackboard service will call this function.  So,
    * this is what we trigger off of.
    * @return String blackboard client name
@@ -92,6 +102,10 @@ public class BlackboardClientProxy implements BlackboardClient
     return actualPlugin.getBlackboardClientName();
   }
 
+  /**
+   * Proxied method.
+   * @return
+   */
   public long currentTimeMillis() {
     return actualPlugin.currentTimeMillis();
   }
