@@ -1,0 +1,148 @@
+<?xml version="1.0"?>
+
+<!-- ================================================================= -->
+<!-- CSI Utilities build file                                          -->
+<!-- ================================================================= -->
+
+<project name="cunitexample" default="compile" basedir=".">
+	
+    <!-- Allow project to override any of these properties with a build.properties file -->
+    <property file="${basedir}/build.properties"/>
+
+    <property environment="env"/>
+    <property name="project.name" value="cunitexample"/>
+    <property name="project.version" value="1.0"/>
+
+    <!-- java source dirs -->
+    <property name="src.dir" value="${basedir}/src"/>  
+    <property name="cunit.test.dir" value="${basedir}/test"/>
+    <!-- lib and conf dirs -->
+    <property name="conf.dir" value="${basedir}/conf"/>
+    <property name="lib.dir" value="${basedir}/lib"/>    
+    <property name="cougaar.dir" value="${env.COUGAAR_INSTALL_PATH}"/>
+    <property name="clib.dir" value="${cougaar.dir}/lib"/>
+    <property name="csys.dir" value="${cougaar.dir}/sys"/>
+
+    <property name="build.dir" value="${basedir}/build"/>
+
+    <!-- All generated stuff below here: should all be subdirs of build.dir -->
+    <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="cunit.classes.dir" value="${build.dir}/cunit/classes"/>
+    <property name="project.jar.dir" value="${build.dir}/jars"/>
+    <property name="project.jarfile" value="${project.jar.dir}/${project.name}-${project.version}.jar"/>
+    <property name="task.jarfile" value="${lib.dir}/cougaarunit-2.0-cB10.4.6.jar"/>
+    
+    <!-- =============================================================== -->
+    <!-- The Classpath                                                   -->
+    <!-- =============================================================== -->
+    <path id="build.classpath">
+        <path refid="libs.classpath"/>
+        <fileset dir="${clib.dir}">
+            <include name="core.jar"/>
+            <include name="planning.jar"/>
+            <include name="glm.jar"/>
+            <include name="util.jar"/>
+        </fileset>
+        <fileset dir="${csys.dir}">
+            <include name="servlet.jar"/>
+        </fileset>
+        <pathelement path="${build.dir}"/>
+    </path>
+    
+    <path id="junit.classpath">
+    	<path refid="build.classpath"/>
+			<pathelement location="${classes.dir}"/>	   
+			<pathelement location="${junit.classes.dir}"/>
+			<fileset dir="${csys.dir}">
+        		<include name="xerces.jar"/>
+	        </fileset>	    
+   	</path>	
+    <path id="cunit.classpath">
+	   	<path refid="build.classpath"/>
+   		<pathelement location="${classes.dir}"/>	   	
+		<pathelement location="${cunit.classes.dir}"/>
+		
+    	<fileset dir="${clib.dir}">
+       	    <include name="bootstrap.jar"/>
+        </fileset>
+		<fileset dir="${csys.dir}">
+            <include name="xerces.jar"/>
+        </fileset>
+    </path>
+    
+    
+    <path id="libs.classpath">
+        <fileset dir="${lib.dir}">
+            <include name="**/*.jar"/>
+        </fileset>
+    </path>
+
+    <!-- =============================================================== -->
+    <!-- Prepares the build directory                                    -->
+    <!-- =============================================================== -->
+    <target name="prepare">
+        <tstamp/>
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${classes.dir}"/>
+        <mkdir dir="${cunit.classes.dir}"/>
+    </target>
+     
+    <!-- ============================================================== -->
+    <!-- Cleans up generated stuff                                      -->
+    <!-- ============================================================== -->
+    <target name="clean" depends="" description="Removes generated files.">
+	    <delete dir="${classes.dir}"/>
+        <delete dir="${cunit.classes.dir}"/>
+        <delete dir="${build.dir}"/>
+    </target>
+
+
+    <!-- ============================================================== -->
+    <!-- Builds the Env                                                 -->
+    <!-- ============================================================== -->
+    <target name="all" description="Builds the entire application" depends="clean,prepare,compile,jar"/>
+
+
+    <!-- =============================================================== -->
+    <!-- Compiles the source code                                        -->
+    <!-- =============================================================== -->
+    <target name="compile" depends="prepare, init" description="compiles.">
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" debug="on" deprecation="off" optimize="off">
+            <classpath refid="build.classpath"/>
+        </javac>	
+		<javac srcdir="${cunit.test.dir}" destdir="${cunit.classes.dir}" debug="on" deprecation="off" optimize="off">
+		    <classpath refid="cunit.classpath"/>
+		</javac>
+    </target>
+    
+     <!-- initialize taskdef -->
+    <target name="init">    	
+        <!-- task defs -->
+		<taskdef name="cunit" classname="org.cougaar.cougaarunit.ant.CUnitTask">
+	   		<classpath>
+            	<pathelement location="${task.jarfile}"/>
+	   		</classpath>
+		</taskdef>        
+    </target>
+
+
+    <!-- ============================================================== -->
+    <!-- Creates the jar file.                                          -->
+    <!-- ============================================================== -->
+    <target name="jar" depends="compile" description="Builds the Jar File">        
+        <jar jarfile="${project.jarfile}">
+            <fileset dir="${classes.dir}" includes="**/*"/>
+        </jar>
+    </target>
+
+    <!-- CougaarUnit Tests -->
+    <target name="cunit-tests" depends="compile" description="Run CUnit Tests">
+    	<cunit testClassname="org.cougaar.cougaarunit.Launcher"
+    		   dir="${basedir}/configs" >
+    		<arg value="SamplePluginTest"/>  
+    		<jvmarg value="-Dorg.cougaar.install.path=${env.COUGAAR_INSTALL_PATH}"/>
+    		<jvmarg value="-Dorg.cougaar.cougaarunit.showoutput=true"/>
+   	    	<classpath refid="cunit.classpath"/>   	    	
+    	</cunit>    	
+    </target>
+</project>

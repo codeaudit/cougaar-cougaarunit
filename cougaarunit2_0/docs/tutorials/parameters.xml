@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<parameters>
+	<parameter name="-Xbootclasspath/p">
+		<value>-Xbootclasspath/p:COUGAAR_INSTALL_PATH/lib/javaiopatch.jar</value>
+	</parameter>
+	<parameter name="-Dorg.cougaar.system.path">
+		<value>COUGAAR_INSTALL_PATH/sys</value>
+	</parameter>
+	<parameter name="-Dorg.cougaar.install.path">
+		<value>COUGAAR_INSTALL_PATH</value>
+	</parameter>
+	<parameter name="-Duser.timezone">
+		<value>GMT</value>
+	</parameter>
+	<parameter name="-Dorg.cougaar.core.agent.startTime">
+		<value>08/10/2005</value>
+	</parameter>
+	<parameter name="-Dorg.cougaar.class.path">
+		<value>../lib/cougaarunit-2.0-cB10.4.6.jar;../bin</value>
+	</parameter>
+	<parameter name="-Dorg.cougaar.workspace">
+		<value>COUGAAR_WORKSPACE</value>
+	</parameter>
+	<parameter name="-Dorg.cougaar.node.name">
+		<value>TestNode</value>
+	</parameter>
+	<parameter name="-Dorg.cougaar.core.logging.config.filename">
+		<value>log.properties</value>
+	</parameter>
+	<parameter name="-Dorg.cougaar.core.node.InitializationComponent">
+		<value>XML</value>
+	</parameter>
+	<parameter name="-Dorg.cougaar.society.file">
+		<value>testSociety.xml</value>
+	</parameter>
+	<parameter name="-Dorg.cougaar.refconfig.user">
+		<value>society_config</value>
+	</parameter>
+	<parameter name="-Dorg.cougaar.refconfig.database">
+		<value>jdbc:mysql://cougaar-db/cougaar</value>
+	</parameter>
+	<parameter name="-Ddriver.mysql">
+		<value>org.gjt.mm.mysql.Driver</value>
+	</parameter>
+	<parameter name="-Xms">
+		<value>-Xms100m</value>
+	</parameter>
+	<parameter name="-Xmx">
+		<value>-Xmx300m</value>
+	</parameter>
+	<parameter name="-Dorg.cougaar.refconfig.password">
+		<value>s0c0nfig</value>
+	</parameter>
+</parameters>

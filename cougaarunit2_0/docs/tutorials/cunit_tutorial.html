@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <title>cunit_tutorial.html</title>
+</head>
+<body>
+<div style="text-align: center;">
+<h1>Creating a Plugin Unit Test using CougaarUnit 2.0</h1>
+<div style="text-align: left;">
+<h2>Note:&nbsp; This tutorial is only intended to provide instructions
+on how to create and execute CougaarUnit tests.&nbsp; For more detailed
+information on CougaarUnit and it's architecture see the documentation
+available in the CougaarUnit CVS repository.</h2>
+<br>
+</div>
+<hr style="width: 100%; height: 2px;">
+<div style="text-align: left;">
+<h2>Step 0:&nbsp; Create or select a Cougaar Plugin to test<br>
+</h2>
+<h2>Step 1:&nbsp; Create the CougaarUnit test class, click <a
+ href="SamplePluginTest.java">here</a><br>
+</h2>
+<span style="font-weight: bold;">A)&nbsp; Create a class that extends
+PluginTestCase</span><br>
+<br>
+/**<br>
+&nbsp;* Sample CougaarUnit test class<br>
+&nbsp;*<br>
+&nbsp;* @author mabrams<br>
+&nbsp;*/<br>
+public class SamplePluginTest extends PluginTestCase {<br>
+}<br>
+<br>
+<span style="font-weight: bold;">B)&nbsp; Implement the abstract
+methods defined in org.cougaar.cougaarunit.PluginTestCase<br>
+<br>
+</span>&nbsp;&nbsp;&nbsp; public void validateSubscriptions() {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Task checkInTask =
+makeTask("VERB", null, null);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+this.subscriptionAssert(checkInTask, true);<br>
+&nbsp;&nbsp;&nbsp; }<br>
+<br>
+&nbsp;&nbsp;&nbsp; public void validateExecution() {<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; Task t1 = makeTask("VERB", null,
+null);<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; // create the bb delta state
+object<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; BlackboardDeltaState bds = new
+BlackboardDeltaState();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // add the expected action
+after publishing a task.<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; bds.add(new
+PublishAction(PublishAction.REMOVE, t1));<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; // publish t1 and verify the
+blackboard delta state<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; assertPublishAdd(t1, bds, 1000,
+true, false);<br>
+&nbsp;&nbsp;&nbsp; }<br>
+<br>
+&nbsp;&nbsp;&nbsp; public String getPluginClass() {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // return the name of the
+class we are testing<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return "SamplePlugin";<br>
+&nbsp;&nbsp;&nbsp; }<br>
+<span style="font-weight: bold;"></span><br>
+<h2>Step 2:&nbsp; Create a configuration directory and populate it with
+the necessary files:</h2>
+<span style="font-weight: bold;">A)&nbsp; Create a configs directory,
+it should contain the following files.&nbsp; NOTE:&nbsp; these files
+are available in the CougaarUnit2.0 zip file or in the CVS repository.<br>
+<br>
+<span style="font-weight: bold;"><span style="font-weight: bold;"></span></span></span>basedir-&gt;configs<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -&gt;
+parameterMapping.xml<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; -&gt; parameters.xml<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; -&gt; resultMapping.xml<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; -&gt; societyMapping.xml<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; -&gt; style.css<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; -&gt; testsuite.xsl<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; -&gt; testsuiteMapping.xml<br>
+<span style="font-weight: bold;"><span style="font-weight: bold;"><span
+ style="font-weight: bold;"></span></span></span>
+<h2>Step 3:&nbsp; Modify parameters.xml as necessary</h2>
+The parameters.xml file contains the parameters that will be used to
+launch the Cougaar node.&nbsp; Parameters with 'COUGAAR_INSTALL_PATH'
+do NOT need to be modified.&nbsp; CougaarUnit will use the enviroments
+'COUGAAR_INSTALL_PATH' variable to correct these values at
+runtime.&nbsp; You will probably need to modify the
+org.cougaar.classpath parameter to include the location of the class
+files for the base and test classes for your project.&nbsp; You will
+also need to add the CougaarUnit2.0 jar file and its location.&nbsp;
+Click <a href="parameters.xml">here</a> for an example.<br>
+<h2>Step 4:&nbsp; Execute the CougaarUnit test.</h2>
+To make executing CougaarUnit tests easy, we have created a CougaarUnit
+ant task that is included with the CougaarUnit jar file.&nbsp; Click <a
+ href="build.xml">here </a>to see a sample build.xml file for
+executing a CougaarUnit test.<br>
+<br>
+</div>
+</div>
+</body>
+</html>
