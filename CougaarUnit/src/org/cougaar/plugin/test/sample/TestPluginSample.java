@@ -33,7 +33,7 @@ public class TestPluginSample extends PluginTestCase {
         being added to to the blackboard.
         */
         BlackboardDeltaState bbs = new BlackboardDeltaState();
-        bbs.add(new PublishAction(PublishAction.ADD, TestBBMessageObject2.class));
+        bbs.add(new PublishAction(PublishAction.ADD, new TestBBMessageObject2()));
         assertPublishAdd(new TestBBMessageObject(), bbs, 5000, true, false);
         /**
          * PublishAdd, PublishRemove, or PublishChange objects in the blackboard and validate that some
@@ -42,7 +42,7 @@ public class TestPluginSample extends PluginTestCase {
     }
 
     public String getPluginClass() {
-        return "org.cougaar.plugin.test.SamplePlugin";
+        return "org.cougaar.plugin.test.sample.SamplePlugin";
     }
 
 

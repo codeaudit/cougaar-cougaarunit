@@ -25,7 +25,7 @@ import org.cougaar.plugin.test.PluginTestCase;
 /**
  * Test version of ComponentPlugin
  * This class should be identical to the normal ComponentPlugin except the following changes:
- * (1) setBlackboardService() method has been modified to use the TestBlackboardService object
+ * (1) setBlackboardService() method has been modified to use the BlackboardServiceProxy object
  * (2) registerClass() method has been added
  * (3) load() method modified to call registerClass() at the very end of the method
  * (3) pluginList vector has been added
@@ -173,7 +173,8 @@ abstract public class ComponentPlugin   extends org.cougaar.util.GenericStateMod
   }*/
 
   public final void setBlackboardService(BlackboardService bs) {
-      blackboard = org.cougaar.plugin.test.TestBlackboardService.getInstance(bs);      //construct the test framework wrapper for the BlackboardService
+      //blackboard = org.cougaar.plugin.test.BlackboardServiceProxy.getInstance(bs);      //construct the test framework wrapper for the BlackboardService
+      blackboard = bs;
   }
 
   public final void setAlarmService(AlarmService s) {
