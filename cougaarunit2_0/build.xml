@@ -32,6 +32,7 @@
     <property name="cunit.classes.dir" value="${build.dir}/cunit/classes"/>
     <property name="project.jar.dir" value="${build.dir}/jars"/>
     <property name="project.jarfile" value="${project.jar.dir}/${project.name}-${project.version}.jar"/>
+    <property name="task.jarfile" value="${project.jar.dir}/cunittasks.jar"/>
     <!-- optional generated stuff, not required to build -->
     <property name="javadoc.dir" value="${build.dir}/javadoc"/>
     <property name="jdepend.dir" value="${build.dir}/jdepend"/>
@@ -43,12 +44,7 @@
     <!--junit info-->
     <property name="junit.results" value="test-results"/>
     
-    <!-- task defs -->
-    <taskdef name="cunit" classname="org.cougaar.cougaarunit.ant.CUnitTask">
-	    <classpath>
-             <pathelement location="${project.jarfile}"/>
-        </classpath>
-	</taskdef>
+    
     
     <!-- =============================================================== -->
     <!-- The Classpath                                                   -->
@@ -107,6 +103,8 @@
         <mkdir dir="${junit.classes.dir}"/>
         <mkdir dir="${cunit.classes.dir}"/>
     </target>
+    
+   
     
     <!-- ============================================================== -->
     <!-- Creates conf files from examples                               -->
@@ -171,8 +169,8 @@
     <!-- =============================================================== -->
     <!-- Compiles the source code                                        -->
     <!-- =============================================================== -->
-    <target name="compile" depends="prepare" description="compiles.">
-        <mkdir dir="${classes.dir}"/>
+    <target name="compile" depends="prepare, init" description="compiles.">
+
         <javac srcdir="${src.dir}" destdir="${classes.dir}" debug="on" deprecation="off" optimize="off">
             <classpath refid="build.classpath"/>
         </javac>
@@ -183,13 +181,28 @@
 		    <classpath refid="build.classpath"/>
 		</javac>
     </target>
+    
+     <!-- initialize taskdef -->
+    <target name="init">
+    	<mkdir dir="${classes.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" debug="on" deprecation="off" optimize="off"
+        	includes = "org/cougaar/cougaar/unit/ant/*.java">
+        </javac>
+        <mkdir dir="${project.jar.dir}"/>
+        <jar jarfile="${task.jarfile}" basedir="${classes.dir}"/>
+        <!-- task defs -->
+	    <taskdef name="cunit" classname="org.cougaar.cougaarunit.ant.CUnitTask">
+	    	<classpath>
+            	 <pathelement location="${task.jarfile}"/>
+	        </classpath>
+		</taskdef>        
+    </target>
 
 
     <!-- ============================================================== -->
     <!-- Creates the jar file.                                          -->
     <!-- ============================================================== -->
-    <target name="jar" depends="compile" description="Builds the Jar File">
-        <mkdir dir="${project.jar.dir}"/>
+    <target name="jar" depends="compile" description="Builds the Jar File">        
         <jar jarfile="${project.jarfile}">
             <fileset dir="${classes.dir}" includes="**/*"/>
         </jar>
@@ -255,7 +268,7 @@
 	<cvs cvsroot="${cvs.repository}" package="${cvs.package}" dest=".."/>
     </target>
 
-    <target name="masterbuild" depends="checkout,compile,junit-test,cunit-test,jar"
+    <target name="masterbuild" depends="checkout,compile,junit-test,cunit-tests,jar"
 	description="Cruise control master build"/>
 
     <target name="cleanbuild" depends="clean,masterbuild" description="Cruise control clean build"/>
