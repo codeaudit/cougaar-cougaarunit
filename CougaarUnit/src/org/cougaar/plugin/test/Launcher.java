@@ -50,6 +50,20 @@ public class Launcher {
                                        "goto QUIT\n"+
                                        ":QUIT\n";
 
+    private static String RUN_SH_TEXT = "#!/bin/sh\n"+
+                                        "# @echo OFF\n"+
+                                        "if [ \"$COUGAAR_INSTALL_PATH\" = \"\" ]\n"+
+                                        "then\n"+
+                                        "echo Please set COUGAAR_INSTALL_PATH\n"+
+                                        "exit 2\n"+
+                                        "fi\n"+
+                                        "LIBPATHS=$COUGAAR_INSTALL_PATH/lib/bootstrap.jar\n"+
+                                        "MYPROPERTIES= -Dorg.cougaar.class.path=$COUGAAR_INSTALL_PATH%\\lib\\CougaarUnit.jar -Dorg.cougaar.system.path=$COUGAAR_INSTALL_PATH%\\sys -Dorg.cougaar.install.path=$COUGAAR_INSTALL_PATH% -Dorg.cougaar.core.servlet.enable=true -Dorg.cougaar.lib.web.scanRange=100 -Dorg.cougaar.lib.web.http.port=8800 -Dorg.cougaar.lib.web.https.port=-1 -Dorg.cougaar.lib.web.https.clientAuth=true -Xbootclasspath/p:$COUGAAR_INSTALL_PATH\\lib\\javaiopatch.jar\n"+
+                                        "MYMEMORY=\n"+
+                                        "MYCLASSES=org.cougaar.bootstrap.Bootstrapper org.cougaar.core.node.Node\n"+
+                                        "MYARGUMENTS= -c -n \"%1\"\n"+
+                                        "java %MYPROPERTIES% %MYMEMORY% -classpath %LIBPATHS% %MYCLASSES% %MYARGUMENTS% $2 $3";
+
 
     private static void writeNodeIni() throws Exception {
         File nodeFile = new File("TestNode.ini");
@@ -87,12 +101,25 @@ public class Launcher {
      * agent ini files have been configured.  This method presumes that
      */
     private static void launchCougaar() throws Exception {
-        File batFile = new File("Run.bat");
-        FileWriter fw = new FileWriter(batFile);
-        fw.write(RUN_BAT_TEXT);
+        File shellFile = null;
+        String shellFileText = null;
+
+        if (System.getProperty("os.name").toLowerCase().indexOf("windows") != -1) {  //is this a Windows environment?
+            shellFile = new File("Run.bat");
+            shellFileText = RUN_BAT_TEXT;
+        }
+        else if (System.getProperty("os.name").toLowerCase().indexOf("linux") != -1) {  //is this a Linux environment?
+            shellFile = new File("Run.sh");
+            shellFileText = RUN_SH_TEXT;
+        }
+        else throw new Exception("Unsupported platfrom");
+
+        FileWriter fw = new FileWriter(shellFile);
+        fw.write(shellFileText);
         fw.flush();
         fw.close();
-        Process p = Runtime.getRuntime().exec("Run.bat TestNode");
+        Process p = Runtime.getRuntime().exec(shellFile.getName() + " TestNode");
+
         BufferedReader is= new BufferedReader(new InputStreamReader(p.getInputStream()));
         String line;
         while ((line = is.readLine()) != null)
@@ -101,6 +128,7 @@ public class Launcher {
     }
 
     public static void main(String[] args) {
+        System.out.println(System.getProperties());
         if (args[0] != null) {
             try {
                 //determine if args[0] is a PluginTestSuite or a PluginTestCase
