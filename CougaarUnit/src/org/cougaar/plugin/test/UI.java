@@ -881,9 +881,9 @@ public class UI extends JFrame {
   private void configClassLoader()  {
 
     loader = MyClassLoader.getInstance();
-    String cip = Misc.getEnv("COUGAAR_INSTALL_PATH");
-    loader.addJarsFromDir(cip+"/lib");
-    loader.addJarsFromDir(cip+"/sys");
+    //String cip = Misc.getEnv("COUGAAR_INSTALL_PATH");
+    //loader.addJarsFromDir(cip+"/lib");
+    //loader.addJarsFromDir(cip+"/sys");
   }
 
   /**
@@ -927,7 +927,7 @@ public class UI extends JFrame {
         rd.show();
         rd.setCursor(CURSOR_WAIT);
         jTabbedPane1.setSelectedComponent(jScrollPaneOutput);  //switch to the output tab while running cougaar
-
+        System.out.println("class loader: " + clazz.getClassLoader());
         Object obj = clazz.newInstance();
         System.out.println("OBJ:" + obj);
         if (obj instanceof PluginTestCase)
