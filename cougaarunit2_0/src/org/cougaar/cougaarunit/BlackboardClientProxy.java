@@ -1,14 +1,9 @@
 package org.cougaar.cougaarunit;
 
-import org.cougaar.util.*;
-import org.cougaar.core.plugin.*;
-import org.cougaar.core.service.BlackboardService;
-import org.cougaar.core.component.*;
-import org.cougaar.core.service.AlarmService;
-import java.util.Collection;
-import org.cougaar.core.blackboard.BlackboardClient;
+import java.util.Enumeration;
+import java.util.Vector;
 
-import java.util.*;
+import org.cougaar.core.blackboard.BlackboardClient;
 
 /**
  *
