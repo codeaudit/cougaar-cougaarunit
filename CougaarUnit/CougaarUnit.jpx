@@ -48,9 +48,9 @@
   <property category="sys" name="ExcludeClassEnabled" value="0"/>
   <property category="sys" name="IncludeTestPath" value="1"/>
   <property category="sys" name="InstanceVisibility" value="2"/>
-  <property category="sys" name="JDK" value="java 1.4.0_01-b03"/>
+  <property category="sys" name="JDK" value="java 1.4.0-b92"/>
   <property category="sys" name="LastTag" value="0"/>
-  <property category="sys" name="Libraries" value="COUGAAR_94;JBCL"/>
+  <property category="sys" name="Libraries" value="COUGAAR_94;JBCL;BCEL"/>
   <property category="sys" name="MakeStable" value="0"/>
   <property category="sys" name="OutPath" value="classes"/>
   <property category="sys" name="SourcePath" value="src;test"/>
@@ -60,6 +60,8 @@
   <property category="sys" name="Version" value="1.0"/>
   <property category="sys" name="VersionLabel" value="@version"/>
   <property category="sys" name="WorkingDirectory" value="."/>
+  <property category="sys"
+    name="uidesign.size.org.cougaar.plugin.test.SearchProgressDialog" value="400,110"/>
   <property category="sys"
     name="uidesign.size.org.cougaar.plugin.test.UI" value="564,442"/>
   <property category="team" name="ignorePath.0" value="bak"/>
