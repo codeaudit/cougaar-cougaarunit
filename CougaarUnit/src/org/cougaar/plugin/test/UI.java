@@ -1,46 +1,22 @@
 package org.cougaar.plugin.test;
 
 import java.awt.*;
-import javax.swing.*;
-import com.borland.jbcl.layout.*;
-import javax.swing.border.*;
 import java.awt.event.*;
-import java.io.File;
-import java.util.jar.JarFile;
-import java.util.Enumeration;
-import java.util.jar.JarEntry;
-import java.io.FileFilter;
+import java.awt.print.*;
+import java.io.*;
+import java.net.*;
+import java.util.*;
+import java.util.jar.*;
+
+import javax.swing.*;
+import javax.swing.border.*;
+import javax.swing.table.*;
+import javax.xml.parsers.*;
+
+import org.apache.bcel.*;
 import org.apache.bcel.classfile.*;
-import org.apache.bcel.Repository;
-import javax.swing.ProgressMonitor;
-import java.io.PrintStream;
-import java.io.OutputStream;
-import java.io.IOException;
-import java.io.ByteArrayOutputStream;
-import javax.swing.table.TableColumnModel;
-import javax.swing.table.TableColumn;
-import javax.swing.table.AbstractTableModel;
-import org.apache.xerces.parsers.DOMParser;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-import java.io.StringReader;
-import org.xml.sax.InputSource;
-import java.util.Vector;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import org.w3c.dom.Element;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableCellEditor;
-import javax.swing.event.CellEditorListener;
-import javax.swing.table.DefaultTableCellRenderer;
-import java.util.HashMap;
-import java.net.URLClassLoader;
-import java.net.URL;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.FileReader;
-import java.io.BufferedReader;
-import javax.swing.event.ListDataListener;
+import org.w3c.dom.*;
+import org.xml.sax.*;
 
 /**
  * <p>Title: </p>
@@ -94,7 +70,7 @@ public class UI extends JFrame {
 
   private final Cursor CURSOR_WAIT = new Cursor(Cursor.WAIT_CURSOR);
   private final Cursor CURSOR_DEFAULT = new Cursor(Cursor.DEFAULT_CURSOR);
-  private JMenuBar jMenuBar1 = new JMenuBar();
+  private JMenuBar jMenuBarMain = new JMenuBar();
   private JMenu jMenuFile = new JMenu();
   private JMenuItem jMenuItemExit = new JMenuItem();
   private JMenu jMenuHelp = new JMenu();
@@ -102,6 +78,12 @@ public class UI extends JFrame {
   private JMenuItem jMenuItemAbout = new JMenuItem();
   private JMenuItem jMenuItemClearHistory = new JMenuItem();
   private JComboBox jComboBoxDirJar = new JComboBox();
+  private JPopupMenu jPopupMenuOutput = new JPopupMenu();
+  private JMenuItem jMenuItemOuptutSave = new JMenuItem();
+  private JMenuItem jMenuItemOutputPrint = new JMenuItem();
+  private JPopupMenu jPopupMenuResults = new JPopupMenu();
+  private JMenuItem jMenuItemResultsSave = new JMenuItem();
+  private JMenuItem jMenuItemResultsPrint = new JMenuItem();
 
 
   class OutputTableModel extends AbstractTableModel {
@@ -192,12 +174,20 @@ public class UI extends JFrame {
     jTableResults.getColumn(OutputTableModel.COLUMN_RESULT).setPreferredWidth(10);
     jTableResults.addMouseListener(new MouseAdapter() {
       public void mouseClicked(MouseEvent e) {
-        if (jTableResults.getColumnName(jTableResults.getSelectedColumn()).equals(OutputTableModel.COLUMN_RESULT)) {
-          ResultsDialog rd = new ResultsDialog();
-          rd.setResultData((ResultStates)UI.this.outputTableModel.getCellAncillaryData(jTableResults.getSelectedRow(), jTableResults.getSelectedColumn()));
-          rd.show();
+        if (e.getModifiers() == Event.META_MASK) {
+          // Make the jPopupMenu visible relative to the current mouse position in the container.
+          jPopupMenuResults.show(jTableResults, e.getX(), e.getY());
+        }
+        else {
+          int col = jTableResults.getSelectedColumn();
+          if ((col != -1) && jTableResults.getColumnName(col).equals(OutputTableModel.COLUMN_RESULT)) {
+            ResultsDialog rd = new ResultsDialog();
+            rd.setResultData((ResultStates)UI.this.outputTableModel.getCellAncillaryData(jTableResults.getSelectedRow(), jTableResults.getSelectedColumn()));
+            rd.show();
+          }
         }
       }
+
       public void mousePressed(MouseEvent e) {
       }
       public void mouseReleased(MouseEvent e) {
@@ -207,6 +197,30 @@ public class UI extends JFrame {
       public void mouseExited(MouseEvent e) {
       }
     });
+
+    jTextPaneOutput.add(jPopupMenuOutput);
+    jTextPaneOutput.addMouseListener(new MouseAdapter() {
+      public void mouseClicked(MouseEvent e) {
+        if (e.getModifiers() == Event.META_MASK) {
+          // Make the jPopupMenu visible relative to the current mouse position in the container.
+          jPopupMenuOutput.show(jTextPaneOutput, e.getX(), e.getY());
+        }
+      }
+      public void mousePressed(MouseEvent e) {}
+      public void mouseReleased(MouseEvent e) {}
+      public void mouseEntered(MouseEvent e) {}
+      public void mouseExited(MouseEvent e) {}
+    });
+    jTableResults.add(jPopupMenuResults);
+    jTableResults.addMouseListener(new MouseAdapter() {
+      public void mouseClicked(MouseEvent e) {
+
+      }
+      public void mousePressed(MouseEvent e) {}
+      public void mouseReleased(MouseEvent e) {}
+      public void mouseEntered(MouseEvent e) {}
+      public void mouseExited(MouseEvent e) {}
+    });
     jTableResults.updateUI();
 
     readFileHistory();
@@ -215,7 +229,7 @@ public class UI extends JFrame {
   }
 
   private void jbInit() throws Exception {
-    this.setJMenuBar(jMenuBar1);
+    this.setJMenuBar(jMenuBarMain);
     jTableResults.setRowSelectionAllowed(false);
     border1 = BorderFactory.createEtchedBorder(Color.white,new Color(178, 178, 178));
     titledBorder1 = new TitledBorder(border1,"Test Suites");
@@ -304,6 +318,30 @@ public class UI extends JFrame {
     });
     jComboBoxDirJar.setPreferredSize(new Dimension(400, 21));
     jComboBoxDirJar.setEditable(true);
+    jMenuItemOuptutSave.setText("Save");
+    jMenuItemOuptutSave.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        jMenuItemOuptutSave_actionPerformed(e);
+      }
+    });
+    jMenuItemOutputPrint.setText("Print");
+    jMenuItemOutputPrint.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        jMenuItemOutputPrint_actionPerformed(e);
+      }
+    });
+    jMenuItemResultsSave.setText("Save");
+    jMenuItemResultsSave.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        jMenuItemResultsSave_actionPerformed(e);
+      }
+    });
+    jMenuItemResultsPrint.setText("Print");
+    jMenuItemResultsPrint.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        jMenuItemResultsPrint_actionPerformed(e);
+      }
+    });
     jPanelDirJar.add(jLabelSelectDir, null);
     jPanelDirJar.add(jComboBoxDirJar, null);
     this.getContentPane().add(jLabel1,  BorderLayout.NORTH);
@@ -327,11 +365,15 @@ public class UI extends JFrame {
     jTabbedPane1.add(jScrollPaneOutput,  "Output");
     jScrollPaneOutput.getViewport().add(jTextPaneOutput, null);
     jScrollPaneResults.getViewport().add(jTableResults, null);
-    jMenuBar1.add(jMenuFile);
-    jMenuBar1.add(jMenuOptions);
-    jMenuBar1.add(jMenuHelp);
+    jMenuBarMain.add(jMenuFile);
+    jMenuBarMain.add(jMenuOptions);
+    jMenuBarMain.add(jMenuHelp);
     jMenuFile.add(jMenuItemExit);
     jMenuOptions.add(jMenuItemClearHistory);
+    jPopupMenuOutput.add(jMenuItemOuptutSave);
+    jPopupMenuOutput.add(jMenuItemOutputPrint);
+    jPopupMenuResults.add(jMenuItemResultsSave);
+    jPopupMenuResults.add(jMenuItemResultsPrint);
     jSplitPane1.setDividerLocation(200);
     jSplitPaneTests.setDividerLocation(250);
     jTabbedPane1.setSelectedComponent(jScrollPaneResults);
@@ -664,6 +706,54 @@ public class UI extends JFrame {
     File f = new File("history");
     if (f.exists()) f.delete();
   }
+
+  void jMenuItemResultsPrint_actionPerformed(ActionEvent e) {
+    PrintableComponent pc = new PrintableComponent(this.jTableResults);
+    try {pc.print();} catch(Exception e1){}
+  }
+
+  void jMenuItemOutputPrint_actionPerformed(ActionEvent e) {
+    PrintableComponent pc = new PrintableComponent(this.jTextPaneOutput);
+    try {pc.print();} catch (Exception e1){}
+  }
+
+  void jMenuItemResultsSave_actionPerformed(ActionEvent e) {
+    StringBuffer sb = new StringBuffer();
+    int colCount = outputTableModel.getColumnCount();
+    int rowCount = outputTableModel.getRowCount();
+    for (int i=0; i<rowCount; i++) {
+      for (int j=0; j<colCount; j++) {
+        sb.append(outputTableModel.getValueAt(i,j));
+        sb.append('\t');
+      }
+      sb.append('\n');
+    }
+    saveToFile(sb.toString());
+  }
+
+  private void saveToFile(String s) {
+    JFileChooser jfc = new JFileChooser();
+    jfc.setDialogType(JFileChooser.SAVE_DIALOG);
+    jfc.setDialogTitle("Save Content");
+    System.out.println(s);
+    int ret = jfc.showSaveDialog(this);
+    if (ret == JFileChooser.APPROVE_OPTION) {
+      try {
+        File f = jfc.getSelectedFile();
+        FileWriter fw = new FileWriter(f);
+        fw.write(s);
+        fw.flush();
+        fw.close();
+      }
+      catch (Exception e1) {
+
+      }
+    }
+  }
+
+  void jMenuItemOuptutSave_actionPerformed(ActionEvent e) {
+    saveToFile(this.jTextPaneOutput.getText());
+  }
 }
 
 
@@ -713,5 +803,61 @@ class MyClassLoader extends URLClassLoader {
       }
     }
     return me;
+  }
+}
+
+
+/**
+ * This wrapper class encapsulates a Component and allows it to be printed
+ * using the Java 1.2 printing API
+ */
+class PrintableComponent implements Printable {
+  // The component to be printed
+  Component c;
+
+  /** Create a PrintableComponent wrapper around a Component */
+  public PrintableComponent(Component c) { this.c = c; }
+
+  /**
+   * This method is not part of the Printable interface.  It is a method
+   * that sets up the PrinterJob and initiates the printing.
+   */
+  public void print() throws PrinterException {
+    // Get the PrinterJob object
+    PrinterJob job = PrinterJob.getPrinterJob();
+    // Get the default page format, then allow the user to modify it
+    PageFormat format = job.pageDialog(job.defaultPage());
+    // Tell the PrinterJob what to print
+    job.setPrintable(this, format);
+    // Ask the user to confirm, and then begin the printing process
+    if (job.printDialog())
+      job.print();
+  }
+
+  /**
+   * This is the "callback" method that the PrinterJob will invoke.
+   * This method is defined by the Printable interface.
+   */
+  public int print(Graphics g, PageFormat format, int pagenum) {
+    // The PrinterJob will keep trying to print pages until we return
+    // this value to tell it that it has reached the end
+    if (pagenum > 0)
+      return Printable.NO_SUCH_PAGE;
+
+    // We're passed a Graphics object, but it can always be cast to Graphics2D
+    Graphics2D g2 = (Graphics2D) g;
+
+    // Use the top and left margins specified in the PageFormat Note
+    // that the PageFormat methods are poorly named.  They specify
+    // margins, not the actual imageable area of the printer.
+    g2.translate(format.getImageableX(), format.getImageableY());
+
+    // Tell the Component to draw itself to the printer by passing in
+    // the Graphics2D object.  This will not work well if the Component
+    // has double-buffering enabled.
+    c.paint(g2);
+
+    // Return this constant to tell the PrinterJob that we printed the page
+    return Printable.PAGE_EXISTS;
   }
 }
