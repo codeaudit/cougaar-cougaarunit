@@ -12,12 +12,22 @@ import org.cougaar.core.plugin.ComponentPlugin;
  */
 
 public abstract class PluginTestCase extends ComponentPlugin {
+    private String description;
 
     /**
      * keep a static reference to the latest instance of this class
      */
     public PluginTestCase() {
+        this.description = this.getClass().getName();  //initialize the description to the class name
         PluginTestResult.setTestName(this.getClass().getName());
+    }
+
+    public void setDescription(String s) {
+        this.description = s;
+    }
+
+    public String getDescription() {
+        return this.description;
     }
 
     /**
@@ -193,6 +203,7 @@ public abstract class PluginTestCase extends ComponentPlugin {
                 validateSubscriptions();
                 validateExecution();
                 System.out.println(PluginTestResult.getReportAsString());  //print the test results to stdout
+                System.out.println(PluginTestResult.getReportAsXML());  //print the test results to stdout
                 System.exit((PluginTestResult.getOverallResult())?0:1);  //exit code = 0 if all tests passed, otherwise 1
             }
         });

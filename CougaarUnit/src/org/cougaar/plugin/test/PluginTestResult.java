@@ -40,10 +40,15 @@ public class PluginTestResult {
 
     private static Vector entries = new Vector();
     private static String testName;
+    private static String testDescription;
 
 
     public static void setTestName(String name) {
         testName = name;
+    }
+
+    public static void setTestDescription(String desc) {
+        testDescription = desc;
     }
 
     public static void addEntry(int phase, int command, boolean result, String description) {
@@ -73,22 +78,40 @@ public class PluginTestResult {
     private static String getCommandAsString(int commandId) {
         switch (commandId) {
             case COMMAND_SUBSCRIPTION_ASSERT: return   "SUBSCRIPTION ASSERT";
-            case COMMAND_ASSERT_PUBLISH_ADD: return    "PUBLISH ADD        ";
-            case COMMAND_ASSERT_PUBLISH_CHANGE: return "PUBLISH CHANGE     ";
-            case COMMAND_ASSERT_PUBLISH_REMOVE: return "PUBLISH REMOVE     ";
+            case COMMAND_ASSERT_PUBLISH_ADD: return    "PUBLISH ADD";
+            case COMMAND_ASSERT_PUBLISH_CHANGE: return "PUBLISH CHANGE";
+            case COMMAND_ASSERT_PUBLISH_REMOVE: return "PUBLISH REMOVE";
         }
         return "";
     }
 
     public static String getReportAsString() {
         StringBuffer result = new StringBuffer();
-        result.append("TEST RESULTS FOR: " + testName+"\n");
-        result.append("ID\tPHASE\t\tCOMMAND\t\t\tRESULT\tDESCRIPTION\n");
-        result.append("--\t-----\t\t-------\t\t\t------\t-----------\n");
+        result.append("Test Name: " + testName+"\n");
         for (Enumeration enum = entries.elements(); enum.hasMoreElements(); ) {
             TestResultEntry tre = (TestResultEntry)enum.nextElement();
-            result.append(String.valueOf(tre.id)+"\t"+getPhaseAsString(tre.testPhase)+"\t"+getCommandAsString(tre.testCommand)+"\t"+String.valueOf(tre.testResult)+"\t"+tre.description+"\n");
+            result.append("ID: " + String.valueOf(tre.id)+
+                          "\nPhase: "+ getPhaseAsString(tre.testPhase)+
+                          "\nCommand: "+getCommandAsString(tre.testCommand)+
+                          "\nResult: "+String.valueOf(tre.testResult)+
+                          "\nDescription: "+tre.description+"\n");
         }
+        return result.toString();
+    }
+
+    public static String getReportAsXML() {
+        StringBuffer result = new StringBuffer();
+        result.append("<?xml version=\"1.0\"?>\n");
+        result.append("<TEST Name=\""+testName+"\">\n");
+        for (Enumeration enum = entries.elements(); enum.hasMoreElements(); ) {
+            TestResultEntry tre = (TestResultEntry)enum.nextElement();
+            result.append("<ID>"+ String.valueOf(tre.id)+"\n");
+            result.append("<PHASE>" + getPhaseAsString(tre.testPhase) + "</PHASE>\n");
+            result.append("<DESCRIPTION>"+tre.description+"</DESCRIPTION>\n");
+            result.append("<RESULT>" + String.valueOf(tre.testResult) + "</RESULT>\n");
+            result.append("</ID>\n");
+        }
+        result.append("</TEST>");
         return result.toString();
     }
 }

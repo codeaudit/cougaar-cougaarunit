@@ -68,5 +68,6 @@
     <property category="external" name="params" value="c:\cougaar941\lib\CougaarUnit.jar"/>
     <property category="external" name="phase" value="deploy"/>
   </node>
+  <file path="src/New.xml"/>
   <file path="RunTest.bat"/>
 </project>
