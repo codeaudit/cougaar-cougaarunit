@@ -141,6 +141,7 @@ public class PluginTestResult {
             case COMMAND_ASSERT_PUBLISH_ADD: return    "PUBLISH ADD";
             case COMMAND_ASSERT_PUBLISH_CHANGE: return "PUBLISH CHANGE";
             case COMMAND_ASSERT_PUBLISH_REMOVE: return "PUBLISH REMOVE";
+            case INITIAL_STATE: return "INITIAL STATE";
         }
         return "";
     }

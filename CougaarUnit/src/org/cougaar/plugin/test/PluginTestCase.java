@@ -66,6 +66,7 @@ public abstract class PluginTestCase extends ComponentPlugin {
         BlackboardDeltaState currentBDS = ((BlackboardServiceProxy)blackboard).getCurrentBlackboardDeltaState();
         boolean result = bds.compare(currentBDS, expectedResult);
         PluginTestResult.addEntry(PluginTestResult.PHASE_TEST_EXECUTION, PluginTestResult.INITIAL_STATE, result, "Initial State", bds, currentBDS);
+        ((BlackboardServiceProxy)blackboard).resetBlackboardDeltaState();   //reset the blackboard state
       }
       catch (Exception ex) {
         ex.printStackTrace();

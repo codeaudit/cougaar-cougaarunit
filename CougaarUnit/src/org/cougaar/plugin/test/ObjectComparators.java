@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import org.cougaar.planning.ldm.plan.Task;
 import org.cougaar.planning.ldm.plan.Expansion;
+import org.cougaar.planning.ldm.asset.Asset;
 
 /**
  *
@@ -97,6 +98,19 @@ public class ObjectComparators {
         Expansion e2 = (Expansion)obj2;
         try {return e1.getTask().getVerb().equals(e2.getTask().getVerb());} catch (Exception e){}
 
+        return false;
+      }
+    };
+
+    public static final Comparator ASSET_COMPARATOR = new Comparator() {
+      public boolean compare(Object obj1, Object obj2) {
+        if ((obj1 == null) || (obj2 == null)) return false;
+        if ((!(obj1 instanceof Asset) || (!(obj2 instanceof Asset)))) return false;
+
+        Asset a1 = (Asset)obj1;
+        Asset a2 = (Asset)obj2;
+
+        try {return a1.getItemIdentificationPG().getItemIdentification().equals(a2.getItemIdentificationPG().getItemIdentification());} catch(Exception e){}
         return false;
       }
     };
