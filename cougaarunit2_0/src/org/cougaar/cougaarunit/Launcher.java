@@ -283,7 +283,9 @@ public class Launcher {
                     PluginTestSuite testSuite = (PluginTestSuite) _class
                         .newInstance();
                     Class[] _classes = testSuite.getTestClasses();
-
+					int failures = 0;
+					float successrate=0f;
+					float numberOfTests=0;
                     if ((_classes != null) && (_classes.length > 0)) {
                         boolean pass = true;
                         Vector tests = new Vector();
@@ -295,6 +297,7 @@ public class Launcher {
 
                             if (returnCode != TEST_PASS_CODE) {
                                 pass = false;
+                                
                             }
 
                             //get test result
@@ -319,7 +322,18 @@ public class Launcher {
                                     TestResultSummary summary = new TestResultSummary();
                                     summary.setName(_classes[i].getName());
                                     summary.setIdList(testResult.getIdList());
+                                    if(testResult.getIdList()!=null){
+                                    	Enumeration enumeration = testResult.getIdList().elements();
+                                    	while(enumeration.hasMoreElements()){
+                                    		if(!(((TestResultId)enumeration.nextElement()).getResult().equals("pass"))){
+                                    			failures++;
+                                    		}
+                                    		numberOfTests++;
+                                    	}
+                                    	
+                                    }
                                     tests.add(summary);
+                                    
                                 } catch (Exception e) {
                                     System.err.println(
                                         "Error getting test results");
@@ -332,6 +346,10 @@ public class Launcher {
                         TestSuiteResult testSuiteResult = new TestSuiteResult();
                         testSuiteResult.setName(args[0]);
                         testSuiteResult.setTestList(tests);
+                        successrate = (numberOfTests-failures)/numberOfTests;
+                        testSuiteResult.setFailures("" + failures);
+                        testSuiteResult.setSuccessrate("" +successrate);
+                        testSuiteResult.setTests(""+(int)numberOfTests);
                         testSuiteResult.saveResult(PluginTestCase.RESULTS_DIRECTORY);
                         try{
 							TransformerFactory tFactory = TransformerFactory.newInstance();
