@@ -25,14 +25,14 @@ public class BlackboardClientProxy implements BlackboardClient
   private BlackboardClient actualPlugin;
   private static Vector pluginList = new Vector();
 
-  private void setParameters(ComponentPlugin plugin, String[] params) {
+/*  private void setParameters(ComponentPlugin plugin, String[] params) {
     ArrayList list = new ArrayList(params.length);
     for (int i=0; i<params.length; i++) {
       list.add(params[i]);
     }
     plugin.setParameter(list);
 
-  }
+  }*/
 
   /**
    * This method is added for testing
@@ -50,10 +50,10 @@ public class BlackboardClientProxy implements BlackboardClient
         Object obj = plugins.nextElement();
         if (obj.getClass().getName().equals(targetPluginClassName)) {
           //set the parameters on the tartget plugin
-          if (obj instanceof ComponentPlugin) {
+         /* if (obj instanceof ComponentPlugin) {
             String[] params = ((PluginTestCase)actualPlugin).getPluginParameters();
             setParameters((ComponentPlugin)obj, params);
-          }
+          }*/
           //if the target plugin has been loaded then we can start the tests
           ((PluginTestCase)actualPlugin).startTests();
           return;
@@ -70,10 +70,10 @@ public class BlackboardClientProxy implements BlackboardClient
           if (targetPluginClassName == null) throw new RuntimeException("You must implement the getPluginClass()) method");
           if (actualPlugin.getClass().getName().equals(targetPluginClassName)) {
             //set the parameters on the tartget plugin
-            if (actualPlugin instanceof ComponentPlugin) {
+            /*if (actualPlugin instanceof ComponentPlugin) {
               String[] params = ((PluginTestCase)obj).getPluginParameters();
               setParameters((ComponentPlugin)actualPlugin, params);
-            }
+            }*/
             //if this current class is the target plugin, then start the tests
             ((PluginTestCase)obj).startTests();
             return;

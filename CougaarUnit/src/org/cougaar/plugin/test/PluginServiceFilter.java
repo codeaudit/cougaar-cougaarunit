@@ -96,9 +96,9 @@ public class PluginServiceFilter
           //return new BlackboardServiceProxy((BlackboardService) service, client);
           return new BlackboardServiceProxy((BlackboardService)service);
         }
-        else if (service instanceof DomainService) {
-          return new DomainServiceProxy((DomainService)service);
-        }
+        //else if (service instanceof DomainService) {
+        //  return new DomainServiceProxy((DomainService)service);
+        //}
         return null;
       }
 

@@ -3,6 +3,7 @@ package org.cougaar.plugin.test;
 import java.util.Vector;
 import java.util.TreeSet;
 import java.util.Enumeration;
+import java.io.Serializable;
 
 /**
  * <p>Title: </p>
@@ -16,7 +17,7 @@ import java.util.Enumeration;
  * @version 1.0
  */
 
-public class BlackboardDeltaState {
+public class BlackboardDeltaState implements Serializable {
 
     Vector stateChanges = new Vector();
 
