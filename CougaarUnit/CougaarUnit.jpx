@@ -60,7 +60,6 @@
     <property category="archiving" name="executableFiles.3" value="CougaarUnit-linux"/>
     <property category="archiving" name="executableFiles.4" value="CougaarUnit-solaris"/>
     <property category="archiving" name="executableFiles.5" value="CougaarUnit-mac"/>
-    <property category="archiving" name="libraryStates.1" value="1:COUGAAR_94"/>
     <property category="archiving" name="manifestMainClass" value="org.cougaar.plugin.test.Launcher"/>
     <property category="archiving" name="targetPath" value="C%|/COUGAAR941/lib/test/AAACougaarUnit.jar"/>
   </node>
