@@ -33,6 +33,7 @@ import org.cougaar.core.blackboard.*;
 import org.cougaar.core.service.BlackboardService;
 import org.cougaar.core.plugin.ComponentPlugin;
 import org.cougaar.core.service.DomainService;
+import org.cougaar.core.service.LoggingService;
 
 /** A plugin's view of its parent component (Container).
  * Add a line like the following to a cluster.ini file:
@@ -81,9 +82,6 @@ public class PluginServiceFilter
           //return new BlackboardServiceProxy((BlackboardService) service, client);
           return new BlackboardServiceProxy((BlackboardService)service);
         }
-        //else if (service instanceof DomainService) {
-        //  return new DomainServiceProxy((DomainService)service);
-        //}
         return null;
       }
 

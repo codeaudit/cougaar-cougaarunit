@@ -38,7 +38,6 @@ public class Launcher {
     private static final String[] OUTPUT_STYLES = {"text", "xml"};
     private int outputStyle = OUTPUT_STYLE_XML;
 
-    private static final String[] errorChecks = new String[] {"Failed to add"};
 
     private String testJarFile="";
 
@@ -147,7 +146,6 @@ public class Launcher {
         BufferedReader es = new BufferedReader(new InputStreamReader(p.getErrorStream()));
         String line = null;
         String line2 = null;
-        boolean errorOccurred = false;
         while (((line = is.readLine()) != null) ||  ((line2 = es.readLine()) != null)) {
             if (line != null) {
                 line += "\n";
@@ -158,51 +156,27 @@ public class Launcher {
                 byte[] lineData = line2.getBytes();
                 os.write(lineData);
             }
-            if (checkForError(line) || checkForError(line2)) {
-                errorOccurred = true;
-                break;
-            }
             //os.write('\n');
-        }
-        if (errorOccurred) {
-
-            try {
-                //clear out the streams
-
-                retCode = -1;
-                System.out.println("Terminating due to Cougaar error!");
-                //ps.write("\003");
-                //ps.write("\003");
-                //ps.flush();
-                is.close();
-                es.close();
-                p.destroy();
-                p.waitFor();
-                int ec = p.exitValue();
-                System.out.println("exit code: " + ec);
-            }
-            catch (Exception ex) {
-                ex.printStackTrace();
-                p.destroy();
-            }
-            //p.waitFor();
         }
         System.out.println("exiting Cougaar system...");
         System.out.flush();
-        //p.waitFor();   //wait for this process to terminate
-
+        retCode = p.waitFor();   //wait for this process to terminate
+System.out.println("*********************RETURN CODE: " + retCode);
         return retCode;
     }
 
-    private boolean checkForError(String line) {
-        if (line == null) return false;
+    private void createLogProps() throws Exception {
+        File logPropsFile;
 
-        for (int i=0; i<errorChecks.length; i++) {
-            if (line.indexOf(errorChecks[i]) != -1 ) {
-                return true;
-            }
-        }
-        return false;
+        logPropsFile = new File("logging.props");
+        logPropsFile.createNewFile();
+        FileWriter fw = new FileWriter(logPropsFile);
+        fw.write("log4j.rootCategory=INFO,A1,A2\n"+
+                 "log4j.appender.A1=org.apache.log4j.ConsoleAppender\n"+
+                 "log4j.appender.A1.layout=org.apache.log4j.PatternLayout\n"+
+                 "log4j.appender.A1.layout.ConversionPattern=%m%n\n"+
+                 "log4j.appender.A2=org.cougaar.plugin.test.ErrorDetectionAppender");
+        fw.close();
     }
 
     private String createRunFile() throws Exception {
@@ -225,6 +199,7 @@ public class Launcher {
                             "-Dorg.cougaar.lib.web.https.port=-1 "+
                             "-Dorg.cougaar.plugin.test.output.format="+OUTPUT_STYLES[outputStyle]+" "+
                             "-Dorg.cougaar.lib.web.https.clientAuth=true "+
+                            "-Dorg.cougaar.core.logging.config.filename=logging.props "+
                             "-Xbootclasspath/p:%COUGAAR_INSTALL_PATH%\\lib\\javaiopatch.jar\n"+
                             "set MYMEMORY=\n"+
                             "set MYCLASSES=org.cougaar.bootstrap.Bootstrapper org.cougaar.core.node.Node\n"+
@@ -260,6 +235,7 @@ public class Launcher {
                             "-Dorg.cougaar.lib.web.https.port=-1 "+
                             "-Dorg.cougaar.lib.web.https.clientAuth=true "+
                             "-Dorg.cougaar.plugin.test.output.format="+OUTPUT_STYLES[outputStyle]+" "+
+                            "-Dorg.cougaar.core.logging.config.filename=log.props "+
                             "-Xbootclasspath/p:$COUGAAR_INSTALL_PATH/lib/javaiopatch.jar\"\n"+
                             "MYMEMORY=\n"+
                             "MYCLASSES=\"org.cougaar.bootstrap.Bootstrapper org.cougaar.core.node.Node\"\n"+
@@ -331,6 +307,8 @@ public class Launcher {
         writeNodeIni(tpc.getAgentId());
         //now we write the agent ini file
         writeAgentIni(tpc.getClass().getName(), sourcePluginStr, tpc.getAgentId(), tpc.getPluginParameters());
+        //now write the logging.props file
+        createLogProps();
         //launch Cougaar
         return launchCougaar(ps);
     }

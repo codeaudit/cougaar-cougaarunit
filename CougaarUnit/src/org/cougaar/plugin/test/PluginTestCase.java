@@ -1,6 +1,7 @@
 package org.cougaar.plugin.test;
 
 import org.cougaar.core.plugin.ComponentPlugin;
+import org.cougaar.core.service.LoggingService;
 
 /**
  * <p>Title: PluginTestCase</p>
@@ -296,7 +297,8 @@ public abstract class PluginTestCase extends ComponentPlugin {
    * Since the subclasses of PluginTestCase don't need to use this method,
    * it's implemented here adn does nothing rather than making it abstract.
    */
-  protected void setupSubscriptions(){}
+  protected void setupSubscriptions(){
+  }
 
   /**
    * ComponentPlugin method.
