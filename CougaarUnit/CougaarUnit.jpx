@@ -116,6 +116,7 @@
     <property category="archiving" name="libraryStates.2" value="1:BCEL"/>
     <property category="archiving" name="targetPath" value="CougaarUnit.jar"/>
   </node>
+  <file path="src/tutorial/DevelopmentExpanderTestCase.java"/>
   <file path="src/New.html"/>
   <file path="src/New.xml"/>
   <file path="RunTest.bat"/>

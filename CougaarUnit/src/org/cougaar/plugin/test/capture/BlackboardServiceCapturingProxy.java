@@ -41,6 +41,9 @@ public class BlackboardServiceCapturingProxy implements BlackboardService {
         this.requestingClient = requestingClient.toString();
     }
 
+    public static void addToObjectStream(CapturedPublishAction cpe) {
+      objectStream.add(cpe);
+    }
 
     public Vector getSerializedData() {
       return objectStream;

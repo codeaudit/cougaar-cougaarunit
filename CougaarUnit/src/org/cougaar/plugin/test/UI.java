@@ -992,7 +992,7 @@ class StreamedDataTableModel extends DefaultTableModel  {
     Vector cols = new Vector();
     if (v.size() == 0) return;
     long baseTime = ((CapturedPublishAction)v.elementAt(0)).timeStamp;
-
+    cols.addElement("ID");
     cols.addElement("TIME");
     //calculate the column names
     for (int i=0; i<v.size(); i++) {
@@ -1019,10 +1019,11 @@ class StreamedDataTableModel extends DefaultTableModel  {
       String newVal = (currentVal.equals(""))?cpa.getActionString() + " " + cpa.publishedObject:currentVal+"\n"+cpa.getActionString() + " " + cpa.publishedObject;
       row[cols.indexOf(cpa.publishingSource)] = newVal;*/
       Object[] row = new Object[cols.size()];
-      for (int j=1; j<cols.size(); j++) { //initialize the row
+      for (int j=2; j<cols.size(); j++) { //initialize the row
         row[j] = "";
       }
-      row[0] = String.valueOf(cpa.timeStamp-baseTime);
+      row[0] = String.valueOf(i);
+      row[1] = String.valueOf(cpa.timeStamp-baseTime);
       row[cols.indexOf(cpa.publishingSource)] = cpa.getActionString() + " " + cpa.publishedObject;
       rows.addElement(row);
     }
