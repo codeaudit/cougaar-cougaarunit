@@ -69,6 +69,7 @@ public class Launcher {
     private static boolean writeToOutput = false;
     private Class testClass;
     private static PluginTestSuite testSuite;
+    private Process p=null;
     private static boolean cougaarError = false;
     /**
      * Creates a new Launcher object.
@@ -100,7 +101,7 @@ public class Launcher {
 
         System.out.println("execing: " + execStr);
 
-        Process p = Runtime.getRuntime().exec(execStr);
+        p = Runtime.getRuntime().exec(execStr);
         System.out.println("Process:  " + p);
 
 
@@ -428,6 +429,7 @@ public class Launcher {
 										|| line.toUpperCase().indexOf("ERROR") >= 0)
 						{
 							cougaarError = true;
+							p.destroy();
 						}
 						output.write(line.getBytes());
 						line = reader.readLine();
