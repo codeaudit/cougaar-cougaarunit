@@ -35,18 +35,12 @@ public class UI extends JFrame {
     private JButton jButtonCancel = new JButton();
     private BorderLayout borderLayout2 = new BorderLayout();
     private JPanel jPanel3 = new JPanel();
-    private JPanel jPanelTests = new JPanel();
     private JPanel jPanelDirJar = new JPanel();
     private BorderLayout borderLayout3 = new BorderLayout();
     private JTextField jTextFieldDirJar = new JTextField();
     private JButton jButtonBrowse = new JButton();
     private JLabel jLabelSelectDir = new JLabel();
     private FlowLayout flowLayout1 = new FlowLayout();
-    private JSplitPane jSplitPaneTests = new JSplitPane();
-    private JScrollPane jScrollPaneTestSuites = new JScrollPane();
-    private JScrollPane jScrollPaneTestCases = new JScrollPane();
-    private JList jListTestSuites = new JList();
-    private JList jListTestCases = new JList();
     private DefaultListModel testCaseModel = new DefaultListModel();
     private DefaultListModel testSuiteModel = new DefaultListModel();
     private Border border1;
@@ -55,11 +49,18 @@ public class UI extends JFrame {
     private TitledBorder titledBorder2;
     private Border border3;
     private TitledBorder titledBorder3;
-    private BorderLayout borderLayout4 = new BorderLayout();
-    private JScrollPane jScrollPane3 = new JScrollPane();
     private Border border4;
     private TitledBorder titledBorder4;
     private JButton jButtonSearch = new JButton();
+  private JSplitPane jSplitPane1 = new JSplitPane();
+  private JSplitPane jSplitPaneTests = new JSplitPane();
+  private JList jListTestCases = new JList();
+  private JPanel jPanelTests = new JPanel();
+  private JList jListTestSuites = new JList();
+  private BorderLayout borderLayout4 = new BorderLayout();
+  private JScrollPane jScrollPaneTestSuites = new JScrollPane();
+  private JScrollPane jScrollPaneTestCases = new JScrollPane();
+  private JScrollPane jScrollPaneOutput = new JScrollPane();
   private JTextArea jTextAreaOutput = new JTextArea();
 
     public UI() {
@@ -116,15 +117,6 @@ public class UI extends JFrame {
         jPanelDirJar.setLayout(flowLayout1);
         flowLayout1.setAlignment(FlowLayout.LEFT);
         flowLayout1.setHgap(10);
-        jPanelTests.setLayout(borderLayout4);
-        jScrollPaneTestSuites.setBorder(titledBorder2);
-        jScrollPaneTestSuites.setPreferredSize(new Dimension(268, 230));
-        jScrollPaneTestCases.setBorder(titledBorder3);
-        jScrollPaneTestCases.setPreferredSize(new Dimension(268, 230));
-        jSplitPaneTests.setPreferredSize(new Dimension(543, 230));
-        jSplitPaneTests.setContinuousLayout(true);
-        jScrollPane3.setBorder(titledBorder4);
-    jScrollPane3.setPreferredSize(new Dimension(70, 125));
         this.addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 this_windowClosing(e);
@@ -136,27 +128,39 @@ public class UI extends JFrame {
                 jButtonSearch_actionPerformed(e);
             }
         });
+    jSplitPaneTests.setPreferredSize(new Dimension(543, 230));
+    jSplitPaneTests.setContinuousLayout(true);
+    jPanelTests.setLayout(borderLayout4);
+    jScrollPaneTestSuites.setBorder(titledBorder2);
+    jScrollPaneTestSuites.setPreferredSize(new Dimension(268, 230));
+    jScrollPaneTestCases.setBorder(titledBorder3);
+    jScrollPaneTestCases.setPreferredSize(new Dimension(268, 230));
+    jSplitPane1.setOrientation(JSplitPane.VERTICAL_SPLIT);
+    jScrollPaneOutput.setBorder(titledBorder4);
+    jScrollPaneOutput.setPreferredSize(new Dimension(70, 125));
     jTextAreaOutput.setLineWrap(true);
     jPanelDirJar.add(jLabelSelectDir, null);
         this.getContentPane().add(jLabel1,  BorderLayout.NORTH);
         this.getContentPane().add(jPanel1, BorderLayout.CENTER);
-        jPanel1.add(jPanel3, BorderLayout.NORTH);
+        jPanel1.add(jPanel3,  BorderLayout.NORTH);
         jPanel3.add(jPanelDirJar, BorderLayout.CENTER);
         jPanelDirJar.add(jTextFieldDirJar, null);
         jPanelDirJar.add(jButtonSearch, null);
         jPanelDirJar.add(jButtonBrowse, null);
-        jPanel1.add(jPanelTests, BorderLayout.CENTER);
         this.getContentPane().add(jPanel2, BorderLayout.SOUTH);
         jPanel2.add(jButtonCancel, null);
         jPanel2.add(jButtonRun, null);
-        jPanelTests.add(jSplitPaneTests, BorderLayout.CENTER);
-        jSplitPaneTests.add(jScrollPaneTestSuites, JSplitPane.TOP);
-        jScrollPaneTestSuites.getViewport().add(jListTestSuites, null);
-        jSplitPaneTests.add(jScrollPaneTestCases, JSplitPane.BOTTOM);
-        jPanel1.add(jScrollPane3,  BorderLayout.SOUTH);
-    jScrollPane3.getViewport().add(jTextAreaOutput, null);
-        jScrollPaneTestCases.getViewport().add(jListTestCases, null);
-        jSplitPaneTests.setDividerLocation(250);
+    jPanel1.add(jSplitPane1, BorderLayout.CENTER);
+    jSplitPane1.add(jPanelTests, JSplitPane.TOP);
+    jPanelTests.add(jSplitPaneTests, BorderLayout.CENTER);
+    jSplitPaneTests.add(jScrollPaneTestSuites, JSplitPane.TOP);
+    jSplitPaneTests.add(jScrollPaneTestCases, JSplitPane.BOTTOM);
+    jSplitPane1.add(jScrollPaneOutput, JSplitPane.BOTTOM);
+    jScrollPaneOutput.getViewport().add(jTextAreaOutput, null);
+    jScrollPaneTestCases.getViewport().add(jListTestCases, null);
+    jScrollPaneTestSuites.getViewport().add(jListTestSuites, null);
+    jSplitPaneTests.setDividerLocation(250);
+    jSplitPane1.setDividerLocation(200);
     }
     public static void main(String[] args) {
         UI ui= new UI();
