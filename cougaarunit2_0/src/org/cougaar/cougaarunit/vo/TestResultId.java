@@ -22,8 +22,22 @@ public class TestResultId implements Serializable{
 	private String command;
 	private String description;
 	private String result;
-
+	private String id;
 	
+	/**
+	 * @return
+	 */
+	public String getId() {
+		return id;
+	}
+
+	/**
+	 * @param id
+	 */
+	public void setId(String id) {
+		this.id = id;
+	}
+
 	/**
 	 * @return Returns the command.
 	 */
