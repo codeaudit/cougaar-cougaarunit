@@ -49,11 +49,6 @@ public class BlackboardClientProxy implements BlackboardClient
       for (Enumeration plugins = pluginList.elements(); plugins.hasMoreElements(); ) {
         Object obj = plugins.nextElement();
         if (obj.getClass().getName().equals(targetPluginClassName)) {
-          //set the parameters on the tartget plugin
-         /* if (obj instanceof ComponentPlugin) {
-            String[] params = ((PluginTestCase)actualPlugin).getPluginParameters();
-            setParameters((ComponentPlugin)obj, params);
-          }*/
           //if the target plugin has been loaded then we can start the tests
           ((PluginTestCase)actualPlugin).startTests();
           return;
@@ -69,11 +64,6 @@ public class BlackboardClientProxy implements BlackboardClient
           String targetPluginClassName = ((PluginTestCase)obj).getPluginClass();
           if (targetPluginClassName == null) throw new RuntimeException("You must implement the getPluginClass()) method");
           if (actualPlugin.getClass().getName().equals(targetPluginClassName)) {
-            //set the parameters on the tartget plugin
-            /*if (actualPlugin instanceof ComponentPlugin) {
-              String[] params = ((PluginTestCase)obj).getPluginParameters();
-              setParameters((ComponentPlugin)actualPlugin, params);
-            }*/
             //if this current class is the target plugin, then start the tests
             ((PluginTestCase)obj).startTests();
             return;

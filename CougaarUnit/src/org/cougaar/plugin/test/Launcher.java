@@ -135,10 +135,18 @@ public class Launcher {
     Process p = Runtime.getRuntime().exec(execStr);
 
     BufferedReader is= new BufferedReader(new InputStreamReader(p.getInputStream()));
-    String line;
-    while ((line = is.readLine()) != null) {
-      byte[] lineData = line.getBytes();
-      os.write(lineData);
+    BufferedReader es = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+    String line = null;
+    String line2 = null;
+    while (((line = is.readLine()) != null) ||  ((line2 = es.readLine()) != null)) {
+      if (line != null) {
+        byte[] lineData = line.getBytes();
+        os.write(lineData);
+      }
+      if (line2 != null) {
+        byte[] lineData = line2.getBytes();
+        os.write(lineData);
+      }
       //os.write('\n');
     }
     //p.waitFor();   //wait for this process to terminate

@@ -63,7 +63,7 @@
   <property category="sys"
     name="uidesign.size.org.cougaar.plugin.test.SearchProgressDialog" value="400,110"/>
   <property category="sys"
-    name="uidesign.size.org.cougaar.plugin.test.UI" value="619,442"/>
+    name="uidesign.size.org.cougaar.plugin.test.UI" value="776,442"/>
   <property category="team" name="ignorePath.0" value="bak"/>
   <property category="team" name="ignorePath.1" value="classes"/>
   <node name="CougaarUnit" type="Archive">

@@ -36,6 +36,11 @@ import javax.swing.table.DefaultTableCellRenderer;
 import java.util.HashMap;
 import java.net.URLClassLoader;
 import java.net.URL;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.FileReader;
+import java.io.BufferedReader;
+import javax.swing.event.ListDataListener;
 
 /**
  * <p>Title: </p>
@@ -57,7 +62,6 @@ public class UI extends JFrame {
   private JPanel jPanel3 = new JPanel();
   private JPanel jPanelDirJar = new JPanel();
   private BorderLayout borderLayout3 = new BorderLayout();
-  private JTextField jTextFieldDirJar = new JTextField();
   private JButton jButtonBrowse = new JButton();
   private JLabel jLabelSelectDir = new JLabel();
   private FlowLayout flowLayout1 = new FlowLayout();
@@ -91,10 +95,14 @@ public class UI extends JFrame {
   private final Cursor CURSOR_WAIT = new Cursor(Cursor.WAIT_CURSOR);
   private final Cursor CURSOR_DEFAULT = new Cursor(Cursor.DEFAULT_CURSOR);
   private JMenuBar jMenuBar1 = new JMenuBar();
-  private JMenu jMenu1 = new JMenu();
-  private JMenuItem jMenuItem1 = new JMenuItem();
-  private JMenu jMenu2 = new JMenu();
-  private JMenuItem jMenuItem2 = new JMenuItem();
+  private JMenu jMenuFile = new JMenu();
+  private JMenuItem jMenuItemExit = new JMenuItem();
+  private JMenu jMenuHelp = new JMenu();
+  private JMenu jMenuOptions = new JMenu();
+  private JMenuItem jMenuItemAbout = new JMenuItem();
+  private JMenuItem jMenuItemClearHistory = new JMenuItem();
+  private JComboBox jComboBoxDirJar = new JComboBox();
+
 
   class OutputTableModel extends AbstractTableModel {
     static final String COLUMN_TEST_NAME = "TEST NAME";
@@ -201,6 +209,8 @@ public class UI extends JFrame {
     });
     jTableResults.updateUI();
 
+    readFileHistory();
+
 
   }
 
@@ -238,7 +248,6 @@ public class UI extends JFrame {
     });
     jPanel1.setLayout(borderLayout2);
     jPanel3.setLayout(borderLayout3);
-    jTextFieldDirJar.setPreferredSize(new Dimension(230, 21));
     jButtonBrowse.setBorder(BorderFactory.createEtchedBorder());
     jButtonBrowse.setPreferredSize(new Dimension(73, 27));
     jButtonBrowse.setText("Browse");
@@ -277,21 +286,30 @@ public class UI extends JFrame {
     jTextPaneOutput.setEditable(false);
     jListTestCases.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     jListTestSuites.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    jMenu1.setText("File");
-    jMenuItem1.setText("Exit");
-    jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+    jMenuFile.setText("File");
+    jMenuItemExit.setText("Exit");
+    jMenuItemExit.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        jMenuItem1_actionPerformed(e);
+        jMenuItemExit_actionPerformed(e);
       }
     });
-    jMenu2.setText("Help");
-    jMenuItem2.setText("About");
+    jMenuHelp.setText("Help");
+    jMenuItemAbout.setText("About");
+    jMenuOptions.setText("Options");
+    jMenuItemClearHistory.setText("Clear History");
+    jMenuItemClearHistory.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        jMenuItemClearHistory_actionPerformed(e);
+      }
+    });
+    jComboBoxDirJar.setPreferredSize(new Dimension(400, 21));
+    jComboBoxDirJar.setEditable(true);
     jPanelDirJar.add(jLabelSelectDir, null);
+    jPanelDirJar.add(jComboBoxDirJar, null);
     this.getContentPane().add(jLabel1,  BorderLayout.NORTH);
     this.getContentPane().add(jPanel1, BorderLayout.CENTER);
     jPanel1.add(jPanel3,  BorderLayout.NORTH);
     jPanel3.add(jPanelDirJar, BorderLayout.CENTER);
-    jPanelDirJar.add(jTextFieldDirJar, null);
     jPanelDirJar.add(jButtonSearch, null);
     jPanelDirJar.add(jButtonBrowse, null);
     this.getContentPane().add(jPanel2, BorderLayout.SOUTH);
@@ -309,10 +327,11 @@ public class UI extends JFrame {
     jTabbedPane1.add(jScrollPaneOutput,  "Output");
     jScrollPaneOutput.getViewport().add(jTextPaneOutput, null);
     jScrollPaneResults.getViewport().add(jTableResults, null);
-    jMenuBar1.add(jMenu1);
-    jMenuBar1.add(jMenu2);
-    jMenu1.add(jMenuItem1);
-    jMenu2.add(jMenuItem2);
+    jMenuBar1.add(jMenuFile);
+    jMenuBar1.add(jMenuOptions);
+    jMenuBar1.add(jMenuHelp);
+    jMenuFile.add(jMenuItemExit);
+    jMenuOptions.add(jMenuItemClearHistory);
     jSplitPane1.setDividerLocation(200);
     jSplitPaneTests.setDividerLocation(250);
     jTabbedPane1.setSelectedComponent(jScrollPaneResults);
@@ -377,16 +396,59 @@ public class UI extends JFrame {
     });
     int ret = jfc.showOpenDialog(this);
     if (ret == JFileChooser.APPROVE_OPTION) {
-      jTextFieldDirJar.setText(jfc.getSelectedFile().getAbsolutePath());
+      //update the combo box
+      String path  = jfc.getSelectedFile().getAbsolutePath();
+      if ((((DefaultComboBoxModel)jComboBoxDirJar.getModel()).getIndexOf(path)) == -1){
+        jComboBoxDirJar.addItem(path);
+      }
+      jComboBoxDirJar.setSelectedItem(path);
     }
 
   }
 
   void jButtonCancel_actionPerformed(ActionEvent e) {
-    System.exit(1);
+    closeApp();
   }
 
   void this_windowClosing(WindowEvent e) {
+    closeApp();
+  }
+
+  private void readFileHistory() {
+    File f = new File("history");
+    if (f.exists()) {
+      try {
+        FileReader fr = new FileReader(f);
+        BufferedReader br = new BufferedReader(fr);
+        String line = br.readLine();
+        while (line != null) {
+          jComboBoxDirJar.addItem(line);
+          line = br.readLine();
+        }
+      }
+      catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+  }
+
+  private void saveFileHistory() {
+    try {
+      File f = new File("history");
+      FileWriter fw = new FileWriter(f);
+      int count = jComboBoxDirJar.getItemCount();
+      for (int i=0; i<count; i++) {
+        fw.write(((String)jComboBoxDirJar.getItemAt(i))+"\n");
+      }
+      fw.close();
+    }
+    catch (Exception e){
+      e.printStackTrace();
+    }
+  }
+
+  private void closeApp() {
+    saveFileHistory();
     System.exit(1);
   }
 
@@ -402,7 +464,7 @@ public class UI extends JFrame {
     Thread t = new Thread() {
       public void run() {
         try {
-          File f = new File(jTextFieldDirJar.getText());
+          File f = new File((String)jComboBoxDirJar.getSelectedItem());
           if (f.isDirectory()) {
             //search for class and jar files that are instance of PluginTestCase or PluginTestSuite
             File[] jarFiles = f.listFiles( new FileFilter() {
@@ -495,6 +557,7 @@ public class UI extends JFrame {
     }
   }
 
+
   void jButtonRun_actionPerformed(ActionEvent e) {
     jTextPaneOutput.setText("");  //clear the output pane
     MyByteArrayOutputStream baos;
@@ -504,7 +567,7 @@ public class UI extends JFrame {
     MyClassLoader loader = null;
     try {
       //create a class loader that contains the selected directory or jar file in it's class path
-      loader = MyClassLoader.getInstance(new URL[]{new URL("file", "localhost", jTextFieldDirJar.getText())});
+      loader = MyClassLoader.getInstance(new URL[]{new URL("file", "localhost", (String)jComboBoxDirJar.getSelectedItem())});
     }
     catch (Exception e1) {
       e1.printStackTrace();
@@ -537,7 +600,7 @@ public class UI extends JFrame {
     }
   }
 
-  void jMenuItem1_actionPerformed(ActionEvent e) {
+  void jMenuItemExit_actionPerformed(ActionEvent e) {
     System.exit(0);
   }
 
@@ -594,6 +657,12 @@ public class UI extends JFrame {
       super.write(bytes);
       jTextPaneOutput.setText(jTextPaneOutput.getText()+new String(bytes)+"\n");
     }
+  }
+
+  void jMenuItemClearHistory_actionPerformed(ActionEvent e) {
+    ((DefaultComboBoxModel)jComboBoxDirJar.getModel()).removeAllElements();
+    File f = new File("history");
+    if (f.exists()) f.delete();
   }
 }
 
