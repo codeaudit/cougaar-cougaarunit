@@ -103,6 +103,14 @@ public class SocietyBuilder {
         		node.addVMParam("-Dorg.cougaar.domain."+component.getName()+"="+component.getClassName());
         	}
         }
+        Collection serviceComponents = pluginTestCase.getServiceComponents();
+        if (serviceComponents != null) {
+            Iterator iterator = serviceComponents.iterator();
+            while (iterator.hasNext()) {
+                Component serviceComponent = (Component) iterator.next();
+                node.addComponent(serviceComponent);
+            }
+        }
         node.addAgent(SocietyBuilder.buildAgent(pluginTestCase));
         return node;
     }

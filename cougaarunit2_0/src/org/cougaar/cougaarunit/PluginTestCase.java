@@ -314,6 +314,14 @@ public abstract class PluginTestCase extends ComponentPlugin {
     protected Collection getDomains() {
         return null;
     }
+    
+    /**
+     * get any service components to add to the node
+     * @return a collection of Component Value objects
+     */
+    protected Collection getServiceComponents() {
+        return null;
+    }
 
     /**
      * Initiates the tests by calling the validateSubscritpions() and validateExecution()
