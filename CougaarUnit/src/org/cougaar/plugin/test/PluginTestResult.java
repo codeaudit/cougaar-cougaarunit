@@ -64,29 +64,29 @@ public class PluginTestResult {
 
     private static String getPhaseAsString(int phaseId) {
         switch (phaseId) {
-            case PHASE_TEST_SUBSCRIPTION: return "SUBSCRIPTION PHASE";
-            case PHASE_TEST_EXECUTION: return "EXECUTION PHASE";
+            case PHASE_TEST_SUBSCRIPTION: return "SUBSCRIPTION";
+            case PHASE_TEST_EXECUTION: return "EXECUTION";
         }
         return "";
     }
 
     private static String getCommandAsString(int commandId) {
         switch (commandId) {
-            case COMMAND_SUBSCRIPTION_ASSERT: return "COMMAND SUBSCRIPTION ASSERT";
-            case COMMAND_ASSERT_PUBLISH_ADD: return "COMMAND PUBLISH ADD";
-            case COMMAND_ASSERT_PUBLISH_CHANGE: return "COMMAND PUBLISH CHANGE";
-            case COMMAND_ASSERT_PUBLISH_REMOVE: return "COMMAND PUBLISH REMOVE";
+            case COMMAND_SUBSCRIPTION_ASSERT: return   "SUBSCRIPTION ASSERT";
+            case COMMAND_ASSERT_PUBLISH_ADD: return    "PUBLISH ADD        ";
+            case COMMAND_ASSERT_PUBLISH_CHANGE: return "PUBLISH CHANGE     ";
+            case COMMAND_ASSERT_PUBLISH_REMOVE: return "PUBLISH REMOVE     ";
         }
         return "";
     }
 
     public static String getReportasString() {
         StringBuffer result = new StringBuffer();
+        result.append("TEST RESULTS FOR: " + testName+"\n");
+        result.append("ID\tPHASE\t\tCOMMAND\t\t\tRESULT\tDESCRIPTION\n");
+        result.append("--\t-----\t\t-------\t\t\t------\t-----------\n");
         for (Enumeration enum = entries.elements(); enum.hasMoreElements(); ) {
             TestResultEntry tre = (TestResultEntry)enum.nextElement();
-            result.append("TEST RESULTS FOR: " + testName+"\n");
-            result.append("ID\tPHASE\t\t\tTEST\t\t\t\tRESULT\tDESCRIPTION\n");
-            result.append("--\t-----\t\t\t----\t\t\t\t------\t-----------\n");
             result.append(String.valueOf(tre.id)+"\t"+getPhaseAsString(tre.testPhase)+"\t"+getCommandAsString(tre.testCommand)+"\t"+String.valueOf(tre.testResult)+"\t"+tre.description+"\n");
         }
         return result.toString();
