@@ -16,7 +16,7 @@
 		<value>08/10/2005</value>
 	</parameter>
 	<parameter name="-Dorg.cougaar.class.path">
-		<value>../bin</value>
+		<value>../bin;COUGAAR_INSTALL_PATH/lib/bootstrap.jar</value>
 	</parameter>
 	<parameter name="-Dorg.cougaar.workspace">
 		<value>COUGAAR_WORKSPACE</value>

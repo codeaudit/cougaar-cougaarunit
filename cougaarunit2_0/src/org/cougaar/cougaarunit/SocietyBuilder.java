@@ -69,6 +69,7 @@ public class SocietyBuilder {
                 Parameter p = (Parameter) i.next();
                 String pName = p.getName();
                 String value = p.getValue();
+//                value = value.replaceAll("COUGAAR_INSTALL_PATH", System.getProperty("org.cougaar.install.path"));
                 if (pName.indexOf("-X") < 0) {
                     node.addVMParam(pName + "=" + value);
                 } else {

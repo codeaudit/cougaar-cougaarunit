@@ -1,5 +1,7 @@
 package org.cougaar.cougaarunit;
 
+import java.util.List;
+
 
 /**
  *
@@ -17,4 +19,5 @@ public abstract class PluginTestSuite {
      * all the test cases to be tested within this suite
      */
     public abstract Class[] getTestClasses();
+  
 }

@@ -1,0 +1,237 @@
+<?xml version="1.0"?>
+
+<!-- ================================================================= -->
+<!-- CSI Utilities build file                                          -->
+<!-- ================================================================= -->
+
+<project name="cougaarunit" default="compile" basedir=".">
+	<taskdef name="cunit" classname="org.cougaar.cougaarunit.ant.CUnitTask"/>
+    <!-- Allow project to override any of these properties with a build.properties file -->
+    <property file="${basedir}/build.properties"/>
+
+    <property environment="env"/>
+    <property name="project.name" value="cougaarunit"/>
+    <property name="project.version" value="2.0-cB10.4.6"/>
+
+    <!-- java source dirs -->
+    <property name="src.dir" value="${basedir}/src"/>
+    <property name="test.dir" value="${basedir}/test"/>
+
+    <!-- lib and conf dirs -->
+    <property name="conf.dir" value="${basedir}/conf"/>
+    <property name="lib.dir" value="${basedir}/lib"/>
+    <property name="cougaar.dir" value="${env.COUGAAR_INSTALL_PATH}"/>
+    <property name="clib.dir" value="${cougaar.dir}/lib"/>
+    <property name="csys.dir" value="${cougaar.dir}/sys"/>
+
+    <property name="build.dir" value="${basedir}/build"/>
+
+    <!-- All generated stuff below here: should all be subdirs of build.dir -->
+    <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="project.jar.dir" value="${build.dir}/jars"/>
+    <property name="project.jarfile" value="${project.jar.dir}/${project.name}-${project.version}.jar"/>
+    <!-- optional generated stuff, not required to build -->
+    <property name="javadoc.dir" value="${build.dir}/javadoc"/>
+    <property name="jdepend.dir" value="${build.dir}/jdepend"/>
+    
+    <!--cvs info-->
+    <property name="cvs.repository" value=":pserver:abrams@cougaar.org:/cvsroot/cougaarunit"/>
+    <property name="cvs.package" value="cougaarunit2_0"/>
+
+    <!--junit info-->
+    <property name="junit.results" value="test-results"/>
+    <!-- =============================================================== -->
+    <!-- The Classpath                                                   -->
+    <!-- =============================================================== -->
+    <path id="build.classpath">
+        <path refid="libs.classpath"/>
+        <fileset dir="${clib.dir}">
+            <include name="core.jar"/>
+            <include name="planning.jar"/>
+            <include name="glm.jar"/>
+            <include name="util.jar"/>
+        </fileset>
+        <fileset dir="${csys.dir}">
+            <include name="servlet.jar"/>
+        </fileset>
+        <pathelement path="${build.dir}"/>
+    </path>
+    
+    <path id="junit.classpath">
+    	<path refid="build.classpath"/>
+	    <pathelement location="${classes.dir}"/>	   
+	</path>
+	
+	<path id="cunit.classpath">
+    	<path refid="junit.classpath"/>
+    	<fileset dir="${clib.dir}">
+            <include name="bootstrap.jar"/>
+        </fileset>
+    	 <fileset dir="${csys.dir}">
+            <include name="xerces.jar"/>
+        </fileset>
+	</path>
+    
+    
+    <path id="libs.classpath">
+        <fileset dir="${lib.dir}">
+            <include name="**/*.jar"/>
+        </fileset>
+    </path>
+    
+
+
+    <!-- =============================================================== -->
+    <!-- Prepares the build directory                                    -->
+    <!-- =============================================================== -->
+    <target name="prepare" depends="templates">
+        <tstamp/>
+        <mkdir dir="${build.dir}"/>
+    </target>
+    
+    <!-- ============================================================== -->
+    <!-- Creates conf files from examples                               -->
+    <!-- ============================================================== -->
+    <target name="check_config">
+        <condition property="configuration.needed">
+            <not>
+                <available file="${conf.dir}/env.properties"/>
+            </not>
+        </condition>
+    </target>
+    <target name="configure" depends="check_config" if="configuration.needed" description="Creates conf files from examples">
+        <echo message="You have not configured env.properties.  Creating from example..."/>
+        <copy file="${conf.dir}/env.properties.example" tofile="${conf.dir}/env.properties"/>
+        <fail message="Please edit ${conf.dir}/env.properties and set variables appropriate to your environment, before using ant again."/>
+    </target>
+    
+    
+    <!-- =================================================================== -->
+    <!-- Generates all the system files based off templates                  -->
+    <!-- =================================================================== -->
+    <target name="templates" depends="configure">
+        <!-- filter based on anything user puts in env.properties -->
+        <filter filtersfile="${conf.dir}/env.properties"/>
+
+        <!-- standard filters -->
+        <filter token="project.basedir" value="${basedir}"/>
+
+        <copy todir="." filtering="true" overwrite="true">
+            <fileset dir=".">
+                <include name="**/*.template"/>
+            </fileset>
+            <mapper type="glob" from="*.template" to="*"/>
+        </copy>
+
+        <chmod perm="ug+x">
+            <fileset dir=".">
+                <include name="**/*.sh"/>
+                <include name="**/*.bat"/>
+            </fileset>
+        </chmod>
+    </target>
+
+
+    <!-- ============================================================== -->
+    <!-- Cleans up generated stuff                                      -->
+    <!-- ============================================================== -->
+    <target name="clean" depends="" description="Removes generated files.">
+        <delete dir="${build.dir}"/>
+    </target>
+
+
+    <!-- ============================================================== -->
+    <!-- Builds the Env                                                 -->
+    <!-- ============================================================== -->
+    <target name="all" description="Builds the entire application" depends="clean,prepare,compile,jar"/>
+
+
+    <!-- =============================================================== -->
+    <!-- Compiles the source code                                        -->
+    <!-- =============================================================== -->
+    <target name="compile" depends="prepare" description="compiles.">
+        <mkdir dir="${classes.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" debug="on" deprecation="off" optimize="off">
+            <classpath refid="build.classpath"/>
+        </javac>
+	<javac srcdir="${test.dir}" destdir="${classes.dir}" debug="on" deprecation="off" optimize="off">
+	    <classpath refid="build.classpath"/>
+	</javac>
+    </target>
+
+
+    <!-- ============================================================== -->
+    <!-- Creates the jar file.                                          -->
+    <!-- ============================================================== -->
+    <target name="jar" depends="compile" description="Builds the Jar File">
+        <mkdir dir="${project.jar.dir}"/>
+        <jar jarfile="${project.jarfile}">
+            <fileset dir="${classes.dir}" includes="**/*"/>
+        </jar>
+    </target>
+
+
+    <!-- =================================================================== -->
+    <!-- Creates the API documentation                                       -->
+    <!-- =================================================================== -->
+    <target name="javadoc" depends="prepare" description="Creates the API documentation">
+        <mkdir dir="${javadoc.dir}"/>
+        <javadoc packagenames="com.*" sourcepath="${src.dir}" destdir="${javadoc.dir}" author="true" version="true" windowtitle="${name} API" doctitle="${name}" bottom="Copyright &#169; 2001-2002 Cougaar Software. All Rights Reserved.">
+            <classpath refid="build.classpath"/>
+        </javadoc>
+    </target>
+
+
+    <!-- =================================================================== -->
+    <!-- Creates JDepend Quality Metrics                                     -->
+    <!--   requires jdepend.jar to be in ANT_HOME/lib                        -->
+    <!--   available from:                                                   -->
+    <!--   http://www.clarkware.com/software/JDepend.html#download           -->
+    <!-- =================================================================== -->
+    <target name="jdepend" depends="compile" description="Creates JDepend quality metrics">
+        <mkdir dir="${jdepend.dir}"/>
+        <jdepend format="xml" outputfile="${jdepend.dir}/jdepend-report.xml">
+            <sourcespath>
+                <pathelement location="${build.dir}"/>
+            </sourcespath>
+            <classpath refid="build.classpath"/>
+        </jdepend>
+        <style basedir="${jdepend.dir}" destdir="${jdepend.dir}" includes="jdepend-report.xml" style="${env.ANT_HOME}/etc/jdepend.xsl"/>
+    </target>
+    
+    <!-- Junit tests -->
+    <target name="junit-test" depends="compile" description="Run Junit tests">
+	<delete dir="${junit.results}"/>
+	<mkdir dir="${junit.results}"/>
+	<junit fork="yes" haltonfailure="yes">
+	    <classpath refid="junit.classpath"/>
+		<formatter type="plain" usefile="false"/>
+		<formatter type="xml"/>
+		<batchtest todir="${junit.results}">
+			<fileset dir="${classes.dir}" includes="**/*Test.class"/>
+		</batchtest>
+	</junit>
+    </target>
+    
+    <!-- CougaarUnit Tests -->
+    <target name="cunit-tests" depends="compile" description="Run CUnit Tests">
+    	<cunit testClassname="org.cougaar.cougaarunit.Launcher"
+    		   dir="./configs" >
+    		<arg value="org.cougaar.cougaarunit.SamplePluginTest"/>  
+    		<jvmarg value="-Dorg.cougaar.install.path=c:/cougaar/10_4_6"/>
+   	    	<classpath refid="cunit.classpath"/>   	    	
+    	</cunit>    	
+    </target>
+    
+   
+
+    <target name="checkout" description="Update package from CVS">
+	<cvs cvsroot="${cvs.repository}" package="${cvs.package}" dest=".."/>
+    </target>
+
+    <target name="masterbuild" depends="checkout,compile,junit-test,jar"
+	description="Cruise control master build"/>
+
+    <target name="cleanbuild" depends="clean,masterbuild" description="Cruise control clean build"/>
+
+</project>

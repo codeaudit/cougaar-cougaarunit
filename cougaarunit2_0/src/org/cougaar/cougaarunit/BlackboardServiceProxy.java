@@ -26,7 +26,6 @@ public class BlackboardServiceProxy implements BlackboardService {
     BlackboardService actualBlackboardService;
     static Vector predicates = new Vector();
     static BlackboardDeltaState currentBlackboardDeltaState = new BlackboardDeltaState();
-    private static BlackboardServiceProxy instance;
 
     /**
      * Standard constructor
@@ -322,7 +321,7 @@ public class BlackboardServiceProxy implements BlackboardService {
      * @throws org.cougaar.core.blackboard.SubscriberException
      */
     public void closeTransaction(boolean parm1) throws org.cougaar.core.blackboard.SubscriberException {
-        actualBlackboardService.closeTransaction(parm1);
+        actualBlackboardService.closeTransactionDontReset();
     }
 
     /**
