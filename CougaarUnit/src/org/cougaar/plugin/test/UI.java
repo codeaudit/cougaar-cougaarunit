@@ -15,6 +15,7 @@ import org.apache.bcel.Repository;
 import javax.swing.ProgressMonitor;
 import java.io.PrintStream;
 import java.io.OutputStream;
+import java.io.IOException;
 
 /**
  * <p>Title: </p>
@@ -122,8 +123,13 @@ public class UI extends JFrame {
         jScrollPaneTestCases.setPreferredSize(new Dimension(268, 230));
         jSplitPaneTests.setPreferredSize(new Dimension(543, 230));
         jSplitPaneTests.setContinuousLayout(true);
-        jTextAreaOutput.setPreferredSize(new Dimension(70, 125));
+        jTextAreaOutput.setMaximumSize(new Dimension(0, 0));
+    jTextAreaOutput.setMinimumSize(new Dimension(0, 0));
+    jTextAreaOutput.setPreferredSize(new Dimension(0, 0));
+    jTextAreaOutput.setLineWrap(true);
+    jTextAreaOutput.setWrapStyleWord(true);
         jScrollPane3.setBorder(titledBorder4);
+    jScrollPane3.setPreferredSize(new Dimension(70, 125));
         this.addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 this_windowClosing(e);
@@ -294,10 +300,9 @@ public class UI extends JFrame {
             super(os);
         }
 
-        public void println(String s) {
-            super.println(s);
-            jTextAreaOutput.append(s);
+        public void write(byte[] bytes) throws IOException {
+          super.write(bytes);
+          jTextAreaOutput.append(new String(bytes));
         }
-
     }
 }
