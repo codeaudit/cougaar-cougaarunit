@@ -954,29 +954,33 @@ public class UI extends JFrame {
     }
 
     public void run() {
-      try {
-        RunDialog rd = new RunDialog();
-        rd.setTitle(title);
-        rd.setMessage(clazz.getName());
-        rd.show();
-        rd.setCursor(CURSOR_WAIT);
-        jTabbedPane1.setSelectedComponent(jScrollPaneOutput);  //switch to the output tab while running cougaar
-        System.out.println("class loader: " + clazz.getClassLoader());
-        Object obj = clazz.newInstance();
-        System.out.println("OBJ:" + obj);
-        if (obj instanceof PluginTestCase)
-          launcher.runTestCase((PluginTestCase)obj, baos);
-        else if (obj instanceof PluginTestSuite)
-          launcher.runTestSuite((PluginTestSuite)obj, baos);
+        try {
+            int ret = 0;
+            RunDialog rd = new RunDialog();
+            rd.setTitle(title);
+            rd.setMessage(clazz.getName());
+            rd.show();
+            rd.setCursor(CURSOR_WAIT);
+            jTabbedPane1.setSelectedComponent(jScrollPaneOutput);  //switch to the output tab while running cougaar
+            System.out.println("class loader: " + clazz.getClassLoader());
+            Object obj = clazz.newInstance();
+            System.out.println("OBJ:" + obj);
+            if (obj instanceof PluginTestCase) {
+                ret = launcher.runTestCase((PluginTestCase)obj, baos);
+                System.out.println("ret: " + ret);
+            }
+            else if (obj instanceof PluginTestSuite) {
+                ret = launcher.runTestSuite((PluginTestSuite)obj, baos);
+            }
 
-        processResult(baos.toString());
-        rd.dispose();
-        rd.setCursor(CURSOR_DEFAULT);
-        jTabbedPane1.setSelectedComponent(jScrollPaneResults); //switch to the results tab after completion
-      }
-      catch (Exception e ){
-        e.printStackTrace();
-      }
+            processResult(baos.toString());
+            rd.dispose();
+            rd.setCursor(CURSOR_DEFAULT);
+            jTabbedPane1.setSelectedComponent(jScrollPaneResults); //switch to the results tab after completion
+        }
+        catch (Exception e ){
+            e.printStackTrace();
+        }
     }
   }
 
