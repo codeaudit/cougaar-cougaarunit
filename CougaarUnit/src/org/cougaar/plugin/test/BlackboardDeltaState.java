@@ -41,33 +41,25 @@ public class BlackboardDeltaState {
      */
     public boolean compare(BlackboardDeltaState bbs, boolean isOrdered) {
         if (this.getSize() != bbs.getSize()) return false;  //verify the sizes are the same
+
         if (isOrdered) {  //if the comparison is ordered, then compare elements one by one in order
             for (int i=0; i<stateChanges.size(); i++) {
-                Object obj1 = stateChanges.elementAt(i);
-                Object obj2 = bbs.stateChanges.elementAt(i);
-                //make sure the two objects are the same class
-                if (!obj1.getClass().equals(obj2.getClass())) return false;
-                //get the comparator function for this class
-                Comparator comp = ObjectComparators.getComparator(obj1.getClass());
-                if (!comp.compare(obj1, obj2))
-                    return false;
+                PublishAction pa1 = (PublishAction)stateChanges.elementAt(i);
+                PublishAction pa2 = (PublishAction)bbs.stateChanges.elementAt(i);
+                if (!pa1.equals(pa2)) return false;
             }
             return true;
         }
         else {
             Vector targetStateChanges = new Vector(bbs.stateChanges);  //create a copy of the stateChanges object in the bbs
             for (Enumeration enum = stateChanges.elements(); enum.hasMoreElements(); ) {
-                Object item1 = enum.nextElement();
-                //get the comparator function for this object's class
-                Comparator comp = ObjectComparators.getComparator(item1.getClass());
+                PublishAction pa1 = (PublishAction)enum.nextElement();
                 //now loop through the targetStateChanges vector to see if we get a match
                 for (Enumeration enum2 = targetStateChanges.elements(); enum2.hasMoreElements(); ) {
-                    Object item2 = enum2.nextElement();
-                    if (item1.getClass().equals(item2.getClass())) {  //make sure they are the same class
-                        if (comp.compare(item1, item2)) {  //if they match then remove the item and break out to the outer loop to continue
-                            targetStateChanges.remove(item2);
-                            break;
-                        }
+                    PublishAction pa2 = (PublishAction)enum2.nextElement();
+                    if (pa1.equals(pa2)) {  //if they match then remove the item and break out to the outer loop to continue
+                        targetStateChanges.remove(pa2);
+                        break;
                     }
                 }
             }

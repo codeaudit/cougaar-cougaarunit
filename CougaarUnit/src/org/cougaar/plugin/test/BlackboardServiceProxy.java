@@ -26,7 +26,7 @@ public class BlackboardServiceProxy implements BlackboardService {
 
     BlackboardService actualBlackboardService;
     static Vector predicates = new Vector();
-    BlackboardDeltaState currentBlackboardDeltaState = new BlackboardDeltaState();
+    static BlackboardDeltaState currentBlackboardDeltaState = new BlackboardDeltaState();
     private static BlackboardServiceProxy instance;
 
     public BlackboardServiceProxy(BlackboardService actualBlackboardService){
@@ -113,22 +113,48 @@ public class BlackboardServiceProxy implements BlackboardService {
     }
 
     public boolean publishAdd(Object parm1) {
-        currentBlackboardDeltaState.add(new PublishAction(PublishAction.ADD, parm1));
+        return publishAdd(parm1, false);
+    }
+
+    public boolean publishAdd(Object parm1, boolean bypassDelta) {
+        if (!bypassDelta)  {
+            currentBlackboardDeltaState.add(new PublishAction(PublishAction.ADD, parm1));
+        }
         return actualBlackboardService.publishAdd(parm1);
     }
 
     public boolean publishRemove(Object parm1) {
-        currentBlackboardDeltaState.add(new PublishAction(PublishAction.REMOVE, parm1));
+        return publishRemove(parm1, false);
+    }
+
+    public boolean publishRemove(Object parm1, boolean bypassDelta) {
+        if (!bypassDelta) {
+            currentBlackboardDeltaState.add(new PublishAction(PublishAction.REMOVE, parm1));
+        }
         return actualBlackboardService.publishRemove(parm1);
+
     }
 
     public boolean publishChange(Object parm1) {
-        currentBlackboardDeltaState.add(new PublishAction(PublishAction.CHANGE, parm1));
+        return publishChange(parm1, false);
+    }
+
+    public boolean publishChange(Object parm1, boolean bypassDelta) {
+        if (!bypassDelta) {
+            currentBlackboardDeltaState.add(new PublishAction(PublishAction.CHANGE, parm1));
+        }
         return actualBlackboardService.publishChange(parm1);
+
     }
 
     public boolean publishChange(Object parm1, Collection parm2) {
-        currentBlackboardDeltaState.add(new PublishAction(PublishAction.CHANGE, parm1));
+        return publishChange(parm1, parm2, false);
+    }
+
+    public boolean publishChange(Object parm1, Collection parm2, boolean bypassDelta) {
+        if (!bypassDelta) {
+            currentBlackboardDeltaState.add(new PublishAction(PublishAction.CHANGE, parm1));
+        }
         return actualBlackboardService.publishChange(parm1, parm2);
     }
 

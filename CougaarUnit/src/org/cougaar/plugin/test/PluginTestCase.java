@@ -73,7 +73,7 @@ public abstract class PluginTestCase extends ComponentPlugin {
             */
     public void assertPublishAdd(Object obj, BlackboardDeltaState bbs, long waitTime, boolean expectedResult, boolean ordered) {
         blackboard.openTransaction();
-        ((BlackboardServiceProxy)blackboard).publishAdd(obj);
+        ((BlackboardServiceProxy)blackboard).publishAdd(obj, true);
         blackboard.closeTransaction();
         if (bbs != null) {
             try {
@@ -108,7 +108,7 @@ public abstract class PluginTestCase extends ComponentPlugin {
             */
     public void assertPublishChange(Object obj, BlackboardDeltaState bbs, long waitTime, boolean expectedResult, boolean ordered) {
         blackboard.openTransaction();
-        ((BlackboardServiceProxy)blackboard).publishChange(obj);
+        ((BlackboardServiceProxy)blackboard).publishChange(obj, true);
         blackboard.closeTransaction();
         if (bbs != null) {
             try {
@@ -142,7 +142,7 @@ public abstract class PluginTestCase extends ComponentPlugin {
             */
     public void assertPublishRemove(Object obj, BlackboardDeltaState bbs, long waitTime, boolean expectedResult, boolean ordered) {
         blackboard.openTransaction();
-        ((BlackboardServiceProxy)blackboard).publishRemove(obj);
+        ((BlackboardServiceProxy)blackboard).publishRemove(obj, true);
         blackboard.closeTransaction();
         if (bbs != null) {
             try {

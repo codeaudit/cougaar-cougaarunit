@@ -65,7 +65,8 @@
   </node>
   <node name="Signer" type="ExternalTask">
     <property category="external" name="executable" value="C:\Home\signit.bat"/>
-    <property category="external" name="params" value="c:\cougaar941\lib\test\AAACougaarUnit.jar"/>
+    <property category="external" name="params" value="c:\cougaar941\lib\CougaarUnit.jar"/>
     <property category="external" name="phase" value="deploy"/>
   </node>
+  <file path="RunTest.bat"/>
 </project>

@@ -36,9 +36,18 @@ public class PublishAction  {
         this.obj = objRef;
     }
 
-    public boolean equals(Object obj) {
-        if (obj instanceof PublishAction) {
-            return (this.actionId == ((PublishAction)obj).actionId) && (this.obj.equals(((PublishAction)obj).obj));
+    public boolean equals(PublishAction pa) {
+        if (pa == null) return false;
+        try {
+            //compare the action ids
+            if (actionId != pa.actionId) return false;
+            //check the classes of the two objects to make sure they're the same
+            if (!obj.getClass().equals(pa.obj.getClass())) return false;
+            //now get a Comparator for the objects and compare them
+            return ObjectComparators.getComparator(obj.getClass()).compare(obj, pa.obj);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
         }
         return false;
     }
