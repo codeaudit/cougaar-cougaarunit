@@ -137,13 +137,18 @@ public class Launcher {
         }
     }
 
-
+	/**
+	 * Create the Society XML file and return the Command line to launch the 
+	 * Cougaar Society
+	 * @return Command line to launch cougaar
+	 * @throws Exception
+	 */
     private String createTestSociety() throws Exception{
-    	
-        Society testSociety = SocietyBuilder.buildSociety((PluginTestCase)this.testClass.newInstance());
+    	PluginTestCase pluginTestCase = (PluginTestCase)this.testClass.newInstance();
+    	Society testSociety = SocietyBuilder.buildSociety(pluginTestCase);
         Vector v = testSociety.getNodeList();
         Iterator i = v.iterator();
-
+		
         //there should only be one node in a cougaarunit test
         if (i.hasNext()) {
             Node testNode = (Node) i.next();

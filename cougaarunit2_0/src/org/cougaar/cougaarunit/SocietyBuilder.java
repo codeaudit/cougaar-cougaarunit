@@ -2,7 +2,7 @@ package org.cougaar.cougaarunit;
 
 
 import java.io.FileReader;
-
+import java.util.Collection;
 import java.util.Iterator;
 
 import org.cougaar.core.plugin.PluginBase;
@@ -14,10 +14,8 @@ import org.cougaar.cougaarunit.vo.Node;
 import org.cougaar.cougaarunit.vo.Parameter;
 import org.cougaar.cougaarunit.vo.Parameters;
 import org.cougaar.cougaarunit.vo.Society;
-
 import org.exolab.castor.mapping.Mapping;
 import org.exolab.castor.xml.Unmarshaller;
-
 import org.xml.sax.InputSource;
 
 
@@ -93,6 +91,14 @@ public class SocietyBuilder {
     private static Node buildNode(PluginTestCase pluginTestCase) {
 		Node node = new Node("TestNode");
         setUpParameters(node);
+		Collection domains = pluginTestCase.getDomains();
+        if(domains!=null){
+        	Iterator iterator = domains.iterator();
+        	while(iterator.hasNext()){
+        		Component component = (Component)iterator.next();
+        		node.addVMParam("-Dorg.cougaar.domain."+component.getName()+"="+component.getClassName());
+        	}
+        }
         node.addAgent(SocietyBuilder.buildAgent(pluginTestCase));
         return node;
     }

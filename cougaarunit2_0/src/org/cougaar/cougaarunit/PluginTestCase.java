@@ -3,6 +3,7 @@ package org.cougaar.cougaarunit;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.util.Collection;
 
 import org.cougaar.core.plugin.ComponentPlugin;
 import org.cougaar.core.service.LoggingService;
@@ -257,10 +258,18 @@ public abstract class PluginTestCase extends ComponentPlugin {
   }
 
   /**
-   *
+   *Get the plugin class to be tested
    * @return
    */
    abstract public String getPluginClass();
+
+	/**
+	 * Get any domains to be loaded
+	 * @return Collection of Component Value Objects
+	 */
+	protected Collection getDomains(){
+		return null;
+	}
 
   /**
    * Initiates the tests by calling the validateSubscritpions() and validateExecution()
