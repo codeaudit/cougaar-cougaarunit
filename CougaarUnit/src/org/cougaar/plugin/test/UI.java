@@ -65,6 +65,12 @@ public class UI extends JFrame {
     private Border border4;
     private TitledBorder titledBorder4;
   private JSplitPane jSplitPane1 = new JSplitPane();
+  OutputTableModel outputTableModel = new OutputTableModel();
+  private TitledBorder titledBorder5;
+  private JButton jButtonSearch = new JButton();
+  private JTabbedPane jTabbedPane1 = new JTabbedPane();
+  private JTable jTableResults = new JTable(outputTableModel);
+  private JScrollPane jScrollPaneResults = new JScrollPane();
   private JSplitPane jSplitPaneTests = new JSplitPane();
   private JList jListTestCases = new JList();
   private JPanel jPanelTests = new JPanel();
@@ -73,10 +79,7 @@ public class UI extends JFrame {
   private JScrollPane jScrollPaneTestSuites = new JScrollPane();
   private JScrollPane jScrollPaneTestCases = new JScrollPane();
   private JScrollPane jScrollPaneOutput = new JScrollPane();
-  OutputTableModel outputTableModel = new OutputTableModel();
-  private JTable jTableOutput = new JTable(outputTableModel);
-  private TitledBorder titledBorder5;
-  private JButton jButtonSearch = new JButton();
+  private JTextPane jTextPaneOutput = new JTextPane();
 
   class OutputTableModel extends AbstractTableModel {
     static final String COLUMN_TEST_NAME = "TEST NAME";
@@ -126,13 +129,13 @@ public class UI extends JFrame {
     private void init2() {
         jListTestCases.setModel(testCaseModel);
         jListTestSuites.setModel(testSuiteModel);
-        jTableOutput.getColumn(OutputTableModel.COLUMN_TEST_NAME).setPreferredWidth(100);
-        jTableOutput.getColumn(OutputTableModel.COLUMN_ID).setPreferredWidth(5);
-        jTableOutput.getColumn(OutputTableModel.COLUMN_TEST_PHASE).setPreferredWidth(75);
-        jTableOutput.getColumn(OutputTableModel.COLUMN_COMMAND).setPreferredWidth(80);
-        jTableOutput.getColumn(OutputTableModel.COLUMN_DESCRIPTION).setPreferredWidth(100);
-        jTableOutput.getColumn(OutputTableModel.COLUMN_RESULT).setPreferredWidth(10);
-        jTableOutput.updateUI();
+        jTableResults.getColumn(OutputTableModel.COLUMN_TEST_NAME).setPreferredWidth(100);
+        jTableResults.getColumn(OutputTableModel.COLUMN_ID).setPreferredWidth(5);
+        jTableResults.getColumn(OutputTableModel.COLUMN_TEST_PHASE).setPreferredWidth(75);
+        jTableResults.getColumn(OutputTableModel.COLUMN_COMMAND).setPreferredWidth(80);
+        jTableResults.getColumn(OutputTableModel.COLUMN_DESCRIPTION).setPreferredWidth(100);
+        jTableResults.getColumn(OutputTableModel.COLUMN_RESULT).setPreferredWidth(10);
+        jTableResults.updateUI();
     }
 
     private void jbInit() throws Exception {
@@ -149,7 +152,7 @@ public class UI extends JFrame {
         jLabel1.setHorizontalAlignment(SwingConstants.CENTER);
         jLabel1.setText("Cougaar Unit");
         this.getContentPane().setLayout(borderLayout1);
-        jButtonRun.setBorder(BorderFactory.createRaisedBevelBorder());
+        jButtonRun.setBorder(BorderFactory.createEtchedBorder());
     jButtonRun.setPreferredSize(new Dimension(73, 27));
         jButtonRun.setText("Run");
         jButtonRun.addActionListener(new java.awt.event.ActionListener() {
@@ -157,7 +160,7 @@ public class UI extends JFrame {
                 jButtonRun_actionPerformed(e);
             }
         });
-        jButtonCancel.setBorder(BorderFactory.createRaisedBevelBorder());
+        jButtonCancel.setBorder(BorderFactory.createEtchedBorder());
     jButtonCancel.setPreferredSize(new Dimension(73, 27));
     jButtonCancel.setText("Cancel");
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
@@ -168,7 +171,7 @@ public class UI extends JFrame {
         jPanel1.setLayout(borderLayout2);
         jPanel3.setLayout(borderLayout3);
         jTextFieldDirJar.setPreferredSize(new Dimension(230, 21));
-        jButtonBrowse.setBorder(BorderFactory.createRaisedBevelBorder());
+        jButtonBrowse.setBorder(BorderFactory.createEtchedBorder());
     jButtonBrowse.setPreferredSize(new Dimension(73, 27));
     jButtonBrowse.setText("Browse");
         jButtonBrowse.addActionListener(new java.awt.event.ActionListener() {
@@ -185,17 +188,8 @@ public class UI extends JFrame {
                 this_windowClosing(e);
             }
         });
-    jSplitPaneTests.setPreferredSize(new Dimension(543, 230));
-    jSplitPaneTests.setContinuousLayout(true);
-    jPanelTests.setLayout(borderLayout4);
-    jScrollPaneTestSuites.setBorder(titledBorder2);
-    jScrollPaneTestSuites.setPreferredSize(new Dimension(268, 230));
-    jScrollPaneTestCases.setBorder(titledBorder3);
-    jScrollPaneTestCases.setPreferredSize(new Dimension(268, 230));
     jSplitPane1.setOrientation(JSplitPane.VERTICAL_SPLIT);
-    jScrollPaneOutput.setBorder(titledBorder4);
-    jScrollPaneOutput.setPreferredSize(new Dimension(70, 125));
-    jButtonSearch.setBorder(BorderFactory.createRaisedBevelBorder());
+    jButtonSearch.setBorder(BorderFactory.createEtchedBorder());
     jButtonSearch.setPreferredSize(new Dimension(73, 27));
     jButtonSearch.setText("Search");
     jButtonSearch.addActionListener(new java.awt.event.ActionListener() {
@@ -203,7 +197,17 @@ public class UI extends JFrame {
         jButtonSearch_actionPerformed(e);
       }
     });
-    jTableOutput.setRowSelectionAllowed(false);
+    jTableResults.setRowSelectionAllowed(false);
+    jScrollPaneResults.setBorder(null);
+    jScrollPaneResults.setPreferredSize(new Dimension(70, 125));
+    jSplitPaneTests.setPreferredSize(new Dimension(543, 230));
+    jSplitPaneTests.setContinuousLayout(true);
+    jPanelTests.setLayout(borderLayout4);
+    jScrollPaneTestSuites.setBorder(titledBorder2);
+    jScrollPaneTestSuites.setPreferredSize(new Dimension(268, 230));
+    jScrollPaneTestCases.setBorder(titledBorder3);
+    jScrollPaneTestCases.setPreferredSize(new Dimension(268, 230));
+    jTextPaneOutput.setEditable(false);
     jPanelDirJar.add(jLabelSelectDir, null);
         this.getContentPane().add(jLabel1,  BorderLayout.NORTH);
         this.getContentPane().add(jPanel1, BorderLayout.CENTER);
@@ -216,16 +220,20 @@ public class UI extends JFrame {
         jPanel2.add(jButtonCancel, null);
         jPanel2.add(jButtonRun, null);
     jPanel1.add(jSplitPane1, BorderLayout.CENTER);
+    jSplitPane1.add(jTabbedPane1, JSplitPane.BOTTOM);
     jSplitPane1.add(jPanelTests, JSplitPane.TOP);
     jPanelTests.add(jSplitPaneTests, BorderLayout.CENTER);
     jSplitPaneTests.add(jScrollPaneTestSuites, JSplitPane.TOP);
     jSplitPaneTests.add(jScrollPaneTestCases, JSplitPane.BOTTOM);
-    jSplitPane1.add(jScrollPaneOutput, JSplitPane.BOTTOM);
-    jScrollPaneOutput.getViewport().add(jTableOutput, null);
     jScrollPaneTestCases.getViewport().add(jListTestCases, null);
     jScrollPaneTestSuites.getViewport().add(jListTestSuites, null);
-    jSplitPaneTests.setDividerLocation(250);
+    jTabbedPane1.add(jScrollPaneResults,   "Results");
+    jTabbedPane1.add(jScrollPaneOutput,  "Output");
+    jScrollPaneOutput.getViewport().add(jTextPaneOutput, null);
+    jScrollPaneResults.getViewport().add(jTableResults, null);
     jSplitPane1.setDividerLocation(200);
+    jSplitPaneTests.setDividerLocation(250);
+    jTabbedPane1.setSelectedComponent(jScrollPaneResults);
     }
     public static void main(String[] args) {
         UI ui= new UI();
@@ -335,12 +343,11 @@ public class UI extends JFrame {
     }
 
     private void processResult(String s) {
-      System.out.println("ORIGINAL STRING: " + s);
+      jTextPaneOutput.setText(s);
       //find the beginning of the xml output
       int index = s.indexOf("<?xml");
       String xmlStr = s.substring(index);
       xmlStr = xmlStr.substring(0, xmlStr.lastIndexOf("</TEST>")+7);
-      System.out.println("\n\nXML STRING: " + xmlStr);
       try {
         InputSource is = new InputSource(new StringReader(xmlStr));
         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -372,7 +379,7 @@ public class UI extends JFrame {
 
           }
           outputTableModel.addRow(results);
-          jTableOutput.updateUI();
+          jTableResults.updateUI();
 
         }
 
