@@ -56,7 +56,6 @@ abstract public class ComponentPlugin   extends org.cougaar.util.GenericStateMod
   }
 
 
-
   /**
    * This method is added for testing
    */
@@ -65,7 +64,7 @@ abstract public class ComponentPlugin   extends org.cougaar.util.GenericStateMod
 
       //if this is an instance of the TestPlugin then we need to call it to find out the class name of the plugin
       //that is to be tested
-      if (this.getClass().getName().equals(PluginTestCase.class.getName())) {
+      if (this instanceof PluginTestCase) {
           String targetPluginClassName = ((PluginTestCase)this).getPluginClass();
           if (targetPluginClassName == null) throw new RuntimeException("You must implement the getPluginClass()) method");
           //now we need to see if that plugin has already been loaded
@@ -73,7 +72,7 @@ abstract public class ComponentPlugin   extends org.cougaar.util.GenericStateMod
               Object obj = plugins.nextElement();
               if (obj.getClass().getName().equals(targetPluginClassName)) {
                   //if the target plugin has been loaded then we can start the tests
-                  ((PluginTestCase)obj).startTests();
+                  ((PluginTestCase)this).startTests();
                   return;
               }
           }

@@ -34,7 +34,7 @@ public class TestPluginSample extends PluginTestCase {
     }
 
     public String getPluginClass() {
-        return "org.cougaar.plugin.FooPlugin.class";
+        return "org.cougaar.plugin.test.SamplePlugin";
     }
 
 

@@ -13,6 +13,9 @@ import org.cougaar.core.plugin.ComponentPlugin;
 
 public abstract class PluginTestCase extends ComponentPlugin {
 
+    /**
+     * keep a static reference to the latest instance of this class
+     */
     public PluginTestCase() {
     }
 
@@ -112,10 +115,12 @@ public abstract class PluginTestCase extends ComponentPlugin {
      * @todo - this method will probably probably need to run in a separate thread
      */
     public void startTests() {
+        System.out.println("########################STARTING TESTS...");
         Thread t = new Thread(new Runnable() {
             public void run() {
                 validateSubscriptions();
                 validateExecution();
+                System.exit(0);
             }
         });
         t.start();
