@@ -14,7 +14,8 @@ import org.cougaar.cougaarunit.vo.Society;
 public class SocietyBuilderTest extends TestCase {
 
 	public void testBuildSociety() {
-		Society s = SocietyBuilder.buildSociety("PluginATest");
+		
+		Society s = SocietyBuilder.buildSociety(new SimpleTest());
 		assertNotNull(s.getNodeList());
 		Iterator i = s.getNodeList().iterator();
 		while (i.hasNext()) {
@@ -28,5 +29,30 @@ public class SocietyBuilderTest extends TestCase {
 		}
 		
 	}
+	private class SimpleTest extends PluginTestCase{
 
+		/* (non-Javadoc)
+		 * @see org.cougaar.cougaarunit.PluginTestCase#validateSubscriptions()
+		 */
+		public void validateSubscriptions() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		/* (non-Javadoc)
+		 * @see org.cougaar.cougaarunit.PluginTestCase#validateExecution()
+		 */
+		public void validateExecution() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		/* (non-Javadoc)
+		 * @see org.cougaar.cougaarunit.PluginTestCase#getPluginClass()
+		 */
+		public String getPluginClass() {
+			// TODO Auto-generated method stub
+			return "org.cougaar.cougaarunit.SocietyBuilderPlugin";
+		}
+	}
 }

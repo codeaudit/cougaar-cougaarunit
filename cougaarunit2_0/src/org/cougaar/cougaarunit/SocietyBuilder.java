@@ -36,9 +36,9 @@ public class SocietyBuilder {
      *
      * @return DOCUMENT ME!
      */
-    public static Society buildSociety(String societyName) {
-        Society society = new Society(societyName);
-        society.addNode(SocietyBuilder.buildNode(societyName));
+    public static Society buildSociety(PluginTestCase pluginTestCase) {
+        Society society = new Society(pluginTestCase.getDescription());
+        society.addNode(SocietyBuilder.buildNode(pluginTestCase));
         society.saveSociety("./");
         return society;
     }
@@ -90,10 +90,10 @@ public class SocietyBuilder {
      *
      * @return
      */
-    private static Node buildNode(String societyName) {
-        Node node = new Node(societyName + "_testNode");
+    private static Node buildNode(PluginTestCase pluginTestCase) {
+        Node node = new Node(pluginTestCase.getDescription() + "_testNode");
         setUpParameters(node);
-        node.addAgent(SocietyBuilder.buildAgent(societyName));
+        node.addAgent(SocietyBuilder.buildAgent(pluginTestCase));
         return node;
     }
 
@@ -105,13 +105,21 @@ public class SocietyBuilder {
      *
      * @return
      */
-    private static Agent buildAgent(String testPluginName) {
+    private static Agent buildAgent(PluginTestCase pluginTestCase) {
+    	String testPluginName = pluginTestCase.getClass().getName();
+    	String pluginBeingTested = pluginTestCase.getPluginClass();
         Agent agent = new Agent(testPluginName + "_testAgent");
         Component comp = new ComponentImpl(testPluginName);
         comp.setInsertionpoint(PluginBase.INSERTION_POINT);
         comp.setClassName(testPluginName);
         comp.setPriority(SocietyBuilder.COMPONENT_PRIORITY);
         agent.addComponent(comp);
+        //add plugin to be tested
+		Component comp2 = new ComponentImpl(testPluginName);
+		comp2.setInsertionpoint(PluginBase.INSERTION_POINT);
+		comp2.setClassName(pluginBeingTested);
+		comp2.setPriority(SocietyBuilder.COMPONENT_PRIORITY);
+		agent.addComponent(comp2);
         String pluginServiceFilter = "org.cougaar.cougaarunit.PluginServiceFilter";
         comp = new ComponentImpl(pluginServiceFilter);
         comp.setClassName(pluginServiceFilter);
