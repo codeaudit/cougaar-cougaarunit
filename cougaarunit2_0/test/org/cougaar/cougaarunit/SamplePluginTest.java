@@ -1,6 +1,10 @@
 package org.cougaar.cougaarunit;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.cougaar.core.service.DomainService;
+import org.cougaar.cougaarunit.vo.ComponentImpl;
 import org.cougaar.planning.ldm.PlanningFactory;
 import org.cougaar.planning.ldm.plan.NewTask;
 import org.cougaar.planning.ldm.plan.Task;
@@ -27,7 +31,9 @@ public class SamplePluginTest extends PluginTestCase {
 	 * @see org.cougaar.cougaarunit.PluginTestCase#validateExecution()
 	 */
 	public void validateExecution() {
-		System.out.println("Validating Execution");
+		if(logging.isInfoEnabled()){
+			logging.info("Validating Execution");
+		}
 		// TODO Auto-generated method stub
 		
 	}
@@ -37,6 +43,14 @@ public class SamplePluginTest extends PluginTestCase {
 	 */
 	public String getPluginClass() {
 		return "org.cougaar.cougaarunit.SamplePlugin";
+	}
+	public Collection getDomains(){
+		ArrayList list = new ArrayList();
+		ComponentImpl c = new ComponentImpl();
+		c.setName("glm");
+		c.setClassName("org.cougaar.glm.ldm.GLMDomain");
+		list.add(c);	
+		return list;
 	}
 	
 	private NewTask makeTask(String verb, Task parent_task, Workflow wf) {
