@@ -224,6 +224,15 @@ public abstract class PluginTestCase extends ComponentPlugin {
     }
 
     /**
+     * Subclasses may override this to provide a different identifier
+     * for the agent
+     * @return
+     */
+    public String getAgentId() {
+      return "TestAgent";  //default identifier
+    }
+
+    /**
      *
      * @return
      */

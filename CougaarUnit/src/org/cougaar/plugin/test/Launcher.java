@@ -82,11 +82,11 @@ public class Launcher {
 
 
 
-  private void writeNodeIni() throws Exception {
+  private void writeNodeIni(String agentId) throws Exception {
     File nodeFile = new File("TestNode.ini");
     FileWriter fw = new FileWriter(nodeFile);
     fw.write("[ Clusters ]\n");
-    fw.write("cluster = TestAgent\n");
+    fw.write("cluster = "+agentId+"\n");
     fw.write("[ AlpProcess ]\n");
     fw.write("[ Policies ]\n");
     fw.write("[ Permission ]\n");
@@ -95,12 +95,12 @@ public class Launcher {
     fw.close();
   }
 
-  private void writeAgentIni(String testPluginStr, String sourcePluginStr) throws Exception {
-    File agentFile = new File("TestAgent.ini");
+  private void writeAgentIni(String testPluginStr, String sourcePluginStr, String agentId) throws Exception {
+    File agentFile = new File(agentId+".ini");
     FileWriter fw = new FileWriter(agentFile);
     fw.write("[ Cluster ]\n");
     fw.write("class = org.cougaar.core.agent.ClusterImpl\n");
-    fw.write("uic = TestAgent\n");
+    fw.write("uic = "+agentId+"\n");
     fw.write("cloned = false\n");
     fw.write("[ Plugins ]\n");
     fw.write("plugin = " + sourcePluginStr + "\n");
@@ -253,10 +253,11 @@ public class Launcher {
 
   protected void runTestCase(PluginTestCase tpc, OutputStream ps) throws Exception {
     String sourcePluginStr = tpc.getPluginClass();
+
     //now we need to generate the ini files for launching cougaar
-    writeNodeIni();
+    writeNodeIni(tpc.getAgentId());
     //now we write the agent ini file
-    writeAgentIni(tpc.getClass().getName(), sourcePluginStr);
+    writeAgentIni(tpc.getClass().getName(), sourcePluginStr, tpc.getAgentId());
     //launch Cougaar
     launchCougaar(ps);
   }

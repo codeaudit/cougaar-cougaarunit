@@ -397,6 +397,8 @@ public class UI extends JFrame {
   }
 
   void jButtonSearch_actionPerformed(ActionEvent e) {
+    testCaseModel.clear();   //clear the test cases
+    testSuiteModel.clear();  //clear the test suites
     Thread t = new Thread() {
       public void run() {
         try {
@@ -494,6 +496,7 @@ public class UI extends JFrame {
   }
 
   void jButtonRun_actionPerformed(ActionEvent e) {
+    jTextPaneOutput.setText("");  //clear the output pane
     MyByteArrayOutputStream baos;
     Launcher launcher = new Launcher();
     launcher.setOutputStyle(Launcher.OUTPUT_STYLE_XML);
