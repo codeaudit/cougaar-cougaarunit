@@ -3,10 +3,13 @@ package org.cougaar.cougaarunit;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.Properties;
 import java.util.Vector;
 
 import org.cougaar.cougaarunit.vo.Node;
@@ -36,7 +39,7 @@ import org.cougaar.cougaarunit.vo.Society;
 public class Launcher {
     private static final int TEST_SUITE_TYPE = 1;
     private static final int TEST_CASE_TYPE = 2;
-    
+    private static final String COUGAAR_UNIT_PROPS="cougaar_unit.properties";
     /** DOCUMENT ME! */
     public static final int OUTPUT_STYLE_TEXT = 0;
     /** DOCUMENT ME! */
@@ -91,11 +94,9 @@ public class Launcher {
         logPropsFile = new File("log.properties");
         logPropsFile.createNewFile();
         FileWriter fw = new FileWriter(logPropsFile);
-        fw.write("log4j.rootCategory=INFO,A1\n"//,A2\n"
-            + "log4j.appender.A1=org.apache.log4j.ConsoleAppender\n"
-            + "log4j.appender.A1.layout=org.apache.log4j.PatternLayout\n"
-            + "log4j.appender.A1.layout.ConversionPattern=%m%n\n");
-            //+ "log4j.appender.A2=org.cougaar.plugin.test.ErrorDetectionAppender");
+         fw.write("# Set the root category priority to WARN and add a stdout and rolling appender.\n" +            	"log4j.rootCategory=DEBUG, stdout, rolling\n" +
+				"log4j.category.org.cougaar.cougaarunit=INFO\n" +            	"# -- Configure all the Appenders\n" +            	"#  ------ Configure the STDOUT Appender\n" +            	"log4j.appender.stdout=org.apache.log4j.ConsoleAppender\n" +            	"log4j.appender.stdout.Target=System.out\n" +            	"# Define the STDOUT pattern to:  date level [thread] - message\n" +            	"log4j.appender.stdout.layout=org.apache.log4j.PatternLayout\n" +            	"log4j.appender.stdout.layout.ConversionPattern=%d{ABSOLUTE} %-5p [%c{1}] - %m%n\n" +            	"#  ------ End STDOUT Appender\n" +            	"# ----- Configure the Rolling Log File\n" +            	"#\n" +            	"# Configure a Rolling Log File Appender\n" +            	"log4j.appender.rolling=org.apache.log4j.RollingFileAppender\n" +            	"log4j.appender.rolling.File=cougaarunit.log\n" +            	"# Define the logfile size\n" +            	"log4j.appender.rolling.MaxFileSize=1024KB\n" +            	"# Keep a backup file\n" +            	"log4j.appender.rolling.MaxBackupIndex=1\n" +            	"# Define the Rolling pattern to:  date level [thread] - message\n" +            	"log4j.appender.rolling.layout=org.apache.log4j.PatternLayout\n" +            	"log4j.appender.rolling.layout.ConversionPattern=%d{ABSOLUTE} %-5p [%C{1}] - %m%n\n" +            	"#\n" +            	"# ---- End Rolling Log File");
+
         fw.close();
     }
 
@@ -103,7 +104,21 @@ public class Launcher {
     public static void main(String[] args) {
         if (args.length > 0) {
             try {
-            	
+            	try{
+            		Properties p = new Properties();
+            		p.load(new FileInputStream(new File(COUGAAR_UNIT_PROPS)));
+            		Enumeration keys =p.keys();
+            		while(keys.hasMoreElements()){
+            			String key = (String)keys.nextElement();
+            			String value = p.getProperty(key);
+            			System.setProperty(key, value);
+            		}
+            		
+            	}catch(Exception e){
+            		System.err.println("Error getting properties");
+            		e.printStackTrace();
+            		System.exit(1);
+            	}     	
                 //get class name
                 Class _class = Class.forName(args[0]);
 				int testType = getTestType(_class.getSuperclass());
@@ -127,13 +142,16 @@ public class Launcher {
 						}
 					}else{
 						System.err.println("Test suite with no test cases");
+						System.exit(1);
 					}
                 }
             } catch (Exception ex) {
                 System.out.println("Error running test: " + ex);
+                System.exit(1);
             }
         } else {
             System.out.println("Missing required argument: Test classname");
+            System.exit(1);
         }
     }
 
