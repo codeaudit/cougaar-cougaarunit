@@ -470,9 +470,9 @@ public class UI extends JFrame {
 
         Object obj = clazz.newInstance();
         if (obj instanceof PluginTestCase)
-          launcher.runTestCase((PluginTestCase)clazz.newInstance(), baos);
+          launcher.runTestCase((PluginTestCase)obj, baos);
         else if (obj instanceof PluginTestSuite)
-          launcher.runTestSuite((PluginTestSuite)clazz.newInstance(), baos);
+          launcher.runTestSuite((PluginTestSuite)obj, baos);
 
         processResult(baos.toString());
         rd.dispose();
