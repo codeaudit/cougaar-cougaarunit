@@ -2,6 +2,8 @@ package org.cougaar.plugin.test;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import org.cougaar.planning.ldm.plan.Task;
+import org.cougaar.planning.ldm.plan.Expansion;
 
 /**
  *
@@ -65,7 +67,41 @@ public class ObjectComparators {
       }
     };
 
-    private static Comparator defaultComaprator = CLASS_COMPARATOR;
+    public static final Comparator EQUALS_COMPARATOR = new Comparator() {
+      public boolean compare(Object obj1, Object obj2) {
+        if ((obj1 == null) || (obj2 == null)) return false;
+        return obj1.equals(obj2);
+      }
+    };
+
+    public static final Comparator TASK_VERB_COMPARATOR = new Comparator() {
+      public boolean compare(Object obj1, Object obj2) {
+        if ((obj1 == null) || (obj2 == null)) return false;
+        if ((!(obj1 instanceof Task) || (!(obj2 instanceof Task)))) return false;
+        Task t1 = (Task)obj1;
+        Task t2 = (Task)obj2;
+
+        try {return t1.getVerb().equals(t2.getVerb());} catch (Exception e){}
+
+        return false;
+      }
+    };
+
+
+    public static final Comparator EXPANSION_COMPARATOR = new Comparator() {
+      public boolean compare(Object obj1, Object obj2) {
+        if ((obj1 == null) || (obj2 == null)) return false;
+        if ((!(obj1 instanceof Expansion) || (!(obj2 instanceof Expansion)))) return false;
+
+        Expansion e1 = (Expansion)obj1;
+        Expansion e2 = (Expansion)obj2;
+        try {return e1.getTask().getVerb().equals(e2.getTask().getVerb());} catch (Exception e){}
+
+        return false;
+      }
+    };
+
+    private static Comparator defaultComaprator = EQUALS_COMPARATOR;
 
     /**
      * Register a new comparator object to be used when comparing instances of class clazz.

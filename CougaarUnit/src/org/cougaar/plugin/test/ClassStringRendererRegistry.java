@@ -5,6 +5,7 @@ import java.util.HashMap;
 import org.cougaar.planning.ldm.plan.Task;
 import org.cougaar.planning.ldm.asset.Asset;
 import org.cougaar.planning.ldm.plan.Expansion;
+import org.cougaar.planning.ldm.plan.PlanElement;
 
 /**
  * <p>Title: ClassStringRendererRegistry</p>
@@ -47,9 +48,10 @@ public class ClassStringRendererRegistry {
     public String render(Object obj) {
       if (obj instanceof Expansion) {
         try {
-          return "Expansion for: " + ((Expansion)obj).getTask().getWorkflow().getParentTask().getVerb().toString();
+          return "Expansion for Task: " + ((Expansion)obj).getTask().getVerb().toString();
         }
-        catch (Exception e){}
+        catch (Exception e){
+        }
       }
       return obj.toString();
     }

@@ -1,5 +1,7 @@
 package org.cougaar.plugin.test;
 
+import org.cougaar.plugin.test.util.XMLEncoder;
+
 /**
  * <p>Title: PublishAction</p>
  * <p>Description:
@@ -127,7 +129,7 @@ public class PublishAction  {
      * @return
      */
     public String getXML() {
-      StringBuffer ret = new StringBuffer().append("<PUBLISH_ACTION><ACTION_ID>").append(getActionString(actionId)).append("</ACTION_ID><RESULT>").append(getResultString()).append("</RESULT></PUBLISH_ACTION>");
+      StringBuffer ret = new StringBuffer().append("<PUBLISH_ACTION><ACTION_ID>").append(getActionString(actionId)).append("</ACTION_ID><RESULT>").append(XMLEncoder.encode(getResultString())).append("</RESULT></PUBLISH_ACTION>");
       return ret.toString();
     }
 }
