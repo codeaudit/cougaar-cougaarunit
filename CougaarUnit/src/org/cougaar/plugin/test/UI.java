@@ -55,6 +55,7 @@ public class UI extends JFrame {
   private JSplitPane jSplitPane1 = new JSplitPane();
   OutputTableModel outputTableModel = new OutputTableModel();
   private TitledBorder titledBorder5;
+  StreamedDataTableModel streamedDataTableModel = new StreamedDataTableModel();
   private JButton jButtonSearch = new JButton();
   private JTabbedPane jTabbedPane1 = new JTabbedPane();
   private JTable jTableResults = new JTable(outputTableModel);
@@ -86,6 +87,11 @@ public class UI extends JFrame {
   private JMenuItem jMenuItemResultsSave = new JMenuItem();
   private JMenuItem jMenuItemResultsPrint = new JMenuItem();
   private JPanel jPanelObjectStreamEditor = new JPanel();
+  private BorderLayout borderLayout5 = new BorderLayout();
+  private JSplitPane jSplitPane2 = new JSplitPane();
+  private JScrollPane jScrollPaneStreamedData = new JScrollPane();
+  private JScrollPane jScrollPane2 = new JScrollPane();
+  private JTable jTableStreamedData = new JTable(streamedDataTableModel);
 
 
   /**
@@ -97,6 +103,35 @@ public class UI extends JFrame {
    * @author David Craine
    * @version 1.0
    */
+
+  class StreamedDataTableModel extends AbstractTableModel {
+    static final String COLUMN_PUBLISH_ACTION = "PUBLISH ACTION";
+    static final String COLUMN_OBJECT = "OBJECT";
+    static final String COLUMN_ID = "ID";
+    protected final String[] columnNames = {COLUMN_ID, COLUMN_PUBLISH_ACTION, COLUMN_OBJECT};
+    Vector data = new Vector();
+    public int getColumnCount() {
+      return columnNames.length;
+    }
+    public int getRowCount() {
+      return data.size();
+    }
+
+    public String getColumnName(int col) {
+      return columnNames[col];
+    }
+
+    public Object getValueAt(int row, int col) {
+      if (data.size() > 0)
+        return ((Object[])data.elementAt(row))[col];
+      return null;
+    }
+
+    public void addRow(Object[] row) {
+      data.add(row);
+    }
+  }
+
   class OutputTableModel extends AbstractTableModel {
     static final String COLUMN_TEST_NAME = "TEST NAME";
     static final String COLUMN_ID = "ID";
@@ -372,6 +407,8 @@ public class UI extends JFrame {
         jMenuItemResultsPrint_actionPerformed(e);
       }
     });
+    jPanelObjectStreamEditor.setLayout(borderLayout5);
+    jSplitPane2.setOrientation(JSplitPane.VERTICAL_SPLIT);
     jPanelDirJar.add(jLabelSelectDir, null);
     jPanelDirJar.add(jComboBoxDirJar, null);
     this.getContentPane().add(jLabel1,  BorderLayout.NORTH);
@@ -381,7 +418,7 @@ public class UI extends JFrame {
     jPanel3.add(jPanelDirJar, BorderLayout.CENTER);
     jPanelDirJar.add(jButtonSearch, null);
     jPanelDirJar.add(jButtonBrowse, null);
-    this.getContentPane().add(jPanel2, BorderLayout.SOUTH);
+    jPanelTestRunner.add(jPanel2, BorderLayout.SOUTH);
     jPanel2.add(jButtonCancel, null);
     jPanel2.add(jButtonRun, null);
     jPanelTestRunner.add(jSplitPane1, BorderLayout.CENTER);
@@ -391,6 +428,10 @@ public class UI extends JFrame {
     jSplitPaneTests.add(jScrollPaneTestSuites, JSplitPane.TOP);
     jSplitPaneTests.add(jScrollPaneTestCases, JSplitPane.BOTTOM);
     jTabbedPaneMain.add(jPanelObjectStreamEditor,  "Object Stream Editor");
+    jPanelObjectStreamEditor.add(jSplitPane2, BorderLayout.CENTER);
+    jSplitPane2.add(jScrollPaneStreamedData, JSplitPane.TOP);
+    jScrollPaneStreamedData.getViewport().add(jTableStreamedData, null);
+    jSplitPane2.add(jScrollPane2, JSplitPane.BOTTOM);
     jScrollPaneTestCases.getViewport().add(jListTestCases, null);
     jScrollPaneTestSuites.getViewport().add(jListTestSuites, null);
     jTabbedPane1.add(jScrollPaneResults,   "Results");
@@ -409,6 +450,7 @@ public class UI extends JFrame {
     jSplitPane1.setDividerLocation(200);
     jSplitPaneTests.setDividerLocation(250);
     jTabbedPane1.setSelectedComponent(jScrollPaneResults);
+    jSplitPane2.setDividerLocation(100);
 
   }
 
