@@ -21,7 +21,7 @@ public abstract class PluginTestCase extends ComponentPlugin {
   private String description;
   protected LoggingService logging;
   protected boolean started;
-  protected String RESULTS_DIRECTORY = "test_results";
+  public static final  String RESULTS_DIRECTORY = "test_results";
   public void setStarted(boolean b){
   	this.started = b;
   }
