@@ -151,7 +151,8 @@ public class AnimatedPanel extends JPanel implements Runnable {
             offScreenPanel);
         try {Thread.currentThread().sleep(100);} catch (Exception e) {}
         if (points == 0) {
-          break;
+          points = 50;
+          radius = 10;
         }
       }
     }
@@ -176,18 +177,30 @@ public class AnimatedPanel extends JPanel implements Runnable {
   }
 
   class PointsAnimation2  implements Animation {
-    public void renderTo(Graphics2D grp, JPanel offScreenPanel, Image offScreenImage) {
-      Dimension d = AnimatedPanel.this.getSize();
-      int radius = 10;
-      int pointCount = 50;
-      Set points = new HashSet();
-      Color[] c = new Color[] {Color.BLACK, Color.GRAY, Color.RED};
-      Point center = new Point(d.height/2, d.width/2);
+    Dimension d;
+    int radius;
+    int pointCount;
+    Set points;
+    Color[] c;
+    Point center;
+
+    private void reset() {
+      d = AnimatedPanel.this.getSize();
+      radius = 10;
+      pointCount = 50;
+      points = new HashSet();
+      c = new Color[] {Color.BLACK, Color.GRAY, Color.RED};
+      center = new Point(d.height/2, d.width/2);
       for (int i=0;i<pointCount;i++) {
         int len = (int)(Math.random() * radius);
         PointWrapper pd = new PointWrapper(c[(int)(Math.random()*3)], len, (int)(Math.random()*360));
         points.add(pd);
       }
+
+    }
+
+    public void renderTo(Graphics2D grp, JPanel offScreenPanel, Image offScreenImage) {
+      reset();
 
       while (true) {
         grp.setPaint(Color.BLACK);
@@ -198,7 +211,7 @@ public class AnimatedPanel extends JPanel implements Runnable {
             pd.expand();
           }
           if (pd.getRadius() > 25) {
-            break;
+            reset();
           }
           grp.setPaint(pd.getC());
           int x = (int)(pd.getRadius() * Math.sin(Math.toRadians(pd.getTheta())));
