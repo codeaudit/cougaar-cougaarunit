@@ -12,7 +12,7 @@ package org.cougaar.plugin.test;
  * @version 1.0
  */
 
-public class PublishAction {
+public class PublishAction  {
 
     private int actionId;
     private Object obj = null;
@@ -34,5 +34,12 @@ public class PublishAction {
 
     public void add(Object objRef) {
         this.obj = objRef;
+    }
+
+    public boolean equals(Object obj) {
+        if (obj instanceof PublishAction) {
+            return (this.actionId == ((PublishAction)obj).actionId) && (this.obj.equals(((PublishAction)obj).obj));
+        }
+        return false;
     }
 }

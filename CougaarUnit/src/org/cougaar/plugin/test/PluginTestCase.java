@@ -184,7 +184,7 @@ public abstract class PluginTestCase extends ComponentPlugin {
             public void run() {
                 validateSubscriptions();
                 validateExecution();
-                System.out.println(PluginTestResult.getReportasString());  //print the test results to stdout
+                System.out.println(PluginTestResult.getReportAsString());  //print the test results to stdout
                 System.exit((PluginTestResult.getOverallResult())?0:1);  //exit code = 0 if all tests passed, otherwise 1
             }
         });

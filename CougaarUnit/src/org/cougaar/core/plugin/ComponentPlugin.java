@@ -261,7 +261,7 @@ abstract public class ComponentPlugin   extends org.cougaar.util.GenericStateMod
     // activate the trigger model
     tm.initialize();
     tm.load();
-    System.out.println("**************************THE PLUGIN IS LOADED... "+ this.getClass().getName());
+
     registerClass();
   }
 

@@ -1,6 +1,8 @@
 package org.cougaar.plugin.test;
 
 import java.util.Vector;
+import java.util.TreeSet;
+import java.util.Enumeration;
 
 /**
  * <p>Title: </p>
@@ -25,6 +27,10 @@ public class BlackboardDeltaState {
         stateChanges.add(pa);
     }
 
+    public int getSize() {
+        return stateChanges.size();
+    }
+
     /**
      * compare this BlackboardState object another one
      * @param bbs The BlackboardState object to compare to
@@ -34,6 +40,26 @@ public class BlackboardDeltaState {
      *    false = no match
      */
     public boolean compare(BlackboardDeltaState bbs, boolean isOrdered) {
+        if (this.getSize() != bbs.getSize()) return false;  //verify the sizes are the same
+        if (isOrdered) {  //if the comparison is ordered, then compare elements one by one in order
+            for (int i=0; i<stateChanges.size(); i++) {
+                if (!stateChanges.elementAt(i).equals(bbs.stateChanges.elementAt(i)))
+                    return false;
+            }
+            return true;
+        }
+        else {
+            Vector targetStateChanges = new Vector(bbs.stateChanges);  //create a copy of the stateChanges object in the bbs
+            for (Enumeration enum = stateChanges.elements(); enum.hasMoreElements(); ) {
+                Object item = enum.nextElement();
+                if (targetStateChanges.contains(item))  //if the item is in the targetStateChanges, then remove it and keep going
+                    targetStateChanges.remove(item);
+                else  //otherwise the whole test fails
+                    return false;
+            }
+            if (targetStateChanges.isEmpty())  //if the targetStateChanges vector is empty then we've matched all the items
+                return true;
+        }
         return false;
     }
 

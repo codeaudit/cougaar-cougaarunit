@@ -80,7 +80,7 @@ public class PluginTestResult {
         return "";
     }
 
-    public static String getReportasString() {
+    public static String getReportAsString() {
         StringBuffer result = new StringBuffer();
         result.append("TEST RESULTS FOR: " + testName+"\n");
         result.append("ID\tPHASE\t\tCOMMAND\t\t\tRESULT\tDESCRIPTION\n");
