@@ -2,6 +2,7 @@ package org.cougaar.plugin.test;
 
 public class TestPluginSample extends PluginTestCase {
     public void validateSubscriptions() {
+        System.out.println("Validating Subscriptions....");
         /*publishes this object to the blackboard and validates that the
         * plugin's subscription model passes the object through
         */
@@ -18,6 +19,7 @@ public class TestPluginSample extends PluginTestCase {
     }
 
     public void validateExecution() {
+        System.out.println("Validating Execution...");
         /*
         These three lines construct a blackboard state object that is used to validate the state if the
         blackboard after the asserPublishX statement. In this case, the assertPublishAdd() method will
