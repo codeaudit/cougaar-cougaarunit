@@ -20,6 +20,15 @@ import org.cougaar.core.service.LoggingService;
 public abstract class PluginTestCase extends ComponentPlugin {
   private String description;
   protected LoggingService logging;
+  protected boolean started;
+  
+  public void setStarted(boolean b){
+  	this.started = b;
+  }
+  
+  public boolean isStarted(){
+  	return this.started;
+  }
   
   /**
    * Set LoggingService
