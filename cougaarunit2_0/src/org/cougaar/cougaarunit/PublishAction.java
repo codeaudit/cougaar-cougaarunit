@@ -101,12 +101,17 @@ public class PublishAction  {
             String packName = pack.getName();
             String className = obj.getClass().getName();
             String comparatorName = "org.cougaar.cougaarunit.comparators." + className.substring(packName.length()+1, className.length()) + "Comparator";
+            try{
             Class comparatorClass = Class.forName(comparatorName);
 			Comparator comparator =(Comparator)comparatorClass.newInstance();
             if(comparator.compare(obj, pa.obj)==1){
             	return true;
             }else{
             	return false;
+            }
+            }catch(ClassNotFoundException cnfe){
+            	//no comparator, just use equals
+            	return obj.equals(pa.obj);
             }
         }
         catch (Exception e) {
