@@ -61,7 +61,7 @@
     <property category="archiving" name="executableFiles.4" value="CougaarUnit-solaris"/>
     <property category="archiving" name="executableFiles.5" value="CougaarUnit-mac"/>
     <property category="archiving" name="manifestMainClass" value="org.cougaar.plugin.test.Launcher"/>
-    <property category="archiving" name="targetPath" value="C%|/COUGAAR941/lib/test/AAACougaarUnit.jar"/>
+    <property category="archiving" name="targetPath" value="C%|/COUGAAR941/lib/CougaarUnit.jar"/>
   </node>
   <node name="Signer" type="ExternalTask">
     <property category="external" name="executable" value="C:\Home\signit.bat"/>
