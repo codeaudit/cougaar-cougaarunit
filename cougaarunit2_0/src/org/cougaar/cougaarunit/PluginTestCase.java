@@ -38,6 +38,13 @@ public abstract class PluginTestCase extends ComponentPlugin {
   	this.logging = s;
   }
   
+  public void load(){
+  	super.load();
+  	//this is here b/c for some reason sometimes setLoggingService() does not function?
+  	logging = (LoggingService)this.getServiceBroker().getService(this,LoggingService.class,null);
+  	
+  	
+  }
  
   /**
    * keep a static reference to the latest instance of this class
