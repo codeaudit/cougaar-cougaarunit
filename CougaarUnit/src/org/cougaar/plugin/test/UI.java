@@ -33,6 +33,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import javax.swing.event.CellEditorListener;
 import javax.swing.table.DefaultTableCellRenderer;
+import java.util.HashMap;
 
 /**
  * <p>Title: </p>
@@ -103,6 +104,7 @@ public class UI extends JFrame {
 
     protected final String[] columnNames = {COLUMN_TEST_NAME, COLUMN_ID, COLUMN_TEST_PHASE, COLUMN_COMMAND, COLUMN_DESCRIPTION, COLUMN_RESULT};
     Vector data = new Vector();
+    HashMap ancillaryData = new HashMap();
 
     public int getColumnCount() {
       return columnNames.length;
@@ -124,6 +126,15 @@ public class UI extends JFrame {
 
     public void addRow(Object[] row) {
       data.add(row);
+    }
+
+    public void addCellAncillaryData(int row, int col, Object data) {
+      if (data == null) return;
+      ancillaryData.put(String.valueOf(row)+String.valueOf(col), data);
+    }
+
+    public Object getCellAncillaryData(int row, int col) {
+      return ancillaryData.get(String.valueOf(row)+String.valueOf(col));
     }
   }
 
@@ -173,6 +184,7 @@ public class UI extends JFrame {
       public void mouseClicked(MouseEvent e) {
         if (jTableResults.getColumnName(jTableResults.getSelectedColumn()).equals(OutputTableModel.COLUMN_RESULT)) {
           ResultsDialog rd = new ResultsDialog();
+          rd.setResultData((ResultStates)UI.this.outputTableModel.getCellAncillaryData(jTableResults.getSelectedRow(), jTableResults.getSelectedColumn()));
           rd.show();
         }
       }
@@ -430,6 +442,7 @@ public class UI extends JFrame {
       String testName = root.getAttributes().getNamedItem("Name").getNodeValue();
       //get the list of test ids
       NodeList idList = root.getElementsByTagName("ID");
+      int rowNum = 0;
       for (int i=0; i<idList.getLength(); i++) {
         Object[] results = new Object[6];
         results[0] = testName;
@@ -437,6 +450,7 @@ public class UI extends JFrame {
         String id = idNode.getAttributes().getNamedItem("Value").getNodeValue();
         NodeList subNodes = idNode.getChildNodes();
         results[1] = id;
+        ResultStates resultStates = null;
         for (int j = 0; j<subNodes.getLength(); j++) {
           org.w3c.dom.Node n = subNodes.item(j);
           String nodeName = n.getNodeName();
@@ -448,9 +462,25 @@ public class UI extends JFrame {
             results[4] = n.getFirstChild().getNodeValue();
           else if (nodeName.equals("RESULT"))
             results[5] = n.getFirstChild().getNodeValue();
+          else if (nodeName.equals("EXPECTED_STATE")) {
+            if (resultStates == null) resultStates = new ResultStates();
+            NodeList nl = n.getChildNodes().item(0).getChildNodes();
+            for (int k=0; k<nl.getLength(); k++) {
+              resultStates.addExpectedResult(nl.item(k).getChildNodes().item(0).getFirstChild().getNodeValue(), nl.item(k).getChildNodes().item(1).getFirstChild().getNodeValue());
+            }
+          }
+          else if (nodeName.equals("ACTUAL_STATE")) {
+            if (resultStates == null) resultStates = new ResultStates();
+            NodeList nl = n.getChildNodes().item(0).getChildNodes();
+            for (int k=0; k<nl.getLength(); k++) {
+              resultStates.addActualResult(nl.item(k).getChildNodes().item(0).getFirstChild().getNodeValue(), nl.item(k).getChildNodes().item(1).getFirstChild().getNodeValue());
+            }
+          }
 
         }
         outputTableModel.addRow(results);
+        outputTableModel.addCellAncillaryData(rowNum, 5, resultStates);
+        rowNum++;
         jTableResults.updateUI();
       }
     }
@@ -530,3 +560,25 @@ public class UI extends JFrame {
     System.exit(0);
   }
 }
+
+class ResultStates {
+  class ResultState{
+    String id;
+    String result;
+    public ResultState(String id, String result) {
+      ResultState.this.id = id;
+      ResultState.this.result = result;
+    }
+  }
+  Vector expectedResults = new Vector();
+  Vector actualResults = new Vector();
+
+  public void addExpectedResult(String id, String result) {
+    expectedResults.addElement(new ResultState(id, result));
+  }
+
+  public void addActualResult(String id, String result) {
+    actualResults.addElement(new ResultState(id, result));
+  }
+}
+

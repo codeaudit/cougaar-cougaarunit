@@ -90,4 +90,5 @@
   </node>
   <file path="src/New.xml"/>
   <file path="RunTest.bat"/>
+  <file path="src/TestOutput.xml"/>
 </project>
