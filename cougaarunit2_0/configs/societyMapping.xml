@@ -1,0 +1,103 @@
+<!DOCTYPE databases PUBLIC "-//EXOLAB/Castor Mapping DTD Version 1.0//EN"
+                           "http://castor.exolab.org/mapping.dtd">
+
+<mapping>
+	<class name="org.cougaar.cougaarunit.vo.Society">
+		<map-to xml="Society"/>
+		<field name="nodeList" 
+			   type="org.cougaar.cougaarunit.vo.Node"
+			   collection="vector">
+			<bind-xml name="Node"/>
+		</field>
+		<field name="name" type="java.lang.String">
+			<bind-xml name="name" node="attribute"/>
+		</field>
+	</class>
+	
+	<class name="org.cougaar.cougaarunit.vo.Node">
+		<map-to xml="Node"/>
+		<field name="name" type="java.lang.String">
+			<bind-xml name="name" node="attribute"/>
+		</field>
+		<field name="programParams" 
+			   type="java.lang.String"
+			   collection="vector">
+			<bind-xml name="programParam" node="element"/>
+		</field>	
+		<field name="vmParams" 
+			   type="java.lang.String"
+			   collection="vector">
+			<bind-xml name="vmParam" node="element"/>
+		</field>
+		<field name="envrionmentParams" 
+			   type="java.lang.String"
+			   collection="vector">
+			<bind-xml name="envrionmentParam" node="element"/>
+		</field>
+		<field name="agents" 
+			   type="org.cougaar.cougaarunit.vo.Agent"
+			   collection="vector">
+			<bind-xml name="agent" node="element"/>
+		</field>
+		<field name="components" 
+			   type="org.cougaar.cougaarunit.vo.ComponentImpl"
+			   collection="vector">
+			<bind-xml name="component" node="element"/>
+		</field>
+	</class>
+	<class name="org.cougaar.cougaarunit.vo.Agent">
+		<map-to xml="Agent"/>
+		<field name="name" type="java.lang.String">
+			<bind-xml name="name" node="attribute"/>
+		</field>
+		<field name="facets" 
+			   type="java.lang.String"
+			   collection="vector">
+			<bind-xml name="facet" node="element"/>
+		</field>			
+		<field name="components" 
+			   type="org.cougaar.cougaarunit.vo.ComponentImpl"
+			   collection="vector">
+			<bind-xml name="component" node="element"/>
+		</field>
+		<field name="arguments" type="java.lang.String"
+			   collection="vector">
+			<bind-xml name="argument" node="element"/>
+		</field>		
+		<field name="className"
+			   type="java.lang.String">
+			<bind-xml name="class" node="attribute"/>
+		</field>
+		<field name="priority"
+			   type="java.lang.String">
+			<bind-xml name="priority" node="attribute"/>
+		</field>
+		<field name="insertionpoint"
+			   type="java.lang.String">
+			<bind-xml name="insertionpoint" node="attribute"/>
+		</field>				
+	</class>
+	<class name="org.cougaar.cougaarunit.vo.ComponentImpl">
+		<map-to xml="Component"/>
+		<field name="arguments" type="java.lang.String"
+			   collection="vector">
+			<bind-xml name="argument" node="element"/>
+		</field>
+		<field name="name" type="java.lang.String">
+			<bind-xml name="name" node="attribute"/>
+		</field>
+		<field name="className"
+			   type="java.lang.String">
+			<bind-xml name="class" node="attribute"/>
+		</field>
+		<field name="priority"
+			   type="java.lang.String">
+			<bind-xml name="priority" node="attribute"/>
+		</field>
+		<field name="insertionpoint"
+			   type="java.lang.String">
+			<bind-xml name="insertionpoint" node="attribute"/>
+		</field>		
+	</class>
+	
+</mapping>

@@ -1,0 +1,24 @@
+<!DOCTYPE databases PUBLIC "-//EXOLAB/Castor Mapping DTD Version 1.0//EN"
+                           "http://castor.exolab.org/mapping.dtd">
+
+<mapping>
+	<class name="org.cougaar.cougaarunit.vo.Parameters">
+		<map-to xml="parameters"/>
+		<field name="parameters" 
+			   type="org.cougaar.cougaarunit.vo.Parameter"
+			   collection="vector">
+			<bind-xml name="parameter"/>
+		</field>		
+	</class>
+	
+	<class name="org.cougaar.cougaarunit.vo.Parameter">
+		<map-to xml="parameter"/>
+		<field name="name" type="java.lang.String">
+			<bind-xml name="name" node="attribute"/>
+		</field>
+		<field name="value" type="java.lang.String">
+			<bind-xml name="value" node="element"/>
+		</field>
+	</class>
+	
+</mapping>

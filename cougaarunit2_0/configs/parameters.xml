@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<parameters>
+	<parameter name="-Xbootclasspath/p">
+		<value>-Xbootclasspath/p:COUGAAR_INSTALL_PATH\lib\javaiopatch.jar</value>
+	</parameter>
+	<parameter name="-Dorg.cougaar.system.path">
+		<value>COUGAAR_INSTALL_PATH\sys</value>
+	</parameter>
+	<parameter name="-Dorg.cougaar.install.path">
+		<value>COUGAAR_INSTALL_PATH</value>
+	</parameter>
+	<parameter name="-Duser.timezone">
+		<value>GMT</value>
+	</parameter>
+	<parameter name="-Dorg.cougaar.core.agent.startTime">
+		<value>08/10/2005</value>
+	</parameter>
+	<parameter name="-Dorg.cougaar.class.path">
+		<value> </value>
+	</parameter>
+	<parameter name="-Dorg.cougaar.workspace">
+		<value>COUGAAR_WORKSPACE</value>
+	</parameter>
+	<parameter name="-Dorg.cougaar.node.name">
+		<value>TestNode</value>
+	</parameter>
+	<parameter name="-org.cougaar.core.logging.config.filename">
+		<value>log.properties</value>
+	</parameter>
+	<parameter name="-Dorg.cougaar.core.node.InitializationComponent">
+		<value>XML</value>
+	</parameter>
+	<parameter name="-Dorg.cougaar.society.file">
+		<value>testSociety.xml</value>
+	</parameter>
+	<parameter name="-Xms">
+		<value>-Xms100m</value>
+	</parameter>
+	<parameter name="-Xmx">
+		<value>-Xms500m</value>
+	</parameter>
+</parameters>
