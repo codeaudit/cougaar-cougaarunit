@@ -494,12 +494,13 @@ public class UI extends JFrame {
   }
 
   void jButtonRun_actionPerformed(ActionEvent e) {
-    ByteArrayOutputStream baos;
+    MyByteArrayOutputStream baos;
     Launcher launcher = new Launcher();
     launcher.setOutputStyle(Launcher.OUTPUT_STYLE_XML);
     Object[] testSuites = jListTestSuites.getSelectedValues();
     MyClassLoader loader = null;
     try {
+      //create a class loader that contains the selected directory or jar file in it's class path
       loader = MyClassLoader.getInstance(new URL[]{new URL("file", "localhost", jTextFieldDirJar.getText())});
     }
     catch (Exception e1) {
@@ -509,7 +510,7 @@ public class UI extends JFrame {
 
     for (int i=0; i<testSuites.length; i++) {
       try {
-        baos = new ByteArrayOutputStream(256);
+        baos = new MyByteArrayOutputStream(256);
         Class clazz = loader.loadClass((String)testSuites[i]);
         Thread t = new Thread(new LauncherRunnable("Executing test suite", launcher, clazz, baos));
         t.start();
@@ -522,7 +523,7 @@ public class UI extends JFrame {
     Object[] testCases = jListTestCases.getSelectedValues();
     for (int i=0; i<testCases.length; i++) {
       try {
-        baos = new ByteArrayOutputStream(256);
+        baos = new MyByteArrayOutputStream(256);
         Class clazz = loader.loadClass((String)testCases[i]);
         Thread t = new Thread(new LauncherRunnable("Executing test class", launcher, clazz, baos));
         t.start();
@@ -558,6 +559,7 @@ public class UI extends JFrame {
         rd.setMessage(clazz.getName());
         rd.show();
         rd.setCursor(CURSOR_WAIT);
+        jTabbedPane1.setSelectedComponent(jScrollPaneOutput);  //switch to the output tab while running cougaar
 
         Object obj = clazz.newInstance();
         if (obj instanceof PluginTestCase)
@@ -568,6 +570,7 @@ public class UI extends JFrame {
         processResult(baos.toString());
         rd.dispose();
         rd.setCursor(CURSOR_DEFAULT);
+        jTabbedPane1.setSelectedComponent(jScrollPaneResults); //switch to the results tab after completion
       }
       catch (Exception e ){
         e.printStackTrace();
@@ -575,7 +578,21 @@ public class UI extends JFrame {
     }
   }
 
+  class MyByteArrayOutputStream extends ByteArrayOutputStream {
+    public MyByteArrayOutputStream(int size) {
+      super(size);
+    }
+
+    /**
+     * Write the bytes to the output text pane
+     * @param bytes
+     */
+    public void write(byte[] bytes) {
+      jTextPaneOutput.setText(jTextPaneOutput.getText()+new String(bytes));
+    }
+  }
 }
+
 
 class ResultStates {
   class ResultState{

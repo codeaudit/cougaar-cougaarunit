@@ -130,9 +130,6 @@ public class Launcher {
     while ((line = is.readLine()) != null) {
       byte[] lineData = line.getBytes();
       os.write(lineData);
-      String strData = new String(lineData);
-
-
     }
     //p.waitFor();   //wait for this process to terminate
   }
