@@ -1,0 +1,84 @@
+<html>
+  <head>
+  <title>
+	Using a Cougaar Unit Test Suite
+  </title>
+ </head>
+<body>
+	<table border="0" width="80%">
+		<tr>
+			<td><h3>Using Cougaar Unit Test Suites:</h3></td>
+		</tr>
+		<tr>
+			<td>
+				<p>
+					A Cougaar Unit Test Suite enabled the packaging of multiple PluginTestCases into a single Cougaar Unit
+				</p>
+			</td>
+		</tr>
+		<tr>
+			<td><b>Creating a Test Suite:</b></td>
+		</tr>
+		<tr>
+			<tr>
+				<td>
+					<table width="100%" border="0">
+						<tr>
+							<td>
+								<b>Step 1: Extend org.cougaar.cougaarunit.PluginTestSuite:</b><br><br>
+								<table width="100%">
+									<tr>
+										<td bgcolor="lightgrey">
+										<pre>
+import org.cougaar.cougaarunit.PluginTestSuite;
+
+public class FooTestSuite extends PluginTestSuite{
+
+	public Class[] getTestClasses(){
+		return null;
+	}
+}										
+										</pre><br>
+										</td>
+									</tr>
+								</table>
+								
+							</td>
+
+						</tr>
+						<tr>
+							<td>
+								<b>Step 2: Return the PluginTestCases</b><br>
+								The <i>getTestClasses</i> method is used to return the PluginTestCase classes to be included in the TestSuite. In this following example, two PluginTestCases are to be run (FooPluginTestCase1 and FooPluginTestCase2):
+								<br><br>
+								<table>
+									<tr>
+										<td bgcolor="lightgrey">
+										<pre>
+public Class[] getTestClass(){
+	Classs[] cases = new Class[2];
+	cases[0]=FooPluginTestCase1.class;
+	cases[1]=FooPluginTextCase2.class;
+	return cases;
+}
+										</pre><br>
+										</td>
+									</tr>
+								</table>
+							</td>
+							
+						</tr>
+						<tr>
+							<td>
+								<p>
+									That is all there is to setting up a PluginTestSuite.
+								</p>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</tr>
+	</table>
+</body>
+</html>

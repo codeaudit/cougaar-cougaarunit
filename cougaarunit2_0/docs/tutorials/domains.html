@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Adding Custom Domains </TITLE>
+</HEAD>
+
+<BODY>
+	<table>
+		<tr>
+			<td><h3>Adding custom domains to a Cougaar Unit Test Case</h3></td>
+		</tr>
+		<tr>
+			<td>
+				<p>The <i>org.cougaar.cougaarunit.PluginTestCase</i> contains the <i>getDomain</i> method. By default this method returns null.  In order for a PluginTestCase to utilize a custom domain, the <i>getDomain</i> method needs to be extended to return a list of <i>Component</i> value objects describing the Domain.  Here is an example of FooPluginTestCase including the FooDomain withing a run:
+				<br>
+				<br>
+				<table width="100%">
+					<tr>
+						<td bgcolor="lightgrey">
+						<pre>
+import java.util.ArrayList;
+import org.cougaar.cougaarunit.PluginTestCase;
+import org.cougaar.cougaarunit.vo.ComponentImpl;
+public class FooPluginTestCase extends PluginTestCase{
+
+	public Collection getDomains(){
+		ArrayList list = new ArrayList();
+		ComponentDescriptionImpl component = new ComponentDescriptionImpl();
+		component.setClassName("foo.FooDomain");
+		component.setName("FooDomain");
+		list.add(new ComponentDescriptionImpl());
+		return list;
+	}
+}
+						</pre><br><br> 
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+</BODY>
+</HTML>
