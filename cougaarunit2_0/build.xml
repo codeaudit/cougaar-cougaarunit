@@ -72,17 +72,17 @@
         </fileset>	    
     </path>
 	
-	<path id="cunit.classpath">
-    		<path refid="build.classpath"/>
-	    	<pathelement location="${classes.dir}"/>	   
-		<pathelement location="${cunit.classes.dir}"/>
-	    	<fileset dir="${clib.dir}">
-        	    <include name="bootstrap.jar"/>
-	        </fileset>
-    		<fileset dir="${csys.dir}">
-	            <include name="xerces.jar"/>
-	        </fileset>
-	</path>
+    <path id="cunit.classpath">
+   	<path refid="build.classpath"/>
+   	<pathelement location="${classes.dir}"/>	   
+	<pathelement location="${cunit.classes.dir}"/>
+    	<fileset dir="${clib.dir}">
+       	    <include name="bootstrap.jar"/>
+        </fileset>
+	<fileset dir="${csys.dir}">
+            <include name="xerces.jar"/>
+        </fileset>
+    </path>
     
     
     <path id="libs.classpath">
