@@ -13,9 +13,8 @@ import org.cougaar.cougaarunit.vo.Society;
  */
 public class SocietyBuilderTest extends TestCase {
 
-	public void testBuildSociety() {
-		
-		Society s = SocietyBuilder.buildSociety(new SimpleTest());
+	public void testBuildSociety() {		
+		Society s = SocietyBuilder.buildSociety(new Simple());
 		assertNotNull(s.getNodeList());
 		Iterator i = s.getNodeList().iterator();
 		while (i.hasNext()) {
@@ -26,10 +25,9 @@ public class SocietyBuilderTest extends TestCase {
 				Agent agent = (Agent) j.next();
 				assertNotNull(agent.getComponents());				
 			}
-		}
-		
+		}		
 	}
-	private class SimpleTest extends PluginTestCase{
+	private class Simple extends PluginTestCase{
 
 		/* (non-Javadoc)
 		 * @see org.cougaar.cougaarunit.PluginTestCase#validateSubscriptions()

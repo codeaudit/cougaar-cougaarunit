@@ -1,2 +1,6 @@
 bin
 build
+target
+test-results
+maven.log
+velocity.log

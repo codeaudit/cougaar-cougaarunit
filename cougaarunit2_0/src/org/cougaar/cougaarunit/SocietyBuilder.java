@@ -1,6 +1,7 @@
 package org.cougaar.cougaarunit;
 
 
+import java.io.File;
 import java.io.FileReader;
 import java.util.Collection;
 import java.util.Iterator;
@@ -53,7 +54,9 @@ public class SocietyBuilder {
                 "parameters.xml");
         Parameters parameters = null;
         try {
-            mapping.loadMapping("parameterMapping.xml");
+        	File f = new File("parameterMapping.xml");
+        	System.out.println(f.getAbsolutePath().toString());
+            mapping.loadMapping(f.getAbsolutePath());
             Unmarshaller unmar = new Unmarshaller(mapping);
 
             parameters = (Parameters) unmar.unmarshal(new InputSource(

@@ -5,7 +5,6 @@
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
 package org.cougaar.cougaarunit;
-
 import junit.framework.TestCase;
 
 import org.cougaar.planning.ldm.asset.ItemIdentificationPGImpl;

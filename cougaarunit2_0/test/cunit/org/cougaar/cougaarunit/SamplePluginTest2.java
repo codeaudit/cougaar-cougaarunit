@@ -1,5 +1,4 @@
 package org.cougaar.cougaarunit;
-
 import java.util.ArrayList;
 import java.util.Collection;
 

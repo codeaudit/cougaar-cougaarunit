@@ -27,7 +27,7 @@
   </siteAddress>
   
   <siteDirectory>
-		
+		/var/www/gforge-projects/csi_core
   </siteDirectory>
 
   <repository>
@@ -81,10 +81,10 @@
     	<url>http://pumax/maven/</url>
     </dependency>
     <dependency>
-	<groupId>cougaar</groupId>
-	<artifactId>planning</artifactId>
-	<version>10.4.6</version>
-	<url>http://pumax/maven/</url>
+		<groupId>cougaar</groupId>
+		<artifactId>planning</artifactId>
+		<version>10.4.6</version>
+		<url>http://pumax/maven/</url>
     </dependency>
     <dependency>
 		<groupId>castor</groupId>
@@ -93,6 +93,19 @@
 		<jar>castor-0.9.5-xml.jar</jar>
 		<url>http://www.ibiblio.org/maven</url>
     </dependency>
+    <dependency>
+		<groupId>ant</groupId>
+		<artifactId>ant</artifactId>
+		<version>1.5.2</version>		
+		<url>http://www.ibiblio.org/maven</url>
+    </dependency>
+     <dependency>
+		<groupId>ant</groupId>
+		<artifactId>ant-optional</artifactId>
+		<version>1.5.2</version>		
+		<url>http://www.ibiblio.org/maven</url>
+    </dependency>
+    
   </dependencies>
 
   <build>
@@ -102,16 +115,16 @@
     </nagEmailAddress>
 
     <sourceDirectory>src</sourceDirectory>
-    <unitTestSourceDirectory>test</unitTestSourceDirectory>
+<!--    <unitTestSourceDirectory>test/junit</unitTestSourceDirectory> -->
 
     <aspectSourceDirectory/>
 
     <!-- Unit test cases -->
-    <unitTest>
+	<unitTest>
       <includes>
         <include>**/*Test.java</include>
       </includes>
-    </unitTest>
+    </unitTest> 
               
     <!-- J A R  R E S O U R C E S -->
     <!-- Resources that are packaged up inside the JAR file -->
@@ -134,7 +147,7 @@
 		<report>maven-changelog-plugin</report>
 		<report>maven-developer-activity-plugin</report>
 		<report>maven-file-activity-plugin</report>	
-		<report>maven-junit-report-plugin</report>
+		<!--<report>maven-junit-report-plugin</report>-->
 		<report>maven-javadoc-plugin</report>
 		<report>maven-jxr-plugin</report>
 		<report>maven-tasklist-plugin</report>

@@ -15,8 +15,8 @@
 
     <!-- java source dirs -->
     <property name="src.dir" value="${basedir}/src"/>
-    <property name="test.dir" value="${basedir}/test"/>
-
+    <property name="junit.test.dir" value="${basedir}/test/junit"/>
+	<property name="cunit.test.dir" value="${basedir}/test/cunit"/>
     <!-- lib and conf dirs -->
     <property name="conf.dir" value="${basedir}/conf"/>
     <property name="lib.dir" value="${basedir}/lib"/>
@@ -28,6 +28,8 @@
 
     <!-- All generated stuff below here: should all be subdirs of build.dir -->
     <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="junit.classes.dir" value="${build.dir}/junit/classes"/>
+    <property name="cunit.classes.dir" value="${build.dir}/cunit/classes"/>
     <property name="project.jar.dir" value="${build.dir}/jars"/>
     <property name="project.jarfile" value="${project.jar.dir}/${project.name}-${project.version}.jar"/>
     <!-- optional generated stuff, not required to build -->
@@ -60,14 +62,20 @@
     <path id="junit.classpath">
     	<path refid="build.classpath"/>
 	    <pathelement location="${classes.dir}"/>	   
+	    <pathelement location="${junit.classes.dir}"/>
+		<fileset dir="${csys.dir}">
+            <include name="xerces.jar"/>
+        </fileset>	    
 	</path>
 	
 	<path id="cunit.classpath">
-    	<path refid="junit.classpath"/>
+    	<path refid="build.classpath"/>
+    	<pathelement location="${classes.dir}"/>	   
+	    <pathelement location="${cunit.classes.dir}"/>
     	<fileset dir="${clib.dir}">
             <include name="bootstrap.jar"/>
         </fileset>
-    	 <fileset dir="${csys.dir}">
+    	<fileset dir="${csys.dir}">
             <include name="xerces.jar"/>
         </fileset>
 	</path>
@@ -87,6 +95,9 @@
     <target name="prepare" depends="templates">
         <tstamp/>
         <mkdir dir="${build.dir}"/>
+        <mkdir dir="${classes.dir}"/>
+        <mkdir dir="${junit.classes.dir}"/>
+        <mkdir dir="${cunit.classes.dir}"/>
     </target>
     
     <!-- ============================================================== -->
@@ -136,6 +147,9 @@
     <!-- Cleans up generated stuff                                      -->
     <!-- ============================================================== -->
     <target name="clean" depends="" description="Removes generated files.">
+    	<delete dir="${junit.classes.dir}"/>
+	    <delete dir="${classes.dir}"/>
+        <delete dir="${cunit.classes.dir}"/>
         <delete dir="${build.dir}"/>
     </target>
 
@@ -154,9 +168,12 @@
         <javac srcdir="${src.dir}" destdir="${classes.dir}" debug="on" deprecation="off" optimize="off">
             <classpath refid="build.classpath"/>
         </javac>
-	<javac srcdir="${test.dir}" destdir="${classes.dir}" debug="on" deprecation="off" optimize="off">
-	    <classpath refid="build.classpath"/>
-	</javac>
+		<javac srcdir="${junit.test.dir}" destdir="${junit.classes.dir}" debug="on" deprecation="off" optimize="off">
+		    <classpath refid="build.classpath"/>
+		</javac>
+		<javac srcdir="${cunit.test.dir}" destdir="${cunit.classes.dir}" debug="on" deprecation="off" optimize="off">
+		    <classpath refid="build.classpath"/>
+		</javac>
     </target>
 
 
@@ -203,12 +220,12 @@
     <target name="junit-test" depends="compile" description="Run Junit tests">
 	<delete dir="${junit.results}"/>
 	<mkdir dir="${junit.results}"/>
-	<junit fork="yes" haltonfailure="yes">
+	<junit fork="yes" haltonfailure="yes" dir="${basedir}/configs">
 	    <classpath refid="junit.classpath"/>
 		<formatter type="plain" usefile="false"/>
 		<formatter type="xml"/>
 		<batchtest todir="${junit.results}">
-			<fileset dir="${classes.dir}" includes="**/*Test.class"/>
+			<fileset dir="${junit.classes.dir}" includes="**/*Test.class"/>
 		</batchtest>
 	</junit>
     </target>
@@ -216,7 +233,7 @@
     <!-- CougaarUnit Tests -->
     <target name="cunit-tests" depends="compile" description="Run CUnit Tests">
     	<cunit testClassname="org.cougaar.cougaarunit.Launcher"
-    		   dir="./configs" >
+    		   dir="${basedir}/configs" >
     		<arg value="org.cougaar.cougaarunit.SampleTestSuite"/>  
     		<jvmarg value="-Dorg.cougaar.install.path=c:/cougaar/10_4_6"/>
     		<jvmarg value="-Dorg.cougaar.cougaarunit.showoutput=true"/>

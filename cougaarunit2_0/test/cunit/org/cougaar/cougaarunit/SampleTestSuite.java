@@ -1,5 +1,4 @@
 package org.cougaar.cougaarunit;
-
 public class SampleTestSuite extends PluginTestSuite{
 
 	/* (non-Javadoc)

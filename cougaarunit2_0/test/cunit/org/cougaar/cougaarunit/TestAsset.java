@@ -5,7 +5,6 @@
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
 package org.cougaar.cougaarunit;
-
 import org.cougaar.planning.ldm.asset.Asset;
 
 /**

@@ -1,5 +1,4 @@
 package org.cougaar.cougaarunit;
-
 import org.cougaar.core.blackboard.IncrementalSubscription;
 import org.cougaar.core.plugin.ComponentPlugin;
 import org.cougaar.planning.ldm.plan.Task;
@@ -8,7 +7,7 @@ import org.cougaar.planning.ldm.predicate.TaskPredicate;
 /**
  * @author mabrams
  */
-public class SamplePlugin2 extends ComponentPlugin {
+public class SamplePlugin extends ComponentPlugin {
 	
 	private IncrementalSubscription taskSubscription;
 	private static TaskPredicate taskPredicate = new TaskPredicate() {
@@ -19,7 +18,7 @@ public class SamplePlugin2 extends ComponentPlugin {
 	
 	public void load() {
 		super.load();
-		System.out.println("loading sample plugin2");
+		System.out.println("loading sample plugin");
 	}
 
 	/* (non-Javadoc)
