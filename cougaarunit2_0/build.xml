@@ -16,7 +16,7 @@
     <!-- java source dirs -->
     <property name="src.dir" value="${basedir}/src"/>
     <property name="junit.test.dir" value="${basedir}/test/junit"/>
-	<property name="cunit.test.dir" value="${basedir}/test/cunit"/>
+    <property name="cunit.test.dir" value="${basedir}/test/cunit"/>
     <!-- lib and conf dirs -->
     <property name="conf.dir" value="${basedir}/conf"/>
     <property name="lib.dir" value="${basedir}/lib"/>
@@ -38,7 +38,7 @@
     <property name="jdepend.dir" value="${build.dir}/jdepend"/>
     
     <!--cvs info-->
-    <property name="cvs.repository" value=":extssh:abrams@cougaar.org:/cvsroot/cougaarunit"/>
+    <property name="cvs.repository" value=":ext:abrams@cougaar.org:/cvsroot/cougaarunit"/>
     <property name="cvs.package" value="cougaarunit2_0"/>
 
     <!--junit info-->
@@ -65,23 +65,23 @@
     
     <path id="junit.classpath">
     	<path refid="build.classpath"/>
-	    <pathelement location="${classes.dir}"/>	   
-	    <pathelement location="${junit.classes.dir}"/>
-		<fileset dir="${csys.dir}">
-            <include name="xerces.jar"/>
+	<pathelement location="${classes.dir}"/>	   
+	<pathelement location="${junit.classes.dir}"/>
+	<fileset dir="${csys.dir}">
+        	<include name="xerces.jar"/>
         </fileset>	    
-	</path>
+    </path>
 	
 	<path id="cunit.classpath">
-    	<path refid="build.classpath"/>
-    	<pathelement location="${classes.dir}"/>	   
-	    <pathelement location="${cunit.classes.dir}"/>
-    	<fileset dir="${clib.dir}">
-            <include name="bootstrap.jar"/>
-        </fileset>
-    	<fileset dir="${csys.dir}">
-            <include name="xerces.jar"/>
-        </fileset>
+    		<path refid="build.classpath"/>
+	    	<pathelement location="${classes.dir}"/>	   
+		<pathelement location="${cunit.classes.dir}"/>
+	    	<fileset dir="${clib.dir}">
+        	    <include name="bootstrap.jar"/>
+	        </fileset>
+    		<fileset dir="${csys.dir}">
+	            <include name="xerces.jar"/>
+	        </fileset>
 	</path>
     
     
@@ -116,19 +116,19 @@
             </not>
         </condition>
     </target>
-    <target name="configure" depends="check_config" if="configuration.needed" description="Creates conf files from examples">
+<!--    <target name="configure" depends="check_config" if="configuration.needed" description="Creates conf files from examples">
         <echo message="You have not configured env.properties.  Creating from example..."/>
         <copy file="${conf.dir}/env.properties.example" tofile="${conf.dir}/env.properties"/>
         <fail message="Please edit ${conf.dir}/env.properties and set variables appropriate to your environment, before using ant again."/>
-    </target>
+    </target> -->
     
     
     <!-- =================================================================== -->
     <!-- Generates all the system files based off templates                  -->
     <!-- =================================================================== -->
-    <target name="templates" depends="configure">
+    <target name="templates">
         <!-- filter based on anything user puts in env.properties -->
-        <filter filtersfile="${conf.dir}/env.properties"/>
+  <!--      <filter filtersfile="${conf.dir}/env.properties"/> -->
 
         <!-- standard filters -->
         <filter token="project.basedir" value="${basedir}"/>
@@ -174,28 +174,28 @@
         <javac srcdir="${src.dir}" destdir="${classes.dir}" debug="on" deprecation="off" optimize="off">
             <classpath refid="build.classpath"/>
         </javac>
-		<javac srcdir="${junit.test.dir}" destdir="${junit.classes.dir}" debug="on" deprecation="off" optimize="off">
-		    <classpath refid="build.classpath"/>
-		</javac>
-		<javac srcdir="${cunit.test.dir}" destdir="${cunit.classes.dir}" debug="on" deprecation="off" optimize="off">
-		    <classpath refid="build.classpath"/>
-		</javac>
+	<javac srcdir="${junit.test.dir}" destdir="${junit.classes.dir}" debug="on" deprecation="off" optimize="off">
+	    <classpath refid="junit.classpath"/>
+	</javac>
+	<javac srcdir="${cunit.test.dir}" destdir="${cunit.classes.dir}" debug="on" deprecation="off" optimize="off">
+	    <classpath refid="cunit.classpath"/>
+	</javac>
     </target>
     
      <!-- initialize taskdef -->
     <target name="init">
     	<mkdir dir="${classes.dir}"/>
         <javac srcdir="${src.dir}" destdir="${classes.dir}" debug="on" deprecation="off" optimize="off"
-        	includes = "org/cougaar/cougaar/unit/ant/*.java">
+        	includes = "org/cougaar/cougaarunit/ant/*.java">
         </javac>
         <mkdir dir="${project.jar.dir}"/>
         <jar jarfile="${task.jarfile}" basedir="${classes.dir}"/>
         <!-- task defs -->
-	    <taskdef name="cunit" classname="org.cougaar.cougaarunit.ant.CUnitTask">
-	    	<classpath>
-            	 <pathelement location="${task.jarfile}"/>
-	        </classpath>
-		</taskdef>        
+	<taskdef name="cunit" classname="org.cougaar.cougaarunit.ant.CUnitTask">
+	   <classpath>
+             <pathelement location="${task.jarfile}"/>
+	   </classpath>
+	</taskdef>        
     </target>
 
 
@@ -256,7 +256,7 @@
     	<cunit testClassname="org.cougaar.cougaarunit.Launcher"
     		   dir="${basedir}/configs" >
     		<arg value="org.cougaar.cougaarunit.SampleTestSuite"/>  
-    		<jvmarg value="-Dorg.cougaar.install.path=c:/cougaar/10_4_6"/>
+    		<jvmarg value="-Dorg.cougaar.install.path=/opt/cougaar/10_4_6"/>
     		<jvmarg value="-Dorg.cougaar.cougaarunit.showoutput=true"/>
    	    	<classpath refid="cunit.classpath"/>   	    	
     	</cunit>    	
