@@ -61,7 +61,7 @@ public class UI extends JFrame {
   private JSplitPane jSplitPane1 = new JSplitPane();
   OutputTableModel outputTableModel = new OutputTableModel();
   private TitledBorder titledBorder5;
-  StreamedDataTableModel timeDataTableModel = new StreamedDataTableModel();
+  TimeDataTableModel timeDataTableModel = new TimeDataTableModel();
   DefaultTableModel sourceDataTableModel = new DefaultTableModel();
   private JButton jButtonSearch = new JButton();
   private JTabbedPane jTabbedPane1 = new JTabbedPane();
@@ -110,6 +110,9 @@ public class UI extends JFrame {
   private JScrollPane jScrollPaneDetails = new JScrollPane();
   private JList jListDetails = new JList();
 
+
+  private static final String SOURCE_DATA_COL_ID = "ID";
+  private static final String SOURCE_DATA_COL_TIME = "TIME";
   /**
    *
    * <p>Title: OutputTableModel</p>
@@ -120,7 +123,7 @@ public class UI extends JFrame {
    * @version 1.0
    */
 
-class StreamedDataTableModel extends DefaultTableModel  {
+class TimeDataTableModel extends DefaultTableModel  {
     static final String COLUMN_PUBLISH_ACTION = "PUBLISH ACTION";
     static final String COLUMN_SOURCE = "SOURCE";
     static final String COLUMN_OBJECT = "OBJECT";
@@ -234,7 +237,7 @@ class StreamedDataTableModel extends DefaultTableModel  {
     jListTestSuites.setModel(testSuiteModel);
     jTableResults.setDefaultRenderer(Object.class, new OutputCellRenderer());
     jTableResults.getColumn(OutputTableModel.COLUMN_TEST_NAME).setPreferredWidth(100);
-    jTableResults.getColumn(OutputTableModel.COLUMN_ID).setPreferredWidth(5);
+    jTableResults.getColumn(OutputTableModel.COLUMN_ID).setMaxWidth(40);
     jTableResults.getColumn(OutputTableModel.COLUMN_TEST_PHASE).setPreferredWidth(75);
     jTableResults.getColumn(OutputTableModel.COLUMN_COMMAND).setPreferredWidth(80);
     jTableResults.getColumn(OutputTableModel.COLUMN_DESCRIPTION).setPreferredWidth(100);
@@ -290,8 +293,8 @@ class StreamedDataTableModel extends DefaultTableModel  {
     });
     jTableResults.updateUI();
 
-    jTableTimeData.getColumn(timeDataTableModel.COLUMN_ID).setPreferredWidth(5);
-    jTableTimeData.getColumn(timeDataTableModel.COLUMN_TIME).setPreferredWidth(50);
+    jTableTimeData.getColumn(timeDataTableModel.COLUMN_ID).setMaxWidth(40);
+    jTableTimeData.getColumn(timeDataTableModel.COLUMN_TIME).setMaxWidth(40);
     jTableTimeData.getColumn(timeDataTableModel.COLUMN_SOURCE).setPreferredWidth(100);
     jTableTimeData.getColumn(timeDataTableModel.COLUMN_PUBLISH_ACTION).setPreferredWidth(75);
     jTableTimeData.getColumn(timeDataTableModel.COLUMN_OBJECT).setPreferredWidth(100);
@@ -992,8 +995,8 @@ class StreamedDataTableModel extends DefaultTableModel  {
     Vector cols = new Vector();
     if (v.size() == 0) return;
     long baseTime = ((CapturedPublishAction)v.elementAt(0)).timeStamp;
-    cols.addElement("ID");
-    cols.addElement("TIME");
+    cols.addElement(SOURCE_DATA_COL_ID);
+    cols.addElement(SOURCE_DATA_COL_TIME);
     //calculate the column names
     for (int i=0; i<v.size(); i++) {
       CapturedPublishAction cpa = (CapturedPublishAction)v.elementAt(i);
