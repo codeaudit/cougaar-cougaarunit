@@ -8,90 +8,117 @@ package org.cougaar.cougaarunit.vo;
 
 import java.io.Serializable;
 
+
 /**
  * @author ttschampel
  *
  * To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
-public class TestResultId implements Serializable{
-	
-	
-	
-	private String phase;
-	private String command;
-	private String description;
-	private String result;
-	private String id;
-	
-	/**
-	 * @return
-	 */
-	public String getId() {
-		return id;
-	}
+public class TestResultId implements Serializable {
+    private String phase;
+    private String command;
+    private String description;
+    private String result;
+    private String id;
+    private ExpectedBlackboardState expectedState;
+    private ActualBlackboardState actualState;
 
-	/**
-	 * @param id
-	 */
-	public void setId(String id) {
-		this.id = id;
-	}
+    /**
+     * @return
+     */
+    public String getId() {
+        return id;
+    }
 
-	/**
-	 * @return Returns the command.
-	 */
-	public String getCommand() {
-		return command;
-	}
+    /**
+     * @param id
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	/**
-	 * @param command The command to set.
-	 */
-	public void setCommand(String command) {
-		this.command = command;
-	}
+    /**
+     * @return Returns the command.
+     */
+    public String getCommand() {
+        return command;
+    }
 
-	/**
-	 * @return Returns the description.
-	 */
-	public String getDescription() {
-		return description;
-	}
+    /**
+             * @return Returns the actualState.
+             */
+    public ActualBlackboardState getActualState() {
+        return actualState;
+    }
 
-	/**
-	 * @param description The description to set.
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    /**
+     * @param actualState The actualState to set.
+     */
+    public void setActualState(ActualBlackboardState actualState) {
+        this.actualState = actualState;
+    }
 
-	/**
-	 * @return Returns the phase.
-	 */
-	public String getPhase() {
-		return phase;
-	}
+    /**
+     * @return Returns the expectedState.
+     */
+    public ExpectedBlackboardState getExpectedState() {
+        return expectedState;
+    }
 
-	/**
-	 * @param phase The phase to set.
-	 */
-	public void setPhase(String phase) {
-		this.phase = phase;
-	}
+    /**
+     * @param expectedState The expectedState to set.
+     */
+    public void setExpectedState(ExpectedBlackboardState expectedState) {
+        this.expectedState = expectedState;
+    }
 
-	/**
-	 * @return Returns the result.
-	 */
-	public String getResult() {
-		return result;
-	}
+    /**
+     * @param command The command to set.
+     */
+    public void setCommand(String command) {
+        this.command = command;
+    }
 
-	/**
-	 * @param result The result to set.
-	 */
-	public void setResult(String result) {
-		this.result = result;
-	}
+    /**
+     * @return Returns the description.
+     */
+    public String getDescription() {
+        return description;
+    }
 
+    /**
+     * @param description The description to set.
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * @return Returns the phase.
+     */
+    public String getPhase() {
+        return phase;
+    }
+
+    /**
+     * @param phase The phase to set.
+     */
+    public void setPhase(String phase) {
+        this.phase = phase;
+    }
+
+    /**
+     * @return Returns the result.
+     */
+    public String getResult() {
+        return result;
+    }
+
+    /**
+     * @param result The result to set.
+     */
+    public void setResult(String result) {
+        this.result = result;
+    }
 }

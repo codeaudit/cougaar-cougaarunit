@@ -53,4 +53,6 @@ public class TestResult implements Serializable {
 		this.name = name;
 	}
 
+	
+
 }
