@@ -19,6 +19,6 @@ Changes from version 1.1
  build.xml: The ant build file.
  configs: Contains the configuration files used by cougaar unit.
  docs: Contains documentation and tutorials.
- 
+ build/jars: Contains the cougaar unit jar file.
  
  More comprehensive documentation for version 1.1 is avialable here (http://cougaar.org/project/showfiles.php?group_id=12)
