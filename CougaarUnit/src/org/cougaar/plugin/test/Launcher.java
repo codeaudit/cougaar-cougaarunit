@@ -34,7 +34,7 @@ public class Launcher {
   public static final int OUTPUT_STYLE_TEXT = 0;
   public static final int OUTPUT_STYLE_XML = 1;
   private static final String[] OUTPUT_STYLES = {"text", "xml"};
-  private int outputStyle = OUTPUT_STYLE_TEXT;
+  private int outputStyle = OUTPUT_STYLE_XML;
 
   private String testJarFile="";
 
