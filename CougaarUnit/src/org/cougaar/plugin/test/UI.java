@@ -589,6 +589,22 @@ public class UI extends JFrame {
     catch (Exception e) {}
   }
 
+  private void checkClassFile(File file) {
+    try {
+      ClassParser cp = new ClassParser(file.getAbsolutePath());
+      JavaClass jc = cp.parse();
+      if (Repository.instanceOf(jc, "org.cougaar.plugin.test.PluginTestCase")) {
+        testCaseModel.addElement(jc.getClassName());
+      }
+      else if (Repository.instanceOf(jc,"org.cougaar.plugin.test.PluginTestSuite")) {
+        testSuiteModel.addElement(jc.getClassName());
+      }
+    }
+    catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
   /**
    * Handler for the Browse button
    * @param e
@@ -718,6 +734,16 @@ public class UI extends JFrame {
               spd.setNote(jarFiles[i].getName());
               spd.setProgressValue(count++);
               searchJarFile(jarFiles[i]);
+            }
+
+            Vector classFiles = Misc.listFilesRecursively(f, new FileFilter() {
+              public boolean accept(File pathName) {
+                if (pathName.getName().endsWith(".class"))
+                  return true;
+                return false;
+              }});
+            for (Enumeration e=classFiles.elements(); e.hasMoreElements(); ) {
+              checkClassFile((File)e.nextElement());
             }
             spd.close();
           }
