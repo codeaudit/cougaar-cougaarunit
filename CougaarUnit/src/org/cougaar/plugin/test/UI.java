@@ -806,11 +806,21 @@ public class UI extends JFrame {
     MyByteArrayOutputStream baos;
     Launcher launcher = new Launcher();
     launcher.setOutputStyle(Launcher.OUTPUT_STYLE_XML);
+    try {
+      File f = new File((String)jComboBoxDirJar.getSelectedItem());
+      launcher.setTestJarFile(f.getCanonicalPath());
+    }
+    catch (Exception e2){}
     Object[] testSuites = jListTestSuites.getSelectedValues();
     MyClassLoader loader = null;
     try {
       //create a class loader that contains the selected directory or jar file in it's class path
-      loader = MyClassLoader.getInstance(new URL[]{new URL("file", "localhost", (String)jComboBoxDirJar.getSelectedItem())});
+      loader = MyClassLoader.getInstance(new URL[]{new URL("file:"+ (String)jComboBoxDirJar.getSelectedItem())});
+      String cip = Misc.getEnv("COUGAAR_INSTALL_PATH");
+      String cougaarLib = cip+"\\lib";
+      String cougaarSys = cip+"\\sys";
+      loader.addJarsFromDir(cougaarLib);
+      loader.addJarsFromDir(cougaarSys);
     }
     catch (Exception e1) {
       e1.printStackTrace();
@@ -833,6 +843,7 @@ public class UI extends JFrame {
     for (int i=0; i<testCases.length; i++) {
       try {
         baos = new MyByteArrayOutputStream(256);
+        System.out.println("LOADING CLASS: "+ (String)testCases[i]);
         Class clazz = loader.loadClass((String)testCases[i]);
         Thread t = new Thread(new LauncherRunnable("Executing test class", launcher, clazz, baos));
         t.start();
@@ -1171,7 +1182,8 @@ class MyClassLoader extends URLClassLoader {
                               }
       });
       for (int i=0; i<files.length; i++ ) {
-        this.addURL(new URL("file", "localhost", dir+"\\"+files[i]));
+        String path = dir+"\\"+files[i];
+        this.addURL(new URL("file:" + path));
       }
 
     }

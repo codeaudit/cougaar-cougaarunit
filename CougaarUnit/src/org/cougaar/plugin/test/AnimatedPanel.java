@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Random;
+import java.net.URL;
 
 /**
  * <p>Title: AnimatedPanel</p>
@@ -25,6 +26,7 @@ public class AnimatedPanel extends JPanel implements Runnable {
   public final static int ANIMATION_POINTS_2 = 3;
   public final static int ANIMATION_CIRCLES = 4;
   public final static int ANIMATION_FIREWORKS = 5;
+  public final static int ANIMATION_WAIT = 6;
 
   private BorderLayout borderLayout1 = new BorderLayout();
   private Thread myThread;
@@ -88,6 +90,7 @@ public class AnimatedPanel extends JPanel implements Runnable {
       case ANIMATION_POINTS_2: return new PointsAnimation2();
       case ANIMATION_CIRCLES: return new CirclesAnimation();
       case ANIMATION_FIREWORKS: return new FireworksAnimation();
+      case ANIMATION_WAIT: return new StaticWaitAnimation();
       default: return new CirclesAnimation();
     }
   }
@@ -102,6 +105,26 @@ public class AnimatedPanel extends JPanel implements Runnable {
     offScreenImage = new BufferedImage(size.width, size.height, BufferedImage.TYPE_INT_RGB);
     Graphics2D grp = (Graphics2D)offScreenImage.getGraphics();
     getCurrentAnimation().renderTo(grp, this, offScreenImage);
+  }
+
+  class StaticWaitAnimation implements Animation {
+    public void renderTo(Graphics2D grp, JPanel offScreenPanel, Image offScreenImage) {
+      MediaTracker tracker = new MediaTracker(null);
+      URL url = this.getClass().getClassLoader().getResource("images/hrglass.gif");
+      Image image = Toolkit.getDefaultToolkit().getImage(url);
+      tracker.addImage(image, 1);
+      try {
+          tracker.waitForAll(2000);
+      }
+      catch (Exception e) {}
+
+      Dimension d = AnimatedPanel.this.getSize();
+      grp.setPaint(Color.black);
+      grp.fillRect(0,0, d.width, d.height);
+      grp.drawImage(image, 0, 0, offScreenPanel);
+      try {offScreenPanel.getGraphics().drawImage(offScreenImage, 0, 0, offScreenPanel);} catch (Exception e){}
+
+    }
   }
 
   /**
@@ -145,7 +168,6 @@ public class AnimatedPanel extends JPanel implements Runnable {
           theta = 0;
           length = 1;
         }
-
       }
     }
   }
@@ -324,6 +346,7 @@ public class AnimatedPanel extends JPanel implements Runnable {
    * @param args
    */
   public static void main(String[] args) {
+    System.out.println("*************** PROPS: \n"+System.getProperties());
     JFrame f = new JFrame("Test");
     f.pack();
     f.setSize(300,200);

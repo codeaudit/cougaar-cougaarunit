@@ -36,6 +36,8 @@ public class Launcher {
   private static final String[] OUTPUT_STYLES = {"text", "xml"};
   private int outputStyle = OUTPUT_STYLE_TEXT;
 
+  private String testJarFile="";
+
   private static String RUN_BAT_TEXT = "@echo OFF\n"+
                                        "if \"%COUGAAR_INSTALL_PATH%\"==\"\" goto AIP_ERROR\n" +
                                        "if \"%1\"==\"\" goto ARG_ERROR\n"+
@@ -163,7 +165,7 @@ public class Launcher {
                       "if \"%COUGAAR_INSTALL_PATH%\"==\"\" goto AIP_ERROR\n" +
                       "if \"%1\"==\"\" goto ARG_ERROR\n"+
                       "set LIBPATHS=%COUGAAR_INSTALL_PATH%\\lib\\bootstrap.jar\n"+
-                      "set MYPROPERTIES= -Dorg.cougaar.class.path=%COUGAAR_INSTALL_PATH%\\lib\\CougaarUnit.jar "+
+                      "set MYPROPERTIES= -Dorg.cougaar.class.path=\""+testJarFile+"\" "+
                       "-Dorg.cougaar.system.path=%COUGAAR_INSTALL_PATH%\\sys "+
                       "-Dorg.cougaar.install.path=%COUGAAR_INSTALL_PATH% "+
                       "-Dorg.cougaar.core.servlet.enable=true "+
@@ -198,7 +200,7 @@ public class Launcher {
                       "exit 2\n"+
                       "fi\n"+
                       "LIBPATHS=$COUGAAR_INSTALL_PATH/lib/bootstrap.jar\n"+
-                      "MYPROPERTIES=\"-Dorg.cougaar.class.path=$COUGAAR_INSTALL_PATH/lib/CougaarUnit.jar "+
+                      "MYPROPERTIES=\"-Dorg.cougaar.class.path=\""+testJarFile+"\" "+
                       "-Dorg.cougaar.system.path=$COUGAAR_INSTALL_PATH/sys "+
                       "-Dorg.cougaar.install.path=$COUGAAR_INSTALL_PATH "+
                       "-Dorg.cougaar.core.servlet.enable=true "+
@@ -283,5 +285,9 @@ public class Launcher {
     if (i < OUTPUT_STYLES.length) {
       outputStyle = i;
     }
+  }
+
+  public void setTestJarFile(String path) {
+    this.testJarFile = path;
   }
 }
