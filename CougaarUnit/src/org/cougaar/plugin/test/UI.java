@@ -87,6 +87,11 @@ public class UI extends JFrame {
 
   private final Cursor CURSOR_WAIT = new Cursor(Cursor.WAIT_CURSOR);
   private final Cursor CURSOR_DEFAULT = new Cursor(Cursor.DEFAULT_CURSOR);
+  private JMenuBar jMenuBar1 = new JMenuBar();
+  private JMenu jMenu1 = new JMenu();
+  private JMenuItem jMenuItem1 = new JMenuItem();
+  private JMenu jMenu2 = new JMenu();
+  private JMenuItem jMenuItem2 = new JMenuItem();
 
   class OutputTableModel extends AbstractTableModel {
     static final String COLUMN_TEST_NAME = "TEST NAME";
@@ -168,6 +173,7 @@ public class UI extends JFrame {
   }
 
   private void jbInit() throws Exception {
+    this.setJMenuBar(jMenuBar1);
     border1 = BorderFactory.createEtchedBorder(Color.white,new Color(178, 178, 178));
     titledBorder1 = new TitledBorder(border1,"Test Suites");
     border2 = BorderFactory.createEtchedBorder(Color.white,new Color(165, 163, 151));
@@ -237,6 +243,17 @@ public class UI extends JFrame {
     jScrollPaneTestCases.setBorder(titledBorder3);
     jScrollPaneTestCases.setPreferredSize(new Dimension(268, 230));
     jTextPaneOutput.setEditable(false);
+    jListTestCases.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    jListTestSuites.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    jMenu1.setText("File");
+    jMenuItem1.setText("Exit");
+    jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        jMenuItem1_actionPerformed(e);
+      }
+    });
+    jMenu2.setText("Help");
+    jMenuItem2.setText("About");
     jPanelDirJar.add(jLabelSelectDir, null);
     this.getContentPane().add(jLabel1,  BorderLayout.NORTH);
     this.getContentPane().add(jPanel1, BorderLayout.CENTER);
@@ -260,10 +277,19 @@ public class UI extends JFrame {
     jTabbedPane1.add(jScrollPaneOutput,  "Output");
     jScrollPaneOutput.getViewport().add(jTextPaneOutput, null);
     jScrollPaneResults.getViewport().add(jTableResults, null);
+    jMenuBar1.add(jMenu1);
+    jMenuBar1.add(jMenu2);
+    jMenu1.add(jMenuItem1);
+    jMenu2.add(jMenuItem2);
     jSplitPane1.setDividerLocation(200);
     jSplitPaneTests.setDividerLocation(250);
     jTabbedPane1.setSelectedComponent(jScrollPaneResults);
+
   }
+
+
+
+
   public static void main(String[] args) {
     UI ui= new UI();
     ui.pack();
@@ -462,7 +488,6 @@ public class UI extends JFrame {
     public void run() {
       try {
         RunDialog rd = new RunDialog();
-        rd.setSize(300,200);
         rd.setTitle(title);
         rd.setMessage(clazz.getName());
         rd.show();
@@ -482,5 +507,9 @@ public class UI extends JFrame {
         e.printStackTrace();
       }
     }
+  }
+
+  void jMenuItem1_actionPerformed(ActionEvent e) {
+    System.exit(0);
   }
 }
