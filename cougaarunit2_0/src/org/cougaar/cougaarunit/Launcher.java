@@ -28,19 +28,19 @@ import java.util.Vector;
  * <p>
  * Title: Launcher
  * </p>
- *
+ * 
  * <p>
  * Description: Launches the Cougaar plugin test environment
  * </p>
- *
+ * 
  * <p>
  * Copyright: Copyright (c) 2002
  * </p>
- *
+ * 
  * <p>
  * Company: InfoEther, LLC
  * </p>
- *
+ * 
  * @author David Craine
  * @version 1.0
  */
@@ -68,9 +68,9 @@ public class Launcher {
     }
 
     /**
-     * Here is where we launch the cougaar environment once the node and
-     * agent ini files have been configured.  This method presumes that
-     */
+	 * Here is where we launch the cougaar environment once the node and agent
+	 * ini files have been configured. This method presumes that
+	 */
     private int launchCougaar(OutputStream os) throws Exception {
         int retCode = TEST_FAIL_CODE;
 
@@ -85,7 +85,8 @@ public class Launcher {
         Process p = Runtime.getRuntime().exec(execStr);
         System.out.println("Process:  " + p);
 
-        //BufferedWriter ps = new BufferedWriter(new OutputStreamWriter(p.getOutputStream()));
+        //BufferedWriter ps = new BufferedWriter(new
+		// OutputStreamWriter(p.getOutputStream()));
         BufferedReader is = new BufferedReader(new InputStreamReader(
                     p.getInputStream()));
         BufferedReader es = new BufferedReader(new InputStreamReader(
@@ -219,36 +220,15 @@ public class Launcher {
     public static void main(String[] args) {
         if (args.length > 0) {
             try {
-                try {
-                    if ((System.getProperty(SHOW_OUTPUT) != null) &&
-                            System.getProperty(SHOW_OUTPUT).toUpperCase()
+                
+                if ((System.getProperty(SHOW_OUTPUT) != null) &&
+                           System.getProperty(SHOW_OUTPUT).toUpperCase()
                                       .equals("TRUE")) {
                         writeToOutput = true;
                     }
 
-                    Properties p = new Properties();
-
-                    if (System.getProperty("org.cougaarunit.configfile") != null) {
-                        p.load(new FileInputStream(
-                                new File(System.getProperty(
-                                        "org.cougaarunit.configfile"))));
-                    } else {
-                        p.load(new FileInputStream(new File(COUGAAR_UNIT_PROPS)));
-                    }
-
-                    Enumeration keys = p.keys();
-
-                    while (keys.hasMoreElements()) {
-                        String key = (String) keys.nextElement();
-                        String value = p.getProperty(key);
-                        System.setProperty(key, value);
-                    }
-                } catch (Exception e) {
-                    System.err.println("Error getting properties");
-                    e.printStackTrace();
-                    System.exit(1);
-                }
-
+                    
+                
                 //get class name
                 Class _class = Class.forName(args[0]);
                 int testType = getTestType(_class.getSuperclass());
@@ -312,11 +292,12 @@ public class Launcher {
     }
 
     /**
-     * Create the Society XML file and return the Command line to launch the
-     * Cougaar Society
-     * @return Command line to launch cougaar
-     * @throws Exception
-     */
+	 * Create the Society XML file and return the Command line to launch the
+	 * Cougaar Society
+	 * 
+	 * @return Command line to launch cougaar
+	 * @throws Exception
+	 */
     private String createTestSociety() throws Exception {
         PluginTestCase pluginTestCase = (PluginTestCase) this.testClass.newInstance();
         Society testSociety = SocietyBuilder.buildSociety(pluginTestCase);
@@ -367,12 +348,12 @@ public class Launcher {
     }
 
     /**
-     * Get the type of test (test suite or test case)
-     *
-     * @param _class
-     *
-     * @return
-     */
+	 * Get the type of test (test suite or test case)
+	 * 
+	 * @param _class
+	 * 
+	 * @return
+	 */
     private static int getTestType(Class _class) {
         if (_class.equals(PluginTestCase.class)) {
             return TEST_CASE_TYPE;
@@ -388,15 +369,16 @@ public class Launcher {
     }
 
     /**
-     * @return Returns the testClassName.
-     */
+	 * @return Returns the testClassName.
+	 */
     public Class getTestClass() {
         return testClass;
     }
 
     /**
-     * @param testClassName The testClassName to set.
-     */
+	 * @param testClassName
+	 *            The testClassName to set.
+	 */
     public void setTestClass(Class testClassName) {
         this.testClass = testClassName;
     }

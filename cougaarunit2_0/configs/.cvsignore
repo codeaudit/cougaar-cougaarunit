@@ -1,3 +1,6 @@
 log.properties
 
 org.cougaar.cougaarunit.SamplePluginTest.xml
+test_results
+org.cougaar.cougaarunit.SamplePluginTest.log
+org.cougaar.cougaarunit.SamplePluginTest2.log

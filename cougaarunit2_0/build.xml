@@ -217,8 +217,9 @@
     <target name="cunit-tests" depends="compile" description="Run CUnit Tests">
     	<cunit testClassname="org.cougaar.cougaarunit.Launcher"
     		   dir="./configs" >
-    		<arg value="org.cougaar.cougaarunit.SamplePluginTest"/>  
+    		<arg value="org.cougaar.cougaarunit.SampleTestSuite"/>  
     		<jvmarg value="-Dorg.cougaar.install.path=c:/cougaar/10_4_6"/>
+    		<jvmarg value="-Dorg.cougaar.cougaarunit.showoutput=true"/>
    	    	<classpath refid="cunit.classpath"/>   	    	
     	</cunit>    	
     </target>
