@@ -1,11 +1,3 @@
-/*
- * <copyright>
- *  Copyright 2000-2003 CougaarSoftware
- *  All Rights Reserved
- * </copyright>
- */
-
-
 package org.cougaar.cougaarunit;
 
 
@@ -17,6 +9,7 @@ import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Vector;
@@ -32,8 +25,10 @@ import org.cougaar.cougaarunit.vo.TestResult;
 import org.cougaar.cougaarunit.vo.TestResultId;
 import org.cougaar.cougaarunit.vo.TestResultSummary;
 import org.cougaar.cougaarunit.vo.TestSuiteResult;
+
 import org.exolab.castor.mapping.Mapping;
 import org.exolab.castor.xml.Unmarshaller;
+
 import org.xml.sax.InputSource;
 
 
@@ -59,8 +54,7 @@ import org.xml.sax.InputSource;
  */
 public class Launcher {
     private static final int TEST_SUITE_TYPE = 1;
-    private static final int TEST_CASE_TYPE = 2;
-    private static final String COUGAAR_UNIT_PROPS = "cougaar_unit.properties";
+    private static final int TEST_CASE_TYPE = 2;   
     private static final String SHOW_OUTPUT = "org.cougaar.cougaarunit.showoutput";
 
     //Result Codes
@@ -212,35 +206,37 @@ public class Launcher {
     private void createLogProps() throws Exception {
         File logPropsFile;
         logPropsFile = new File("log.properties");
-        logPropsFile.createNewFile();
+        if (!logPropsFile.exists()) {
+            logPropsFile.createNewFile();
 
-        FileWriter fw = new FileWriter(logPropsFile);
-        fw.write(
-            "# Set the root category priority to WARN and add a stdout and rolling appender.\n"
-            + "log4j.rootCategory=ERROR, stdout, rolling\n"
-            + "log4j.category.org.cougaar.cougaarunit=INFO\n"
-            + "# -- Configure all the Appenders\n"
-            + "#  ------ Configure the STDOUT Appender\n"
-            + "log4j.appender.stdout=org.apache.log4j.ConsoleAppender\n"
-            + "log4j.appender.stdout.Target=System.out\n"
-            + "# Define the STDOUT pattern to:  date level [thread] - message\n"
-            + "log4j.appender.stdout.layout=org.apache.log4j.PatternLayout\n"
-            + "log4j.appender.stdout.layout.ConversionPattern=%d{ABSOLUTE} %-5p [%c{1}] - %m%n\n"
-            + "#  ------ End STDOUT Appender\n"
-            + "# ----- Configure the Rolling Log File\n" + "#\n"
-            + "# Configure a Rolling Log File Appender\n"
-            + "log4j.appender.rolling=org.apache.log4j.RollingFileAppender\n"
-            + "log4j.appender.rolling.File=" + this.testClass.getName()
-            + ".log\n" + "# Define the logfile size\n"
-            + "log4j.appender.rolling.MaxFileSize=1024KB\n"
-            + "# Keep a backup file\n"
-            + "log4j.appender.rolling.MaxBackupIndex=1\n"
-            + "# Define the Rolling pattern to:  date level [thread] - message\n"
-            + "log4j.appender.rolling.layout=org.apache.log4j.PatternLayout\n"
-            + "log4j.appender.rolling.layout.ConversionPattern=%d{ABSOLUTE} %-5p [%C{1}] - %m%n\n"
-            + "#\n" + "# ---- End Rolling Log File");
+            FileWriter fw = new FileWriter(logPropsFile);
+            fw.write(
+                "# Set the root category priority to WARN and add a stdout and rolling appender.\n"
+                + "log4j.rootCategory=ERROR, stdout, rolling\n"
+                + "log4j.category.org.cougaar.cougaarunit=INFO\n"
+                + "# -- Configure all the Appenders\n"
+                + "#  ------ Configure the STDOUT Appender\n"
+                + "log4j.appender.stdout=org.apache.log4j.ConsoleAppender\n"
+                + "log4j.appender.stdout.Target=System.out\n"
+                + "# Define the STDOUT pattern to:  date level [thread] - message\n"
+                + "log4j.appender.stdout.layout=org.apache.log4j.PatternLayout\n"
+                + "log4j.appender.stdout.layout.ConversionPattern=%d{ABSOLUTE} %-5p [%c{1}] - %m%n\n"
+                + "#  ------ End STDOUT Appender\n"
+                + "# ----- Configure the Rolling Log File\n" + "#\n"
+                + "# Configure a Rolling Log File Appender\n"
+                + "log4j.appender.rolling=org.apache.log4j.RollingFileAppender\n"
+                + "log4j.appender.rolling.File=" + this.testClass.getName()
+                + ".log\n" + "# Define the logfile size\n"
+                + "log4j.appender.rolling.MaxFileSize=1024KB\n"
+                + "# Keep a backup file\n"
+                + "log4j.appender.rolling.MaxBackupIndex=1\n"
+                + "# Define the Rolling pattern to:  date level [thread] - message\n"
+                + "log4j.appender.rolling.layout=org.apache.log4j.PatternLayout\n"
+                + "log4j.appender.rolling.layout.ConversionPattern=%d{ABSOLUTE} %-5p [%C{1}] - %m%n\n"
+                + "#\n" + "# ---- End Rolling Log File");
 
-        fw.close();
+            fw.close();
+        }
     }
 
 
@@ -263,7 +259,7 @@ public class Launcher {
                 int testType = getTestType(_class.getSuperclass());
 
                 if (testType < 0) {
-                    System.err.println("Unregonized test type");
+                    System.err.println("Unrecgonized test type");
                 } else if (testType == TEST_CASE_TYPE) {
                     Launcher launcher = new Launcher(_class);
                     launcher.createLogProps();
@@ -283,9 +279,9 @@ public class Launcher {
                     PluginTestSuite testSuite = (PluginTestSuite) _class
                         .newInstance();
                     Class[] _classes = testSuite.getTestClasses();
-					int failures = 0;
-					float successrate=0f;
-					float numberOfTests=0;
+                    int failures = 0;
+                    float successrate = 0f;
+                    float numberOfTests = 0;
                     if ((_classes != null) && (_classes.length > 0)) {
                         boolean pass = true;
                         Vector tests = new Vector();
@@ -297,7 +293,7 @@ public class Launcher {
 
                             if (returnCode != TEST_PASS_CODE) {
                                 pass = false;
-                                
+
                             }
 
                             //get test result
@@ -322,18 +318,22 @@ public class Launcher {
                                     TestResultSummary summary = new TestResultSummary();
                                     summary.setName(_classes[i].getName());
                                     summary.setIdList(testResult.getIdList());
-                                    if(testResult.getIdList()!=null){
-                                    	Enumeration enumeration = testResult.getIdList().elements();
-                                    	while(enumeration.hasMoreElements()){
-                                    		if(!(((TestResultId)enumeration.nextElement()).getResult().equals("pass"))){
-                                    			failures++;
-                                    		}
-                                    		numberOfTests++;
-                                    	}
-                                    	
+                                    if (testResult.getIdList() != null) {
+                                        Enumeration enumeration = testResult.getIdList()
+                                                                            .elements();
+                                        while (enumeration.hasMoreElements()) {
+                                            if (!(((TestResultId) enumeration
+                                                   .nextElement()).getResult()
+                                                   .equals("pass"))) {
+                                                failures++;
+                                            }
+
+                                            numberOfTests++;
+                                        }
                                     }
+
                                     tests.add(summary);
-                                    
+
                                 } catch (Exception e) {
                                     System.err.println(
                                         "Error getting test results");
@@ -346,22 +346,28 @@ public class Launcher {
                         TestSuiteResult testSuiteResult = new TestSuiteResult();
                         testSuiteResult.setName(args[0]);
                         testSuiteResult.setTestList(tests);
-                        successrate = (numberOfTests-failures)/numberOfTests;
+                        successrate = (numberOfTests - failures) / numberOfTests;
                         testSuiteResult.setFailures("" + failures);
-                        testSuiteResult.setSuccessrate("" +successrate);
-                        testSuiteResult.setTests(""+(int)numberOfTests);
+                        testSuiteResult.setSuccessrate("" + successrate);
+                        testSuiteResult.setTests("" + (int) numberOfTests);
                         testSuiteResult.saveResult(PluginTestCase.RESULTS_DIRECTORY);
-                        try{
-							TransformerFactory tFactory = TransformerFactory.newInstance();
-							Transformer transformer = tFactory.newTransformer(new StreamSource("testsuite.xsl"));
-							File f = new File(PluginTestCase.RESULTS_DIRECTORY+File.separator + testSuiteResult.getName()+".html");
-							FileOutputStream fos = new FileOutputStream(f);
-							transformer.transform(new StreamSource(PluginTestCase.RESULTS_DIRECTORY+File.separator + testSuiteResult.getName()+".xml"), new StreamResult(new OutputStreamWriter(fos)));
-                        }catch(Exception e){
-                        	
+                        try {
+                            TransformerFactory tFactory = TransformerFactory
+                                .newInstance();
+                            Transformer transformer = tFactory.newTransformer(new StreamSource(
+                                        "testsuite.xsl"));
+                            File f = new File(PluginTestCase.RESULTS_DIRECTORY
+                                    + File.separator
+                                    + testSuiteResult.getName() + ".html");
+                            FileOutputStream fos = new FileOutputStream(f);
+                            transformer.transform(new StreamSource(PluginTestCase.RESULTS_DIRECTORY
+                                    + File.separator
+                                    + testSuiteResult.getName() + ".xml"),
+                                new StreamResult(new OutputStreamWriter(fos)));
+                        } catch (Exception e) {
                         }
-                        
-                        
+
+
                         if (pass) {
                             System.out.println("All tests in suite passed");
                             System.exit(0);
