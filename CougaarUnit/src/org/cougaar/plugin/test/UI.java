@@ -89,6 +89,11 @@ public class UI extends JFrame {
         this.getContentPane().setLayout(borderLayout1);
         jButtonRun.setPreferredSize(new Dimension(73, 27));
         jButtonRun.setText("Run");
+        jButtonRun.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                jButtonRun_actionPerformed(e);
+            }
+        });
         jButtonCancel.setText("Cancel");
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -254,5 +259,10 @@ public class UI extends JFrame {
             }
         };
         t.start();
+    }
+
+    void jButtonRun_actionPerformed(ActionEvent e) {
+        Object[] testSuites = jListTestSuites.getSelectedValues();
+
     }
 }

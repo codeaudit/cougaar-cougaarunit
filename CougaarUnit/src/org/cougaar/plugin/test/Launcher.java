@@ -14,6 +14,7 @@ import org.cougaar.bootstrap.XURLClassLoader;
 import java.io.PrintStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 
 /**
  *
@@ -114,10 +115,12 @@ public class Launcher {
      * Here is where we launch the cougaar environment once the node and
      * agent ini files have been configured.  This method presumes that
      */
-    private static void launchCougaar() throws Exception {
+    private static void launchCougaar(OutputStream os) throws Exception {
         File shellFile = null;
         String shellFileText = null;
         String execStr = null;
+
+        if (os == null) os = System.out;
 
         if (currentOS == PLATFORM_WINDOWS) {  //is this a Windows environment?
             shellFile = new File("Run.bat");
@@ -146,7 +149,7 @@ public class Launcher {
         BufferedReader is= new BufferedReader(new InputStreamReader(p.getInputStream()));
         String line;
         while ((line = is.readLine()) != null)
-            System.out.println(line);
+           os.write(line.getBytes());
         //p.waitFor();   //wait for this process to terminate
     }
 
@@ -161,7 +164,7 @@ public class Launcher {
                     for (int i=0; i<testClasses.length; i++) {
                         try {
                             if (testClasses[i].getSuperclass().equals(PluginTestCase.class)) {
-                                runTestCase((PluginTestCase)testClasses[i].newInstance());
+                                runTestCase((PluginTestCase)testClasses[i].newInstance(), System.out);
                             }
                             else {
                                 System.out.println("Invalid Test Case object found in Test Suite.");
@@ -173,7 +176,7 @@ public class Launcher {
                     }
                 }
                 else if (clazz.getSuperclass().equals(PluginTestCase.class)) {
-                    runTestCase((PluginTestCase)clazz.newInstance());
+                    runTestCase((PluginTestCase)clazz.newInstance(), System.out);
                 }
                 else {
                     System.out.println("Unknown test class type: " + clazz.getName());
@@ -186,13 +189,13 @@ public class Launcher {
         }
     }
 
-    private static void runTestCase(PluginTestCase tpc) throws Exception {
+    private static void runTestCase(PluginTestCase tpc, OutputStream os) throws Exception {
         String sourcePluginStr = tpc.getPluginClass();
         //now we need to generate the ini files for launching cougaar
         writeNodeIni();
         //now we write the agent ini file
         writeAgentIni(tpc.getClass().getName(), sourcePluginStr);
         //launch Cougaar
-        launchCougaar();
+        launchCougaar(os);
     }
 }

@@ -34,7 +34,6 @@ public class SearchProgressDialog extends JDialog {
         }
     }
 
-
     private void init2() {
         setSize(300,100);
         center();
@@ -62,6 +61,7 @@ public class SearchProgressDialog extends JDialog {
         jLabelHeading.setToolTipText("");
         jLabelHeading.setHorizontalAlignment(SwingConstants.CENTER);
         jLabelHeading.setText("Seach Progress Dialog");
+        this.setResizable(false);
         getContentPane().add(panel1);
         panel1.add(jPanel1, BorderLayout.CENTER);
         jPanel1.add(jLabelNote, null);
