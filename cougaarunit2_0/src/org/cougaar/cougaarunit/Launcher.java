@@ -41,10 +41,10 @@ public class Launcher {
     public static final int OUTPUT_STYLE_TEXT = 0;
     /** DOCUMENT ME! */
     public static final int OUTPUT_STYLE_XML = 1;
-	private String testClassName;
+	private Class testClass;
     
-    public Launcher (String testClassName) {
-    	this.testClassName = testClassName;
+    public Launcher (Class testClassName) {
+    	this.testClass = testClassName;
     }
    
 	/**
@@ -55,7 +55,7 @@ public class Launcher {
 		int retCode = 0;
 		if (os == null) os = System.out;
 
-		String execStr = createTestSociety(testClassName);
+		String execStr = createTestSociety();
 
 		System.out.println("execing: " + execStr);
 		Process p = Runtime.getRuntime().exec(execStr);
@@ -102,11 +102,11 @@ public class Launcher {
 
     public static void main(String[] args) {
         if (args.length > 0) {
-            Launcher launcher = new Launcher(args[0]);
             try {
+            	
                 //get class name
-                Class _class = Class.forName(launcher.getTestClassName());
-             
+                Class _class = Class.forName(args[0]);
+				Launcher launcher = new Launcher(_class);
                 int testType = getTestType(_class.getSuperclass());
                 
                 if (testType < 0) {
@@ -125,8 +125,9 @@ public class Launcher {
     }
 
 
-    private String createTestSociety(String testName) {
-        Society testSociety = SocietyBuilder.buildSociety(testName);
+    private String createTestSociety() throws Exception{
+    	
+        Society testSociety = SocietyBuilder.buildSociety((PluginTestCase)this.testClass.newInstance());
         Vector v = testSociety.getNodeList();
         Iterator i = v.iterator();
 
@@ -191,13 +192,13 @@ public class Launcher {
 	/**
 	 * @return Returns the testClassName.
 	 */
-	public String getTestClassName() {
-		return testClassName;
+	public Class getTestClass() {
+		return testClass;
 	}
 	/**
 	 * @param testClassName The testClassName to set.
 	 */
-	public void setTestClassName(String testClassName) {
-		this.testClassName = testClassName;
+	public void setTestClass(Class testClassName) {
+		this.testClass = testClassName;
 	}
 }
