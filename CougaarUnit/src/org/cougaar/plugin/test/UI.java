@@ -16,6 +16,19 @@ import javax.swing.ProgressMonitor;
 import java.io.PrintStream;
 import java.io.OutputStream;
 import java.io.IOException;
+import java.io.ByteArrayOutputStream;
+import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.AbstractTableModel;
+import org.apache.xerces.parsers.DOMParser;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import java.io.StringReader;
+import org.xml.sax.InputSource;
+import java.util.Vector;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import org.w3c.dom.Element;
 
 /**
  * <p>Title: </p>
@@ -51,7 +64,6 @@ public class UI extends JFrame {
     private TitledBorder titledBorder3;
     private Border border4;
     private TitledBorder titledBorder4;
-    private JButton jButtonSearch = new JButton();
   private JSplitPane jSplitPane1 = new JSplitPane();
   private JSplitPane jSplitPaneTests = new JSplitPane();
   private JList jListTestCases = new JList();
@@ -61,7 +73,45 @@ public class UI extends JFrame {
   private JScrollPane jScrollPaneTestSuites = new JScrollPane();
   private JScrollPane jScrollPaneTestCases = new JScrollPane();
   private JScrollPane jScrollPaneOutput = new JScrollPane();
-  private JTextArea jTextAreaOutput = new JTextArea();
+  OutputTableModel outputTableModel = new OutputTableModel();
+  private JTable jTableOutput = new JTable(outputTableModel);
+  private TitledBorder titledBorder5;
+  private JButton jButtonSearch = new JButton();
+
+  class OutputTableModel extends AbstractTableModel {
+    static final String COLUMN_TEST_NAME = "TEST NAME";
+    static final String COLUMN_ID = "ID";
+    static final String COLUMN_TEST_PHASE = "TEST PHASE";
+    static final String COLUMN_COMMAND = "COMMAND";
+    static final String COLUMN_DESCRIPTION = "DESCRIPTION";
+    static final String COLUMN_RESULT = "RESULT";
+
+    protected final String[] columnNames = {COLUMN_TEST_NAME, COLUMN_ID, COLUMN_TEST_PHASE, COLUMN_COMMAND, COLUMN_DESCRIPTION, COLUMN_RESULT};
+    Vector data = new Vector();
+
+    public int getColumnCount() {
+      return columnNames.length;
+    }
+
+    public int getRowCount() {
+      return data.size();
+    }
+
+    public String getColumnName(int col) {
+      return columnNames[col];
+    }
+
+    public Object getValueAt(int row, int col) {
+      if (data.size() > 0)
+        return ((Object[])data.elementAt(row))[col];
+      return null;
+    }
+
+    public void addRow(Object[] row) {
+      data.add(row);
+    }
+  }
+
 
     public UI() {
         try {
@@ -76,6 +126,13 @@ public class UI extends JFrame {
     private void init2() {
         jListTestCases.setModel(testCaseModel);
         jListTestSuites.setModel(testSuiteModel);
+        jTableOutput.getColumn(OutputTableModel.COLUMN_TEST_NAME).setPreferredWidth(100);
+        jTableOutput.getColumn(OutputTableModel.COLUMN_ID).setPreferredWidth(5);
+        jTableOutput.getColumn(OutputTableModel.COLUMN_TEST_PHASE).setPreferredWidth(75);
+        jTableOutput.getColumn(OutputTableModel.COLUMN_COMMAND).setPreferredWidth(80);
+        jTableOutput.getColumn(OutputTableModel.COLUMN_DESCRIPTION).setPreferredWidth(100);
+        jTableOutput.getColumn(OutputTableModel.COLUMN_RESULT).setPreferredWidth(10);
+        jTableOutput.updateUI();
     }
 
     private void jbInit() throws Exception {
@@ -87,18 +144,22 @@ public class UI extends JFrame {
         titledBorder3 = new TitledBorder(border3,"Test Cases");
         border4 = BorderFactory.createEtchedBorder(Color.white,new Color(165, 163, 151));
         titledBorder4 = new TitledBorder(border4,"Output");
-        jLabel1.setFont(new java.awt.Font("Dialog", 0, 24));
+        titledBorder5 = new TitledBorder("");
+    jLabel1.setFont(new java.awt.Font("Dialog", 0, 24));
         jLabel1.setHorizontalAlignment(SwingConstants.CENTER);
         jLabel1.setText("Cougaar Unit");
         this.getContentPane().setLayout(borderLayout1);
-        jButtonRun.setPreferredSize(new Dimension(73, 27));
+        jButtonRun.setBorder(BorderFactory.createRaisedBevelBorder());
+    jButtonRun.setPreferredSize(new Dimension(73, 27));
         jButtonRun.setText("Run");
         jButtonRun.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 jButtonRun_actionPerformed(e);
             }
         });
-        jButtonCancel.setText("Cancel");
+        jButtonCancel.setBorder(BorderFactory.createRaisedBevelBorder());
+    jButtonCancel.setPreferredSize(new Dimension(73, 27));
+    jButtonCancel.setText("Cancel");
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 jButtonCancel_actionPerformed(e);
@@ -107,7 +168,9 @@ public class UI extends JFrame {
         jPanel1.setLayout(borderLayout2);
         jPanel3.setLayout(borderLayout3);
         jTextFieldDirJar.setPreferredSize(new Dimension(230, 21));
-        jButtonBrowse.setText("Browse");
+        jButtonBrowse.setBorder(BorderFactory.createRaisedBevelBorder());
+    jButtonBrowse.setPreferredSize(new Dimension(73, 27));
+    jButtonBrowse.setText("Browse");
         jButtonBrowse.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 jButtonBrowse_actionPerformed(e);
@@ -122,12 +185,6 @@ public class UI extends JFrame {
                 this_windowClosing(e);
             }
         });
-        jButtonSearch.setText("Search");
-        jButtonSearch.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                jButtonSearch_actionPerformed(e);
-            }
-        });
     jSplitPaneTests.setPreferredSize(new Dimension(543, 230));
     jSplitPaneTests.setContinuousLayout(true);
     jPanelTests.setLayout(borderLayout4);
@@ -138,15 +195,23 @@ public class UI extends JFrame {
     jSplitPane1.setOrientation(JSplitPane.VERTICAL_SPLIT);
     jScrollPaneOutput.setBorder(titledBorder4);
     jScrollPaneOutput.setPreferredSize(new Dimension(70, 125));
-    jTextAreaOutput.setLineWrap(true);
+    jButtonSearch.setBorder(BorderFactory.createRaisedBevelBorder());
+    jButtonSearch.setPreferredSize(new Dimension(73, 27));
+    jButtonSearch.setText("Search");
+    jButtonSearch.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        jButtonSearch_actionPerformed(e);
+      }
+    });
+    jTableOutput.setRowSelectionAllowed(false);
     jPanelDirJar.add(jLabelSelectDir, null);
         this.getContentPane().add(jLabel1,  BorderLayout.NORTH);
         this.getContentPane().add(jPanel1, BorderLayout.CENTER);
         jPanel1.add(jPanel3,  BorderLayout.NORTH);
         jPanel3.add(jPanelDirJar, BorderLayout.CENTER);
         jPanelDirJar.add(jTextFieldDirJar, null);
-        jPanelDirJar.add(jButtonSearch, null);
-        jPanelDirJar.add(jButtonBrowse, null);
+    jPanelDirJar.add(jButtonSearch, null);
+    jPanelDirJar.add(jButtonBrowse, null);
         this.getContentPane().add(jPanel2, BorderLayout.SOUTH);
         jPanel2.add(jButtonCancel, null);
         jPanel2.add(jButtonRun, null);
@@ -156,7 +221,7 @@ public class UI extends JFrame {
     jSplitPaneTests.add(jScrollPaneTestSuites, JSplitPane.TOP);
     jSplitPaneTests.add(jScrollPaneTestCases, JSplitPane.BOTTOM);
     jSplitPane1.add(jScrollPaneOutput, JSplitPane.BOTTOM);
-    jScrollPaneOutput.getViewport().add(jTextAreaOutput, null);
+    jScrollPaneOutput.getViewport().add(jTableOutput, null);
     jScrollPaneTestCases.getViewport().add(jListTestCases, null);
     jScrollPaneTestSuites.getViewport().add(jListTestSuites, null);
     jSplitPaneTests.setDividerLocation(250);
@@ -164,8 +229,8 @@ public class UI extends JFrame {
     }
     public static void main(String[] args) {
         UI ui= new UI();
-        ui.setSize(600,500);
         ui.pack();
+        ui.setSize(800,600);
         ui.center();
         ui.show();
     }
@@ -269,15 +334,66 @@ public class UI extends JFrame {
         t.start();
     }
 
+    private void processResult(String s) {
+      System.out.println("ORIGINAL STRING: " + s);
+      //find the beginning of the xml output
+      int index = s.indexOf("<?xml");
+      String xmlStr = s.substring(index);
+      xmlStr = xmlStr.substring(0, xmlStr.lastIndexOf("</TEST>")+7);
+      System.out.println("\n\nXML STRING: " + xmlStr);
+      try {
+        InputSource is = new InputSource(new StringReader(xmlStr));
+        DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        Document doc = builder.parse(is);
+
+        //get the test name
+        Element root = doc.getDocumentElement();
+        String testName = root.getAttributes().getNamedItem("Name").getNodeValue();
+        //get the list of test ids
+        NodeList idList = root.getElementsByTagName("ID");
+        for (int i=0; i<idList.getLength(); i++) {
+          Object[] results = new Object[6];
+          results[0] = testName;
+          org.w3c.dom.Node idNode = (org.w3c.dom.Node)idList.item(i);
+          String id = idNode.getAttributes().getNamedItem("Value").getNodeValue();
+          NodeList subNodes = idNode.getChildNodes();
+          results[1] = id;
+          for (int j = 0; j<subNodes.getLength(); j++) {
+            org.w3c.dom.Node n = subNodes.item(j);
+            String nodeName = n.getNodeName();
+            if (nodeName.equals("PHASE"))
+              results[2] = n.getFirstChild().getNodeValue();
+            else if (nodeName.equals("COMMAND"))
+              results[3] = n.getFirstChild().getNodeValue();
+            else if (nodeName.equals("DESCRIPTION"))
+              results[4] = n.getFirstChild().getNodeValue();
+            else if (nodeName.equals("RESULT"))
+              results[5] = n.getFirstChild().getNodeValue();
+
+          }
+          outputTableModel.addRow(results);
+          jTableOutput.updateUI();
+
+        }
+
+
+      }
+      catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+
     void jButtonRun_actionPerformed(ActionEvent e) {
-        MyPrintStream mps = new MyPrintStream(System.out);
+        ByteArrayOutputStream baos;
         Launcher launcher = new Launcher();
         launcher.setOutputStyle(Launcher.OUTPUT_STYLE_XML);
         Object[] testSuites = jListTestSuites.getSelectedValues();
         for (int i=0; i<testSuites.length; i++) {
             try {
-                Class clazz = Class.forName((String)testSuites[i]);
-                try {launcher.runTestSuite((PluginTestSuite)clazz.newInstance(), mps);} catch (Exception e1 ){System.out.println(e);}
+              baos = new ByteArrayOutputStream(256);
+              Class clazz = Class.forName((String)testSuites[i]);
+              try {launcher.runTestSuite((PluginTestSuite)clazz.newInstance(), baos);} catch (Exception e1 ){System.out.println(e);}
+              processResult(baos.toString());
             }
             catch (ClassNotFoundException ex) {
             }
@@ -286,24 +402,17 @@ public class UI extends JFrame {
         Object[] testCases = jListTestCases.getSelectedValues();
         for (int i=0; i<testCases.length; i++) {
             try {
-                Class clazz = Class.forName((String)testCases[i]);
-                try {launcher.runTestCase((PluginTestCase)clazz.newInstance(), mps);} catch (Exception e1 ){System.out.println(e);}
+              baos = new ByteArrayOutputStream(256);
+              Class clazz = Class.forName((String)testCases[i]);
+              try {launcher.runTestCase((PluginTestCase)clazz.newInstance(), baos);} catch (Exception e1 ){System.out.println(e);}
+              processResult(baos.toString());
             }
             catch (ClassNotFoundException ex) {
             }
         }
 
+        //
 
-    }
 
-    class MyPrintStream extends PrintStream {
-        public MyPrintStream(OutputStream os) {
-            super(os);
-        }
-
-        public void write(byte[] bytes) throws IOException {
-          super.write(bytes);
-          jTextAreaOutput.append(new String(bytes));
-        }
     }
 }

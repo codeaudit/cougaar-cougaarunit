@@ -230,7 +230,7 @@ public class Launcher {
     }
   }
 
-  protected void runTestSuite(PluginTestSuite pts, PrintStream ps) throws Exception {
+  protected void runTestSuite(PluginTestSuite pts, OutputStream ps) throws Exception {
     Class[] testClasses = pts.getTestClasses();
     for (int i=0; i<testClasses.length; i++) {
       try {
@@ -248,7 +248,7 @@ public class Launcher {
   }
 
 
-  protected void runTestCase(PluginTestCase tpc, PrintStream ps) throws Exception {
+  protected void runTestCase(PluginTestCase tpc, OutputStream ps) throws Exception {
     String sourcePluginStr = tpc.getPluginClass();
     //now we need to generate the ini files for launching cougaar
     writeNodeIni();

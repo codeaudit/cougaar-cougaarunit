@@ -105,8 +105,9 @@ public class PluginTestResult {
         result.append("<TEST Name=\""+testName+"\">\n");
         for (Enumeration enum = entries.elements(); enum.hasMoreElements(); ) {
             TestResultEntry tre = (TestResultEntry)enum.nextElement();
-            result.append("<ID>"+ String.valueOf(tre.id)+"\n");
+            result.append("<ID Value=\""+ String.valueOf(tre.id)+"\">\n");
             result.append("<PHASE>" + getPhaseAsString(tre.testPhase) + "</PHASE>\n");
+            result.append("<COMMAND>" +getCommandAsString(tre.testCommand)+"</COMMAND>\n");
             result.append("<DESCRIPTION>"+tre.description+"</DESCRIPTION>\n");
             result.append("<RESULT>" + String.valueOf(tre.testResult) + "</RESULT>\n");
             result.append("</ID>\n");
