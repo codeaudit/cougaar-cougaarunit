@@ -11,6 +11,9 @@ import org.cougaar.core.persist.PersistenceNotEnabledException;
 import org.cougaar.core.persist.Persistence;
 import java.util.Vector;
 import java.util.Enumeration;
+import java.io.InputStream;
+import java.io.ObjectOutputStream;
+import java.io.ByteArrayOutputStream;
 
 /**
  * <p>Title: BlackboardServiceCapturingProxy</p>
@@ -37,6 +40,20 @@ public class BlackboardServiceCapturingProxy implements BlackboardService {
         this.requestingClient = requestingClient;
     }
 
+
+    public String getSerializedData() {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        for (Enumeration e = objectStream.elements(); e.hasMoreElements(); ) {
+            try {
+                ObjectOutputStream oos = new ObjectOutputStream(baos);
+                oos.writeObject(e.nextElement());
+            }
+            catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        }
+        return baos.toString();
+    }
 
     /**
      * Proxied method
