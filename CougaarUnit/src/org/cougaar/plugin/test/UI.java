@@ -227,6 +227,7 @@ public class UI extends JFrame {
    */
   public UI() {
     try {
+      this.setupIcons();
       jbInit();
       init2();
     }
@@ -326,6 +327,13 @@ public class UI extends JFrame {
 
     jScrollPaneSourceData.setVisible(false);
     jScrollPaneTimeData.setVisible(true);
+  }
+
+  private void setupIcons() {
+    URL url = getClass().getClassLoader().getResource("images/App.gif");
+    Image icon = Toolkit.getDefaultToolkit().getImage(url);
+    this.setIconImage(icon);
+    this.setTitle("CougaarUnit");
   }
 
   /**
