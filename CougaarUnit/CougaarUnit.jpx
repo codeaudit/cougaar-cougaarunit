@@ -117,28 +117,10 @@
     <property category="archiving" name="executableFiles.3" value=""/>
     <property category="archiving" name="executableFiles.4" value="CougaarUnit2-solaris"/>
     <property category="archiving" name="executableFiles.5" value="CougaarUnit2-mac"/>
-    <property category="archiving" name="extraDeployRoots.1" value="C:images.*"/>
-    <property category="archiving" name="extraDeployRoots.10" value="C:org.cougaar.plugin.test.Launcher"/>
-    <property category="archiving" name="extraDeployRoots.11" value="C:org.cougaar.plugin.test.AnimatedPanel"/>
-    <property category="archiving" name="extraDeployRoots.12" value="C:org.cougaar.plugin.test.UI"/>
-    <property category="archiving" name="extraDeployRoots.13" value="C:org.cougaar.plugin.test.ClassStringRenderer"/>
-    <property category="archiving" name="extraDeployRoots.14" value="C:org.cougaar.plugin.test.ResultsDialog"/>
-    <property category="archiving" name="extraDeployRoots.15" value="C:org.cougaar.plugin.test.ClassStringRendererRegistry"/>
-    <property category="archiving" name="extraDeployRoots.16" value="C:org.cougaar.plugin.test.capture.*"/>
-    <property category="archiving" name="extraDeployRoots.17" value="C:org.cougaar.plugin.test.TestClassLoader"/>
-    <property category="archiving" name="extraDeployRoots.18" value="C:org.cougaar.plugin.test.BlackboardDeltaState"/>
-    <property category="archiving" name="extraDeployRoots.2" value="C:org.cougaar.plugin.test.util.*"/>
-    <property category="archiving" name="extraDeployRoots.3" value="C:org.cougaar.plugin.test.RunDialog"/>
-    <property category="archiving" name="extraDeployRoots.4" value="C:org.cougaar.plugin.test.Animation"/>
-    <property category="archiving" name="extraDeployRoots.5" value="C:org.cougaar.plugin.test.sample.*"/>
-    <property category="archiving" name="extraDeployRoots.6" value="C:org.cougaar.plugin.test.PluginTestResult"/>
-    <property category="archiving" name="extraDeployRoots.7" value="C:org.cougaar.plugin.test.PublishAction"/>
-    <property category="archiving" name="extraDeployRoots.8" value="C:org.cougaar.plugin.test.SearchProgressDialog"/>
-    <property category="archiving" name="extraDeployRoots.9" value="C:org.cougaar.plugin.test.lp.*"/>
+    <property category="archiving" name="extraDeployRoots.1" value="C:org.cougaar.plugin.test.UIBootstrapper"/>
+    <property category="archiving" name="extraDeployRoots.2" value="C:org.cougaar.plugin.test.util.Misc"/>
     <property category="archiving" name="libraryStates.1" value="1:JBCL"/>
-    <property category="archiving" name="libraryStates.2" value="1:BCEL"/>
-    <property category="archiving" name="libraryStates.3" value="1:COUGAAR_10_CORE"/>
-    <property category="archiving" name="libraryStates.4" value="1:COUGAAR_10_UTIL"/>
+    <property category="archiving" name="manifestMainClass" value="org.cougaar.plugin.test.UIBootstrapper"/>
     <property category="archiving" name="outPathState" value="1"/>
     <property category="archiving" name="targetPath" value="CougaarUnitApp.jar"/>
   </node>
@@ -160,7 +142,8 @@
     <property category="archiving" name="extraDeployRoots.7" value="C:org.cougaar.plugin.test.PluginTestCase"/>
     <property category="archiving" name="extraDeployRoots.8" value="C:org.cougaar.plugin.test.ClassStringRenderer"/>
     <property category="archiving" name="extraDeployRoots.9" value="C:org.cougaar.plugin.test.Comparator"/>
-    <property category="archiving" name="outPathState" value="1"/>
+    <property category="archiving" name="libraryStates.1" value="1:JBCL"/>
+    <property category="archiving" name="libraryStates.2" value="1:BCEL"/>
     <property category="archiving" name="targetPath" value="CougaarUnit.jar"/>
   </node>
   <node name="TestClassLoader" type="Archive">

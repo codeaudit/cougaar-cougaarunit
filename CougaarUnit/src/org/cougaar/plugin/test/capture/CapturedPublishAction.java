@@ -42,8 +42,9 @@ public class CapturedPublishAction implements Serializable {
           case ACTION_CLOSE_TRANSACTION: return "CLOSE TRANSACTION";
           case ACTION_INTERAGENT_TRANSFER: return "INTERAGENT TRANSFER";
       }
-     return "";
+      return "";
     }
+
     /**
      * Get the string representation of an action
      * @param actionID

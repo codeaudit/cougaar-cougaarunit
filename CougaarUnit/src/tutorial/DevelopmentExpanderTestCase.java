@@ -75,8 +75,8 @@ public class DevelopmentExpanderTestCase extends PluginTestCase {
 
     BlackboardDeltaState bds = new BlackboardDeltaState();
     bds.add(new PublishAction(PublishAction.ADD, designTask, ObjectComparators.TASK_VERB_COMPARATOR));
-    bds.add(new PublishAction(PublishAction.ADD, testTask, ObjectComparators.TASK_VERB_COMPARATOR));
     bds.add(new PublishAction(PublishAction.ADD, developTask, ObjectComparators.TASK_VERB_COMPARATOR));
+    bds.add(new PublishAction(PublishAction.ADD, testTask, ObjectComparators.TASK_VERB_COMPARATOR));
     bds.add(new PublishAction(PublishAction.ADD, designExp, ObjectComparators.EXPANSION_COMPARATOR));
 
     assertPublishAdd(codeTask, bds, 5000, true, true);

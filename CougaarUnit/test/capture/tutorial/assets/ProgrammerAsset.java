@@ -19,7 +19,7 @@
  * </copyright>
  */
 
-/* @generated Mon Feb 24 16:14:43 EST 2003 from programmer_assets.def - DO NOT HAND EDIT */
+/* @generated Thu Mar 06 12:13:47 EST 2003 from programmer_assets.def - DO NOT HAND EDIT */
 package tutorial.assets;
 import org.cougaar.planning.ldm.asset.*;
 import java.io.ObjectOutputStream;

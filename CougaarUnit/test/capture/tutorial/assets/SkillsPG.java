@@ -19,7 +19,7 @@
  * </copyright>
  */
 
-/* @generated Mon Feb 24 16:14:44 EST 2003 from properties.def - DO NOT HAND EDIT */
+/* @generated Thu Mar 06 12:13:48 EST 2003 from properties.def - DO NOT HAND EDIT */
 /** Primary client interface for SkillsPG.
  *  @see NewSkillsPG
  *  @see SkillsPGImpl

@@ -38,7 +38,7 @@ import org.cougaar.planning.ldm.PlanningFactory;
  * DEVELOP
  * TEST
  * @author ALPINE (alpine-software@bbn.com)
- * @version $Id: DevelopmentExpanderPlugin.java,v 1.2 2003-02-24 22:59:31 dave Exp $
+ * @version $Id: DevelopmentExpanderPlugin.java,v 1.3 2003-03-06 21:44:26 dave Exp $
  **/
 public class DevelopmentExpanderPlugin extends ComponentPlugin
 {
@@ -277,15 +277,14 @@ public class DevelopmentExpanderPlugin extends ComponentPlugin
     this_task_duration = 3;
     NewTask t2 = makeTask("DEVELOP", task, new_wf);
     setPreferences(t2, this_task_duration, deadline_month);
-    getBlackboardService().publishAdd(t2);      // Don't add the task to the Blackboard yet
+    //getBlackboardService().publishAdd(t2);      // Don't add the task to the Blackboard yet
     tasks.addElement(t2); // Add the task to the vector of subtasks
 
     // testing takes two month
     this_task_duration = 2;
     NewTask t3 = makeTask("TEST", task, new_wf);
     setPreferences(t3, this_task_duration, deadline_month);
-
-    getBlackboardService().publishAdd(t3);      // Don't add the task to the Blackboard yet
+    //getBlackboardService().publishAdd(t3);      // Don't add the task to the Blackboard yet
     tasks.addElement(t3); // Add the task to the vector of subtasks
 
     new_wf.setTasks(tasks.elements()); // Add all the subtasks to the workflow
