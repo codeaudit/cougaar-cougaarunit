@@ -24,7 +24,7 @@ package org.cougaar.plugin.test.lp;
 import java.util.*;
 import org.cougaar.core.component.BindingSite;
 import org.cougaar.core.domain.DomainAdapter;
-import org.cougaar.core.domain.DomainBindingSite;
+//import org.cougaar.core.domain.DomainBindingSite;
 import org.cougaar.glm.ldm.lps.*;
 import org.cougaar.core.mts.MessageAddress;
 import org.cougaar.core.domain.RootPlan;
