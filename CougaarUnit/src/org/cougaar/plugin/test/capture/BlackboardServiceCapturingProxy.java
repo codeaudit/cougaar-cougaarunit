@@ -214,7 +214,10 @@ public class BlackboardServiceCapturingProxy implements BlackboardService {
      * @return
      */
     public boolean tryOpenTransaction() {
-        return actualBlackboardService.tryOpenTransaction();
+        boolean ret = actualBlackboardService.tryOpenTransaction();
+        if (ret)
+          objectStream.add(new CapturedPublishAction(CapturedPublishAction.ACTION_OPEN_TRANSACTION, "", requestingClient));
+        return ret;
     }
 
     /**
@@ -230,7 +233,8 @@ public class BlackboardServiceCapturingProxy implements BlackboardService {
      * Proxied method
      */
     public void closeTransactionDontReset() {
-        actualBlackboardService.closeTransactionDontReset();
+      objectStream.add(new CapturedPublishAction(CapturedPublishAction.ACTION_CLOSE_TRANSACTION, "", requestingClient));
+      actualBlackboardService.closeTransactionDontReset();
     }
 
     /**
@@ -239,7 +243,8 @@ public class BlackboardServiceCapturingProxy implements BlackboardService {
      * @throws org.cougaar.core.blackboard.SubscriberException
      */
     public void closeTransaction(boolean parm1) throws org.cougaar.core.blackboard.SubscriberException {
-        actualBlackboardService.closeTransaction(parm1);
+      objectStream.add(new CapturedPublishAction(CapturedPublishAction.ACTION_CLOSE_TRANSACTION, "", requestingClient));
+      actualBlackboardService.closeTransaction(parm1);
     }
 
     /**
