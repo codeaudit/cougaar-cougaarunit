@@ -4,11 +4,11 @@ import java.util.Vector;
 import java.util.Enumeration;
 
 /**
- * <p>Title: </p>
- * <p>Description: </p>
+ * <p>Title: PluginTestResult</p>
+ * <p>Description: Encapsulates the results for an entire plugin test.</p>
  * <p>Copyright: Copyright (c) 2002</p>
- * <p>Company: </p>
- * @author unascribed
+ * <p>Company: InfoEther, LLC</p>
+ * @author David Craine
  * @version 1.0
  */
 
@@ -21,6 +21,15 @@ public class PluginTestResult {
     public static final int COMMAND_ASSERT_PUBLISH_CHANGE = 3;
     public static final int COMMAND_ASSERT_PUBLISH_REMOVE = 4;
 
+    /**
+     *
+     * <p>Title: TestResultEntry</p>
+     * <p>Description: Composite class for containing individual test results</p>
+     * <p>Copyright: Copyright (c) 2002</p>
+     * <p>Company: InfoEther, LLC</p>
+     * @author David Craine
+     * @version 1.0
+     */
     static class TestResultEntry {
         int testPhase;
         int testCommand;
@@ -31,6 +40,15 @@ public class PluginTestResult {
         int id =0;
         static int master_id=0;
 
+        /**
+         * Constructor
+         * @param testPhase
+         * @param testCommand
+         * @param testResult
+         * @param description
+         * @param expectedState
+         * @param actualState
+         */
         public TestResultEntry(int testPhase, int testCommand, boolean testResult, String description, BlackboardDeltaState expectedState, BlackboardDeltaState actualState) {
             this.testPhase = testPhase;
             this.testCommand = testCommand;
@@ -47,18 +65,42 @@ public class PluginTestResult {
     private static String testDescription;
 
 
+    /**
+     * Set the test name
+     * @param name
+     */
     public static void setTestName(String name) {
         testName = name;
     }
 
+    /**
+     * Set the test description
+     * @param desc
+     */
     public static void setTestDescription(String desc) {
         testDescription = desc;
     }
 
+    /**
+     * Add an entry to the test results
+     * @param phase
+     * @param command
+     * @param result
+     * @param description
+     */
     public static void addEntry(int phase, int command, boolean result, String description) {
       addEntry(phase, command, result, description, null, null);
     }
 
+    /**
+     * Add an entry to the test results
+     * @param phase
+     * @param command
+     * @param result
+     * @param description
+     * @param expectedBDS
+     * @param currentBDS
+     */
     public static void addEntry(int phase, int command, boolean result, String description, BlackboardDeltaState expectedBDS, BlackboardDeltaState currentBDS) {
         entries.add(new TestResultEntry(phase, command, result, description, expectedBDS, currentBDS));
     }
@@ -75,6 +117,11 @@ public class PluginTestResult {
         return true;
     }
 
+    /**
+     * Get the string representation of a test phase
+     * @param phaseId
+     * @return
+     */
     private static String getPhaseAsString(int phaseId) {
         switch (phaseId) {
             case PHASE_TEST_SUBSCRIPTION: return "SUBSCRIPTION";
@@ -83,6 +130,11 @@ public class PluginTestResult {
         return "";
     }
 
+    /**
+     * Get the string representaton for a command
+     * @param commandId
+     * @return
+     */
     private static String getCommandAsString(int commandId) {
         switch (commandId) {
             case COMMAND_SUBSCRIPTION_ASSERT: return   "SUBSCRIPTION ASSERT";
@@ -93,6 +145,10 @@ public class PluginTestResult {
         return "";
     }
 
+    /**
+     * Get test result details as a stand-alone string
+     * @return
+     */
     public static String getReportAsString() {
         StringBuffer result = new StringBuffer();
         result.append("Test Name: " + testName+"\n");
@@ -107,6 +163,10 @@ public class PluginTestResult {
         return result.toString();
     }
 
+    /**
+     * Get test result details as an xml string
+     * @return
+     */
     public static String getReportAsXML() {
         StringBuffer result = new StringBuffer();
         result.append("<?xml version=\"1.0\"?>\n");

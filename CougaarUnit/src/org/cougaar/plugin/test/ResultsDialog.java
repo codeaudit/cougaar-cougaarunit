@@ -8,11 +8,11 @@ import java.util.Vector;
 import java.util.Enumeration;
 
 /**
- * <p>Title: </p>
- * <p>Description: </p>
+ * <p>Title: ResultsDialog</p>
+ * <p>Description: This dialog shows a detailed list of the results of a selected PublishAction</p>
  * <p>Copyright: Copyright (c) 2002</p>
- * <p>Company: </p>
- * @author unascribed
+ * <p>Company: InfoEther, LLC</p>
+ * @author David Craine
  * @version 1.0
  */
 
@@ -35,6 +35,15 @@ public class ResultsDialog extends JDialog {
   private ResultTableModel expectedResultsModel = new ResultTableModel();
   private ResultTableModel actualResultsModel = new ResultTableModel();
 
+  /**
+   *
+   * <p>Title: ResultsTableModel</p>
+   * <p>Description: Table model for containing the results</p>
+   * <p>Copyright: Copyright (c) 2002</p>
+   * <p>Company: InfoEther, LLC</p>
+   * @author David Craine
+   * @version 1.0
+   */
   class ResultTableModel extends AbstractTableModel {
       static final String COLUMN_ACTION_ID = "ACTION ID";
       static final String COLUMN_RESULT = "RESULT";
@@ -65,6 +74,12 @@ public class ResultsDialog extends JDialog {
       }
   }
 
+  /**
+   * Constructor
+   * @param frame
+   * @param title
+   * @param modal
+   */
   public ResultsDialog(Frame frame, String title, boolean modal) {
     super(frame, title, modal);
     try {
@@ -79,6 +94,10 @@ public class ResultsDialog extends JDialog {
     }
   }
 
+  /**
+   * Populate the results table via the contents of the ResultStates object
+   * @param resultStates contains a list the result states
+   */
   public void setResultData(ResultStates resultStates) {
     if (resultStates == null || resultStates.expectedResults == null || resultStates.actualResults == null) return;
     for (Enumeration enum = resultStates.expectedResults.elements(); enum.hasMoreElements(); ) {
@@ -99,10 +118,16 @@ public class ResultsDialog extends JDialog {
     this.jTableExpectedResults.updateUI();
   }
 
+  /**
+   * Constructor
+   */
   public ResultsDialog() {
     this(null, "", false);
   }
 
+  /**
+   * UI initializer
+   */
   private void init2() {
     jTableExpectedResults.setModel(expectedResultsModel);
     jTableExpectedResults.getColumn(ResultTableModel.COLUMN_ACTION_ID).setPreferredWidth(75);
@@ -115,6 +140,10 @@ public class ResultsDialog extends JDialog {
 
   }
 
+  /**
+   * UI Initializer
+   * @throws Exception
+   */
   private void jbInit() throws Exception {
     border1 = BorderFactory.createBevelBorder(BevelBorder.LOWERED,Color.white,Color.white,new Color(115, 114, 105),new Color(165, 163, 151));
     titledBorder1 = new TitledBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED,Color.white,Color.white,new Color(115, 114, 105),new Color(165, 163, 151)),"Expected Publish Actions");
@@ -137,6 +166,9 @@ public class ResultsDialog extends JDialog {
     jSplitPaneResults.setDividerLocation(130);
   }
 
+  /**
+   * Centers the dialog on the screen
+   */
   private void center () {
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     Dimension windowSize = this.getSize();

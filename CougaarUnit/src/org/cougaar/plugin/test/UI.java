@@ -19,10 +19,10 @@ import org.w3c.dom.*;
 import org.xml.sax.*;
 
 /**
- * <p>Title: </p>
- * <p>Description: </p>
+ * <p>Title: UI</p>
+ * <p>Description: The main UI class</p>
  * <p>Copyright: Copyright (c) 2002</p>
- * <p>Company: </p>
+ * <p>Company: InfoEther, LLC</p>
  * @author David Craine
  * @version 1.0
  */
@@ -86,6 +86,15 @@ public class UI extends JFrame {
   private JMenuItem jMenuItemResultsPrint = new JMenuItem();
 
 
+  /**
+   *
+   * <p>Title: OutputTableModel</p>
+   * <p>Description: Model for holding the output data</p>
+   * <p>Copyright: Copyright (c) 2002</p>
+   * <p>Company: InfoEther, LLC</p>
+   * @author David Craine
+   * @version 1.0
+   */
   class OutputTableModel extends AbstractTableModel {
     static final String COLUMN_TEST_NAME = "TEST NAME";
     static final String COLUMN_ID = "ID";
@@ -130,6 +139,15 @@ public class UI extends JFrame {
     }
   }
 
+  /**
+   *
+   * <p>Title: OutputCellRendere</p>
+   * <p>Description: Cell Renderer for the output display</p>
+   * <p>Copyright: Copyright (c) 2002</p>
+   * <p>Company: InfoEther, LLC</p>
+   * @author David Craine
+   * @version 1.0
+   */
   class OutputCellRenderer extends DefaultTableCellRenderer {
     public Component getTableCellRendererComponent(JTable table,
         Object value,
@@ -152,6 +170,9 @@ public class UI extends JFrame {
     }
   }
 
+  /**
+   * Constructor
+   */
   public UI() {
     try {
       jbInit();
@@ -162,6 +183,9 @@ public class UI extends JFrame {
     }
   }
 
+  /**
+   * Seconday UI initializer
+   */
   private void init2() {
     jListTestCases.setModel(testCaseModel);
     jListTestSuites.setModel(testSuiteModel);
@@ -228,6 +252,10 @@ public class UI extends JFrame {
 
   }
 
+  /**
+   * UI initializer
+   * @throws Exception
+   */
   private void jbInit() throws Exception {
     this.setJMenuBar(jMenuBarMain);
     jTableResults.setRowSelectionAllowed(false);
@@ -380,9 +408,10 @@ public class UI extends JFrame {
 
   }
 
-
-
-
+  /**
+   * Main method.  Used for starting the UI.
+   * @param args
+   */
   public static void main(String[] args) {
     UI ui= new UI();
     //((UI.OutputTableModel)ui.jTableResults.getModel()).addRow(new String[] {"1", "2", "3", "4", "5", "pass"});
@@ -392,6 +421,10 @@ public class UI extends JFrame {
     ui.show();
   }
 
+  /**
+   * Search a jar file for PluginTestCase classes and PluginTestSuite classes.
+   * @param file
+   */
   private void searchJarFile(File file) {
     //search jar file for classes that are instances of PLutinTestCase or PluginTestSuite
     try {
@@ -420,7 +453,10 @@ public class UI extends JFrame {
     catch (Exception e) {}
   }
 
-
+  /**
+   * Handler for the Browse button
+   * @param e
+   */
   void jButtonBrowse_actionPerformed(ActionEvent e) {
 
     JFileChooser jfc = new JFileChooser();
@@ -445,17 +481,27 @@ public class UI extends JFrame {
       }
       jComboBoxDirJar.setSelectedItem(path);
     }
-
   }
 
+  /**
+   * Handler for the Cancel button
+   * @param e
+   */
   void jButtonCancel_actionPerformed(ActionEvent e) {
     closeApp();
   }
 
+  /**
+   * Handler for the WindowClosing event
+   * @param e
+   */
   void this_windowClosing(WindowEvent e) {
     closeApp();
   }
 
+  /**
+   * Read the history file
+   */
   private void readFileHistory() {
     File f = new File("history");
     if (f.exists()) {
@@ -474,6 +520,9 @@ public class UI extends JFrame {
     }
   }
 
+  /**
+   * Save the File history
+   */
   private void saveFileHistory() {
     try {
       File f = new File("history");
@@ -489,17 +538,27 @@ public class UI extends JFrame {
     }
   }
 
+  /**
+   * close the test application
+   */
   private void closeApp() {
     saveFileHistory();
     System.exit(1);
   }
 
+  /**
+   * Center the UI on the screen
+   */
   private void center () {
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     Dimension windowSize = this.getSize();
     this.setLocation((screenSize.width - windowSize.width)/2, (screenSize.height - windowSize.height)/2);
   }
 
+  /**
+   * Handler for the Search button
+   * @param e
+   */
   void jButtonSearch_actionPerformed(ActionEvent e) {
     testCaseModel.clear();   //clear the test cases
     testSuiteModel.clear();  //clear the test suites
@@ -536,6 +595,10 @@ public class UI extends JFrame {
     t.start();
   }
 
+  /**
+   * Parse the output string so as to construct the results table
+   * @param s
+   */
   private void processResult(String s) {
     //jTextPaneOutput.setText(s);
     //find the beginning of the xml output
@@ -599,7 +662,10 @@ public class UI extends JFrame {
     }
   }
 
-
+  /**
+   * Handler for the Run button
+   * @param e
+   */
   void jButtonRun_actionPerformed(ActionEvent e) {
     jTextPaneOutput.setText("");  //clear the output pane
     MyByteArrayOutputStream baos;
@@ -642,11 +708,24 @@ public class UI extends JFrame {
     }
   }
 
+  /**
+   * Handler for the Exit menu item
+   * @param e
+   */
   void jMenuItemExit_actionPerformed(ActionEvent e) {
     System.exit(0);
   }
 
 
+  /**
+   *
+   * <p>Title: LaunchRunnable</p>
+   * <p>Description: Used to launch the cougaar process via a separate thread</p>
+   * <p>Copyright: Copyright (c) 2002</p>
+   * <p>Company: InfoEther, LLC</p>
+   * @author David Craine
+   * @version 1.0
+   */
   class LauncherRunnable implements Runnable {
     Launcher launcher;
     Class clazz;
@@ -686,6 +765,15 @@ public class UI extends JFrame {
     }
   }
 
+  /**
+   *
+   * <p>Title: MyByteArrayOutputStream</p>
+   * <p>Description: Used so that we can override the write method to update the output panel in real-time.</p>
+   * <p>Copyright: Copyright (c) 2002</p>
+   * <p>Company: InfoEther, LLC</p>
+   * @author David Craine
+   * @version 1.0
+   */
   class MyByteArrayOutputStream extends ByteArrayOutputStream {
     public MyByteArrayOutputStream(int size) {
       super(size);
@@ -757,6 +845,16 @@ public class UI extends JFrame {
 }
 
 
+/**
+ *
+ * <p>Title: ResultStates</p>
+ * <p>Description: Used to contain the list of results that are returned from the
+ * test class.</p>
+ * <p>Copyright: Copyright (c) 2002</p>
+ * <p>Company: InfoEther, LLC</p>
+ * @author David Craine
+ * @version 1.0
+ */
 class ResultStates {
   class ResultState{
     String id;
@@ -778,7 +876,16 @@ class ResultStates {
   }
 }
 
-
+/**
+ *
+ * <p>Title: MyClassLoader</p>
+ * <p>Description: Used to update the classpath at runtime so as to be able to load
+ * the user-selected PluginTestCase classes</p>
+ * <p>Copyright: Copyright (c) 2002</p>
+ * <p>Company: InfoEther, LLC</p>
+ * @author David Craine
+ * @version 1.0
+ */
 class MyClassLoader extends URLClassLoader {
   private static MyClassLoader me;
 

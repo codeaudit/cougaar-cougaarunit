@@ -5,11 +5,11 @@ import javax.swing.*;
 import java.awt.event.*;
 
 /**
- * <p>Title: </p>
- * <p>Description: </p>
+ * <p>Title: RunDialog</p>
+ * <p>Description: Dialog which displays when tests are running</p>
  * <p>Copyright: Copyright (c) 2002</p>
- * <p>Company: </p>
- * @author unascribed
+ * <p>Company: InfoEther, LLC</p>
+ * @author David Craine
  * @version 1.0
  */
 
@@ -20,6 +20,12 @@ public class RunDialog extends JDialog {
   AnimatedPanel ap = new AnimatedPanel();
   private BorderLayout borderLayout2 = new BorderLayout();
 
+  /**
+   * Constructor
+   * @param frame
+   * @param title
+   * @param modal
+   */
   public RunDialog(Frame frame, String title, boolean modal) {
     super(frame, title, modal);
     try {
@@ -34,9 +40,17 @@ public class RunDialog extends JDialog {
     }
   }
 
+  /**
+   * Constructor
+   */
   public RunDialog() {
     this(null, "", false);
   }
+
+  /**
+   * UI Initializer
+   * @throws Exception
+   */
   private void jbInit() throws Exception {
     panel1.setLayout(borderLayout1);
     jLabelMessage.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -47,12 +61,18 @@ public class RunDialog extends JDialog {
     panel1.add(jLabelMessage, BorderLayout.NORTH);
   }
 
+  /**
+   * seconday UI initializer
+   */
   private void init2() {
     panel1.add(ap, BorderLayout.CENTER);
     ap.setAnimation(AnimatedPanel.ANIMATION_FIREWORKS);
 
   }
 
+  /**
+   * Resize the dialgo
+   */
   private void resize() {
     int width = panel1.getGraphics().getFontMetrics().stringWidth(jLabelMessage.getText());
     this.setSize(new Dimension(width+100,200));
@@ -60,6 +80,9 @@ public class RunDialog extends JDialog {
     this.pack();
   }
 
+  /**
+   * override the show method to start the animation
+   */
   public void show() {
     resize();
     center();
@@ -67,22 +90,28 @@ public class RunDialog extends JDialog {
     ap.start();
   }
 
+  /**
+   * override the dispose method to stop the animation
+   */
   public void dispose() {
     ap.stop();
     super.dispose();
   }
 
+  /**
+   * Set the message for the dialog
+   * @param msg
+   */
   public void setMessage(String msg) {
     jLabelMessage.setText(msg);
   }
 
+  /**
+   * center the dialog on the screen
+   */
   private void center () {
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     Dimension windowSize = this.getSize();
     this.setLocation((screenSize.width - windowSize.width)/2, (screenSize.height - windowSize.height)/2);
-  }
-
-  void jMenuItem1_actionPerformed(ActionEvent e) {
-    System.exit(0);
   }
 }

@@ -1,14 +1,14 @@
 package org.cougaar.plugin.test;
 
 /**
- * <p>Title: </p>
+ * <p>Title: PublishAction</p>
  * <p>Description:
  * This class allows the tester to contsruct Publish Actions which can then be tested
  * for.  A publish action consists of an action code and a reference to the object upom whcih  that action
  * taken.</p>
  * <p>Copyright: Copyright (c) 2002</p>
- * <p>Company: </p>
- * @author unascribed
+ * <p>Company: InfoEther, LLC</p>
+ * @author David Craine
  * @version 1.0
  */
 
@@ -17,36 +17,68 @@ public class PublishAction  {
     private int actionId;
     private Object obj = null;
     private Comparator comp = null;
-
-    public PublishAction() {
-    }
     public static final int ADD = 1;
     public static final int REMOVE = 2;
     public static final int CHANGE = 3;
 
+    /**
+     * Standard constructor
+     */
+    public PublishAction() {
+    }
 
+    /**
+     * Constructor
+     * @param actionId
+     * @param obj
+     * @param comp
+     */
     public PublishAction(int actionId, Object obj, Comparator comp) {
       this.actionId = actionId;
       this.obj = obj;
       this.comp = comp;
     }
 
+    /**
+     * Constructor
+     * @param actionId
+     * @param obj
+     */
     public PublishAction(int actionId, Object obj) {
       this(actionId, obj, null);
     }
 
+    /**
+     * Constructor
+     * @param actionId
+     */
     public PublishAction(int actionId) {
       this(actionId, null);
     }
 
+    /**
+     * Add an object to this PublishAction
+     * @param obj
+     */
     public void add(Object obj) {
       this.obj = obj;
     }
 
+    /**
+     * Add a comparator to this PublishAction.  This comparator will be used
+     * when comparing the object within this publish action to objects in any
+     * other publich action.
+     * @param comp
+     */
     public void addComparator(Comparator comp) {
       this.comp = comp;
     }
 
+    /**
+     * Get the string representation of an action
+     * @param actionID
+     * @return
+     */
     private String getActionString(int actionID) {
      switch (actionID) {
          case ADD: return "ADD";
@@ -56,6 +88,10 @@ public class PublishAction  {
      return "";
     }
 
+    /**
+     * Returns the class name of the object
+     * @return
+     */
     private String getResultString() {
       if (obj instanceof Class) {
         return ((Class)obj).getName();
@@ -65,6 +101,11 @@ public class PublishAction  {
     }
 
 
+    /**
+     * Compares another PublishAction object
+     * @param pa
+     * @return
+     */
     public boolean equals(PublishAction pa) {
         if (pa == null) return false;
         try {
@@ -81,6 +122,10 @@ public class PublishAction  {
         return false;
     }
 
+    /**
+     * Get an XML version of the PublishAction
+     * @return
+     */
     public String getXML() {
       StringBuffer ret = new StringBuffer().append("<PUBLISH_ACTION><ACTION_ID>").append(getActionString(actionId)).append("</ACTION_ID><RESULT>").append(getResultString()).append("</RESULT></PUBLISH_ACTION>");
       return ret.toString();

@@ -5,11 +5,11 @@ import javax.swing.*;
 import com.borland.jbcl.layout.*;
 
 /**
- * <p>Title: </p>
- * <p>Description: </p>
+ * <p>Title: SearchProgressDialg</p>
+ * <p>Description: Dialog which displays the progress of searches for test cases</p>
  * <p>Copyright: Copyright (c) 2002</p>
- * <p>Company: </p>
- * @author unascribed
+ * <p>Company: InfoEther, LLC</p>
+ * @author David Craine
  * @version 1.0
  */
 
@@ -22,6 +22,12 @@ public class SearchProgressDialog extends JDialog {
     private JLabel jLabelHeading = new JLabel();
     private JProgressBar jProgressBar1 = new JProgressBar();
 
+    /**
+     * Constructor
+     * @param frame
+     * @param title
+     * @param modal
+     */
     public SearchProgressDialog(Frame frame, String title, boolean modal) {
         super(frame, title, modal);
         try {
@@ -34,12 +40,22 @@ public class SearchProgressDialog extends JDialog {
         }
     }
 
+    /**
+     * Secondary initializer
+     */
     private void init2() {
         setSize(300,100);
         center();
         show();
     }
 
+    /**
+     * Constructor
+     * @param heading
+     * @param note
+     * @param min
+     * @param max
+     */
     public SearchProgressDialog(String heading, String note, int min, int max) {
         this(null, "", false);
         this.jLabelHeading.setText(heading);
@@ -53,6 +69,10 @@ public class SearchProgressDialog extends JDialog {
         }
     }
 
+    /**
+     * UI initializer
+     * @throws Exception
+     */
     private void jbInit() throws Exception {
         panel1.setLayout(borderLayout1);
         jPanel1.setLayout(verticalFlowLayout1);
@@ -69,22 +89,40 @@ public class SearchProgressDialog extends JDialog {
         jPanel1.add(jProgressBar1, null);
     }
 
+    /**
+     * Set the note to be displayed in the dialog
+     * @param text
+     */
     public void setNote(String text) {
         jLabelNote.setText(text);
     }
 
+    /**
+     * Set the dialog heading
+     * @param text
+     */
     public void setHeading(String text) {
         jLabelHeading.setText(text);
     }
 
+    /**
+     * Set the progress value
+     * @param value
+     */
     public void setProgressValue(int value) {
         jProgressBar1.setValue(value);
     }
 
+    /**
+     * Close the dialog
+     */
     public void close() {
         this.dispose();
     }
 
+    /**
+     * Center dialog
+     */
     private void center () {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         Dimension windowSize = this.getSize();

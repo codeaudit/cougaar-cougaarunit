@@ -3,14 +3,13 @@ package org.cougaar.plugin.test;
 import org.cougaar.core.plugin.ComponentPlugin;
 
 /**
- * <p>Title: </p>
- * <p>Description: </p>
+ * <p>Title: PluginTestCase</p>
+ * <p>Description: Parent class for all implemented test cases.</p>
  * <p>Copyright: Copyright (c) 2002</p>
- * <p>Company: </p>
- * @author unascribed
+ * <p>Company: InfoEther, LLC</p>
+ * @author David Craine
  * @version 1.0
  */
-
 public abstract class PluginTestCase extends ComponentPlugin {
   private String description;
 
@@ -23,10 +22,18 @@ public abstract class PluginTestCase extends ComponentPlugin {
   }
 
 
+  /**
+   * Set a textual description for this test case
+   * @param s description
+   */
   public void setDescription(String s) {
     this.description = s;
   }
 
+  /**
+   * Get the description for this test case
+   * @return
+   */
   public String getDescription() {
     return this.description;
   }
@@ -239,7 +246,8 @@ public abstract class PluginTestCase extends ComponentPlugin {
   abstract public String getPluginClass();
 
   /**
-   * @todo - this method will probably probably need to run in a separate thread
+   * Initiates the tests by calling the validateSubscritpions() and validateExecution()
+   * methods.  These methods are called via a separate thread.
    */
   public void startTests() {
     System.out.println("STARTING TESTS...");
@@ -282,6 +290,17 @@ public abstract class PluginTestCase extends ComponentPlugin {
     t.start();
   }
 
+  /**
+   * ComponentPlugin method.
+   * Since the subclasses of PluginTestCase don't need to use this method,
+   * it's implemented here adn does nothing rather than making it abstract.
+   */
   protected void setupSubscriptions(){}
+
+  /**
+   * ComponentPlugin method.
+   * Since the subclasses of PluginTestCase don't need to use this method,
+   * it's implemented here adn does nothing rather than making it abstract.
+   */
   protected void execute(){}
 }
