@@ -106,15 +106,25 @@ public class Launcher {
             	
                 //get class name
                 Class _class = Class.forName(args[0]);
-				Launcher launcher = new Launcher(_class);
-                int testType = getTestType(_class.getSuperclass());
+				int testType = getTestType(_class.getSuperclass());
                 
                 if (testType < 0) {
                     System.err.println("Unregonized test type");
                 } else if (testType == TEST_CASE_TYPE) {
+					Launcher launcher = new Launcher(_class);
                     launcher.launchCougaar(System.out);
                 } else if (testType == TEST_SUITE_TYPE) {
                     //process test suite
+					PluginTestSuite testSuite = (PluginTestSuite)_class.newInstance();
+					Class[] _classes = testSuite.getTestClasses();
+					if(_classes!=null && _classes.length>0){
+						for(int i=0;i<_classes.length;i++){
+							Launcher launcher  = new Launcher(_classes[i]);
+							launcher.launchCougaar(System.out);
+						}
+					}else{
+						System.err.println("Test suite with no test cases");
+					}
                 }
             } catch (Exception ex) {
                 System.out.println("Error running test: " + ex);
