@@ -222,13 +222,24 @@ public abstract class PluginTestCase extends ComponentPlugin {
      */
     public void startTests() {
         System.out.println("STARTING TESTS...");
+        //determine the report format
+
         Thread t = new Thread(new Runnable() {
             public void run() {
                 try {Thread.currentThread().sleep(5000);} catch (Exception e){}  //for now we add a delay to let the source plugin start
                 validateSubscriptions();
                 validateExecution();
-                System.out.println(PluginTestResult.getReportAsString());  //print the test results to stdout
-                System.out.println(PluginTestResult.getReportAsXML());  //print the test results to stdout
+                String reportFormat = System.getProperty("org.cougaar.plugin.test.output.format");
+                if (reportFormat == null) reportFormat = "text";
+                if (reportFormat.equals("text")) {
+                  System.out.println(PluginTestResult.getReportAsString());  //print the test results to stdout
+                }
+                else if (reportFormat.equals("xml")) {
+                  System.out.println(PluginTestResult.getReportAsXML());  //print the test results to stdout as xml
+                }
+                else {
+                  System.out.println(PluginTestResult.getReportAsString());  //print the test results to stdout
+                }
                 System.exit((PluginTestResult.getOverallResult())?0:1);  //exit code = 0 if all tests passed, otherwise 1
             }
         });

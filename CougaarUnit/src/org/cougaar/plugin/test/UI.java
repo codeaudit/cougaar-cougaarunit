@@ -57,10 +57,10 @@ public class UI extends JFrame {
     private TitledBorder titledBorder3;
     private BorderLayout borderLayout4 = new BorderLayout();
     private JScrollPane jScrollPane3 = new JScrollPane();
-    private JTextArea jTextAreaOutput = new JTextArea();
     private Border border4;
     private TitledBorder titledBorder4;
     private JButton jButtonSearch = new JButton();
+  private JTextArea jTextAreaOutput = new JTextArea();
 
     public UI() {
         try {
@@ -123,11 +123,6 @@ public class UI extends JFrame {
         jScrollPaneTestCases.setPreferredSize(new Dimension(268, 230));
         jSplitPaneTests.setPreferredSize(new Dimension(543, 230));
         jSplitPaneTests.setContinuousLayout(true);
-        jTextAreaOutput.setMaximumSize(new Dimension(0, 0));
-    jTextAreaOutput.setMinimumSize(new Dimension(0, 0));
-    jTextAreaOutput.setPreferredSize(new Dimension(0, 0));
-    jTextAreaOutput.setLineWrap(true);
-    jTextAreaOutput.setWrapStyleWord(true);
         jScrollPane3.setBorder(titledBorder4);
     jScrollPane3.setPreferredSize(new Dimension(70, 125));
         this.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -141,7 +136,8 @@ public class UI extends JFrame {
                 jButtonSearch_actionPerformed(e);
             }
         });
-        jPanelDirJar.add(jLabelSelectDir, null);
+    jTextAreaOutput.setLineWrap(true);
+    jPanelDirJar.add(jLabelSelectDir, null);
         this.getContentPane().add(jLabel1,  BorderLayout.NORTH);
         this.getContentPane().add(jPanel1, BorderLayout.CENTER);
         jPanel1.add(jPanel3, BorderLayout.NORTH);
@@ -158,7 +154,7 @@ public class UI extends JFrame {
         jScrollPaneTestSuites.getViewport().add(jListTestSuites, null);
         jSplitPaneTests.add(jScrollPaneTestCases, JSplitPane.BOTTOM);
         jPanel1.add(jScrollPane3,  BorderLayout.SOUTH);
-        jScrollPane3.getViewport().add(jTextAreaOutput, null);
+    jScrollPane3.getViewport().add(jTextAreaOutput, null);
         jScrollPaneTestCases.getViewport().add(jListTestCases, null);
         jSplitPaneTests.setDividerLocation(250);
     }
@@ -272,6 +268,7 @@ public class UI extends JFrame {
     void jButtonRun_actionPerformed(ActionEvent e) {
         MyPrintStream mps = new MyPrintStream(System.out);
         Launcher launcher = new Launcher();
+        launcher.setOutputStyle(Launcher.OUTPUT_STYLE_XML);
         Object[] testSuites = jListTestSuites.getSelectedValues();
         for (int i=0; i<testSuites.length; i++) {
             try {

@@ -48,9 +48,9 @@
   <property category="sys" name="ExcludeClassEnabled" value="0"/>
   <property category="sys" name="IncludeTestPath" value="1"/>
   <property category="sys" name="InstanceVisibility" value="2"/>
-  <property category="sys" name="JDK" value="java 1.4.0_01-b03"/>
+  <property category="sys" name="JDK" value="java 1.4.1_01-b01"/>
   <property category="sys" name="LastTag" value="0"/>
-  <property category="sys" name="Libraries" value="COUGAAR_94;JBCL;BCEL"/>
+  <property category="sys" name="Libraries" value="JBCL;BCEL;COUGAAR_941"/>
   <property category="sys" name="MakeStable" value="0"/>
   <property category="sys" name="OutPath" value="classes"/>
   <property category="sys" name="SourcePath" value="src;test"/>
