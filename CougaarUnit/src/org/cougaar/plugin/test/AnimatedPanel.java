@@ -114,11 +114,11 @@ public class AnimatedPanel extends JPanel implements Runnable {
    * @version 1.0
    */
   class SpiralAnimation implements Animation {
-    Color[] colors = {Color.RED, Color.BLUE, Color.GREEN, Color.PINK, Color.CYAN, Color.LIGHT_GRAY, Color.MAGENTA, Color.ORANGE, Color.YELLOW, Color.WHITE};
+    Color[] colors = {Color.red, Color.blue, Color.green, Color.pink, Color.cyan, Color.lightGray, Color.magenta, Color.orange, Color.yellow, Color.white};
 
     public void renderTo(Graphics2D grp, JPanel offScreenPanel, Image offScreenImage) {
       Dimension d = AnimatedPanel.this.getSize();
-      grp.setPaint(Color.BLACK);
+      grp.setPaint(Color.black);
       grp.fillRect(0,0, d.width, d.height);
       Point2D.Double p = new Point2D.Double(d.width/2, d.height/2);
       Point2D.Double pEnd = new Point2D.Double(d.width/2, d.height/2);
@@ -139,7 +139,7 @@ public class AnimatedPanel extends JPanel implements Runnable {
         try {Thread.currentThread().sleep(10);} catch (Exception e){}
         if ((length > AnimatedPanel.this.getSize().width/2) || (length > AnimatedPanel.this.getSize().height/2)) {
           pEnd = new Point2D.Double(d.width/2, d.height/2);
-          grp.setPaint(Color.BLACK);
+          grp.setPaint(Color.black);
           grp.fillRect(0,0, d.width, d.height);
           try {offScreenPanel.getGraphics().drawImage(offScreenImage, 0, 0, offScreenPanel);} catch (Exception e){}
           theta = 0;
@@ -164,7 +164,7 @@ public class AnimatedPanel extends JPanel implements Runnable {
       Dimension d = AnimatedPanel.this.getSize();
 
       Point2D.Double p = new Point2D.Double(d.height/2, d.width/2);
-      Color c = Color.RED;
+      Color c = Color.red;
       grp.setPaint(c);
       while (true) {
         grp.drawOval((int)p.getX(),  (int)p.getY(),  25, 25);
@@ -193,7 +193,7 @@ public class AnimatedPanel extends JPanel implements Runnable {
       while (true) {
         radius++;
         points--;
-        grp.setPaint(Color.BLACK);
+        grp.setPaint(Color.black);
         grp.fillRect(0,0, d.height, d.width);
         points(grp, radius, points);
         offScreenPanel.getGraphics().drawImage(offScreenImage, 0, 0,
@@ -208,7 +208,7 @@ public class AnimatedPanel extends JPanel implements Runnable {
 
     private void points(Graphics2D grp, int radius, int points) {
       Dimension d = AnimatedPanel.this.getSize();
-      Color[] c = new Color[] {Color.RED, Color.GREEN, Color.BLUE};
+      Color[] c = new Color[] {Color.red, Color.green, Color.blue};
       Point center = new Point(d.height/2, d.width/2);
       for (int i=0;i<points;i++) {
         int x = (int)(Math.random() * radius);
@@ -247,7 +247,7 @@ public class AnimatedPanel extends JPanel implements Runnable {
       radius = 10;
       pointCount = 50;
       points = new HashSet();
-      c = new Color[] {Color.BLACK, Color.GRAY, Color.RED};
+      c = new Color[] {Color.black, Color.gray, Color.red};
       center = new Point(d.height/2, d.width/2);
       for (int i=0;i<pointCount;i++) {
         int len = (int)(Math.random() * radius);
@@ -261,7 +261,7 @@ public class AnimatedPanel extends JPanel implements Runnable {
       reset();
 
       while (true) {
-        grp.setPaint(Color.BLACK);
+        grp.setPaint(Color.black);
         grp.fillRect(0,0, d.height, d.width);
         for (Iterator i = points.iterator(); i.hasNext();) {
           PointWrapper pd = (PointWrapper)i.next();
