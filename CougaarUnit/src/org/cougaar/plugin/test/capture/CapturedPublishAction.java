@@ -20,16 +20,13 @@ public class CapturedPublishAction implements Serializable {
     public final static int ACTION_CLOSE_TRANSACTION = 5;
     public final static int ACTION_INTERAGENT_TRANSFER = 6;
 
-    public String publishedObject;
+    public transient Object publishedObject;
     public int action;
     public String publishingSource;
     public long timeStamp;
 
+
     public CapturedPublishAction(int action, Object publishedObject, String publishingSource) {
-
-    }
-
-    public CapturedPublishAction(int action, String publishedObject, String publishingSource) {
         this.action = action;
         this.publishedObject = publishedObject;
         this.publishingSource = publishingSource;
@@ -56,11 +53,16 @@ public class CapturedPublishAction implements Serializable {
       return CapturedPublishAction.getActionString(action);
     }
 
-    /*private void writeObject(java.io.ObjectOutputStream out) throws IOException {
-
+    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+      out.defaultWriteObject();
+      ExternalizedContainer cont = Externalizers.externalize(publishedObject);
+      out.writeObject(cont);
     }
-    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
 
-    }*/
+    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+      in.defaultReadObject();
+      ExternalizedContainer cont= (ExternalizedContainer)in.readObject();
+      publishedObject = Externalizers.internalize(cont);
+    }
 
 }

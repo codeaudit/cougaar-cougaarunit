@@ -166,7 +166,7 @@ public class BlackboardServiceCapturingProxy implements BlackboardService {
      * @return
      */
     public void publishAdd(Object parm1) {
-        objectStream.add(new CapturedPublishAction(CapturedPublishAction.ACTION_ADD, ClassStringRendererRegistry.render(parm1), requestingClient));
+        objectStream.add(new CapturedPublishAction(CapturedPublishAction.ACTION_ADD, parm1, requestingClient));
         actualBlackboardService.publishAdd(parm1);
     }
 
@@ -176,7 +176,7 @@ public class BlackboardServiceCapturingProxy implements BlackboardService {
      * @return
      */
     public void publishRemove(Object parm1) {
-      objectStream.add(new CapturedPublishAction(CapturedPublishAction.ACTION_REMOVE, ClassStringRendererRegistry.render(parm1), requestingClient));
+      objectStream.add(new CapturedPublishAction(CapturedPublishAction.ACTION_REMOVE, parm1, requestingClient));
       actualBlackboardService.publishRemove(parm1);
     }
 
@@ -186,7 +186,7 @@ public class BlackboardServiceCapturingProxy implements BlackboardService {
      * @return
      */
     public void publishChange(Object parm1) {
-        objectStream.add(new CapturedPublishAction(CapturedPublishAction.ACTION_CHANGE, ClassStringRendererRegistry.render(parm1), requestingClient));
+        objectStream.add(new CapturedPublishAction(CapturedPublishAction.ACTION_CHANGE, parm1, requestingClient));
         actualBlackboardService.publishChange(parm1);
     }
 
@@ -197,7 +197,7 @@ public class BlackboardServiceCapturingProxy implements BlackboardService {
      * @return
      */
     public void publishChange(Object parm1, Collection parm2) {
-        objectStream.add(new CapturedPublishAction(CapturedPublishAction.ACTION_CHANGE, ClassStringRendererRegistry.render(parm1), requestingClient));
+        objectStream.add(new CapturedPublishAction(CapturedPublishAction.ACTION_CHANGE, parm1, requestingClient));
         actualBlackboardService.publishChange(parm1, parm2);
     }
 
