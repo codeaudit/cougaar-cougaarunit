@@ -1,5 +1,7 @@
 package org.cougaar.plugin.test.capture;
 
+import java.io.Serializable;
+
 /**
  * <p>Title: </p>
  * <p>Description: </p>
@@ -9,18 +11,18 @@ package org.cougaar.plugin.test.capture;
  * @version 1.0
  */
 
-public class CapturedPublishAction {
+public class CapturedPublishAction implements Serializable {
     public final static int ACTION_ADD = 1;
     public final static int ACTION_CHANGE =2 ;
     public final static int ACTION_REMOVE = 3;
 
     Object publishedObject;
     int action;
-    Object publishingSource;
+    String publishingSource;
 
     public CapturedPublishAction(int action, Object publishedObject, Object publishingSource) {
         this.action = action;
         this.publishedObject = publishedObject;
-        this.publishingSource = publishingSource;
+        this.publishingSource = publishingSource.getClass().getName();
     }
 }

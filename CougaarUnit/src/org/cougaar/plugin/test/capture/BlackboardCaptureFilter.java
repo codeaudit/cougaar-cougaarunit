@@ -93,7 +93,6 @@ public class BlackboardCaptureFilter
       // returned service.  See FilteringServiceBroker for more options.
       protected Object getServiceProxy(Object service, Class serviceClass, Object client) {
         if (service instanceof BlackboardService) {
-          //return new BlackboardServiceProxy((BlackboardService) service, client);
           return new BlackboardServiceCapturingProxy((BlackboardService)service, client);
         }
         //else if (service instanceof DomainService) {

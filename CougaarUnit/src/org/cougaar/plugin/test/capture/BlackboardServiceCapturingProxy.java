@@ -29,7 +29,7 @@ public class BlackboardServiceCapturingProxy implements BlackboardService {
 
     BlackboardService actualBlackboardService;
     Object requestingClient;
-    Vector objectStream = new Vector(250);
+    static Vector objectStream = new Vector(250);
 
     /**
      * Standard constructor

@@ -28,9 +28,10 @@ import org.xml.sax.*;
  */
 
 public class UI extends JFrame {
+  private JTabbedPane jTabbedPaneMain = new JTabbedPane();
   private BorderLayout borderLayout1 = new BorderLayout();
   private JLabel jLabel1 = new JLabel();
-  private JPanel jPanel1 = new JPanel();
+  private JPanel jPanelTestRunner = new JPanel();
   private JPanel jPanel2 = new JPanel();
   private JButton jButtonRun = new JButton();
   private JButton jButtonCancel = new JButton();
@@ -84,6 +85,7 @@ public class UI extends JFrame {
   private JPopupMenu jPopupMenuResults = new JPopupMenu();
   private JMenuItem jMenuItemResultsSave = new JMenuItem();
   private JMenuItem jMenuItemResultsPrint = new JMenuItem();
+  private JPanel jPanelObjectStreamEditor = new JPanel();
 
 
   /**
@@ -288,7 +290,7 @@ public class UI extends JFrame {
         jButtonCancel_actionPerformed(e);
       }
     });
-    jPanel1.setLayout(borderLayout2);
+    jPanelTestRunner.setLayout(borderLayout2);
     jPanel3.setLayout(borderLayout3);
     jButtonBrowse.setBorder(BorderFactory.createEtchedBorder());
     jButtonBrowse.setPreferredSize(new Dimension(73, 27));
@@ -373,20 +375,22 @@ public class UI extends JFrame {
     jPanelDirJar.add(jLabelSelectDir, null);
     jPanelDirJar.add(jComboBoxDirJar, null);
     this.getContentPane().add(jLabel1,  BorderLayout.NORTH);
-    this.getContentPane().add(jPanel1, BorderLayout.CENTER);
-    jPanel1.add(jPanel3,  BorderLayout.NORTH);
+    this.getContentPane().add(jTabbedPaneMain, BorderLayout.CENTER);
+    jTabbedPaneMain.add(jPanelTestRunner, "Test Runner");
+    jPanelTestRunner.add(jPanel3,  BorderLayout.NORTH);
     jPanel3.add(jPanelDirJar, BorderLayout.CENTER);
     jPanelDirJar.add(jButtonSearch, null);
     jPanelDirJar.add(jButtonBrowse, null);
     this.getContentPane().add(jPanel2, BorderLayout.SOUTH);
     jPanel2.add(jButtonCancel, null);
     jPanel2.add(jButtonRun, null);
-    jPanel1.add(jSplitPane1, BorderLayout.CENTER);
+    jPanelTestRunner.add(jSplitPane1, BorderLayout.CENTER);
     jSplitPane1.add(jTabbedPane1, JSplitPane.BOTTOM);
     jSplitPane1.add(jPanelTests, JSplitPane.TOP);
     jPanelTests.add(jSplitPaneTests, BorderLayout.CENTER);
     jSplitPaneTests.add(jScrollPaneTestSuites, JSplitPane.TOP);
     jSplitPaneTests.add(jScrollPaneTestCases, JSplitPane.BOTTOM);
+    jTabbedPaneMain.add(jPanelObjectStreamEditor,  "Object Stream Editor");
     jScrollPaneTestCases.getViewport().add(jListTestCases, null);
     jScrollPaneTestSuites.getViewport().add(jListTestSuites, null);
     jTabbedPane1.add(jScrollPaneResults,   "Results");
