@@ -1,22 +1,22 @@
 /*
- * <copyright>
- *  Copyright 2000-2001 BBNT Solutions, LLC
- *  under sponsorship of the Defense Advanced Research Projects Agency (DARPA).
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the Cougaar Open Source License as published by
- *  DARPA on the Cougaar Open Source Website (www.cougaar.org).
- *
- *  THE COUGAAR SOFTWARE AND ANY DERIVATIVE SUPPLIED BY LICENSOR IS
- *  PROVIDED 'AS IS' WITHOUT WARRANTIES OF ANY KIND, WHETHER EXPRESS OR
- *  IMPLIED, INCLUDING (BUT NOT LIMITED TO) ALL IMPLIED WARRANTIES OF
- *  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, AND WITHOUT
- *  ANY WARRANTIES AS TO NON-INFRINGEMENT.  IN NO EVENT SHALL COPYRIGHT
- *  HOLDER BE LIABLE FOR ANY DIRECT, SPECIAL, INDIRECT OR CONSEQUENTIAL
- *  DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE OF DATA OR PROFITS,
- *  TORTIOUS CONDUCT, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
- *  PERFORMANCE OF THE COUGAAR SOFTWARE.
- * </copyright>
+* <copyright>
+*  Copyright 2000-2001 BBNT Solutions, LLC
+*  under sponsorship of the Defense Advanced Research Projects Agency (DARPA).
+*
+*  This program is free software; you can redistribute it and/or modify
+*  it under the terms of the Cougaar Open Source License as published by
+*  DARPA on the Cougaar Open Source Website (www.cougaar.org).
+*
+*  THE COUGAAR SOFTWARE AND ANY DERIVATIVE SUPPLIED BY LICENSOR IS
+*  PROVIDED 'AS IS' WITHOUT WARRANTIES OF ANY KIND, WHETHER EXPRESS OR
+*  IMPLIED, INCLUDING (BUT NOT LIMITED TO) ALL IMPLIED WARRANTIES OF
+*  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, AND WITHOUT
+*  ANY WARRANTIES AS TO NON-INFRINGEMENT.  IN NO EVENT SHALL COPYRIGHT
+*  HOLDER BE LIABLE FOR ANY DIRECT, SPECIAL, INDIRECT OR CONSEQUENTIAL
+*  DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE OF DATA OR PROFITS,
+*  TORTIOUS CONDUCT, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+*  PERFORMANCE OF THE COUGAAR SOFTWARE.
+* </copyright>
  */
 package org.cougaar.plugin.test;
 
@@ -42,7 +42,7 @@ import org.cougaar.core.plugin.ComponentPlugin;
 
  **/
 public class PluginServiceFilter
-  extends ServiceFilter
+    extends ServiceFilter
 {
   //  This method specifies the Binder to use (defined later)
   protected Class getBinderClass(Object child) {
@@ -52,7 +52,7 @@ public class PluginServiceFilter
 
   // This is a "Wrapper" binder which installs a service filter for plugins
   public static class PluginServiceFilterBinder
-    extends ServiceFilterBinder
+      extends ServiceFilterBinder
   {
     public PluginServiceFilterBinder(BinderFactory bf, Object child) {
       super(bf,child);
@@ -71,8 +71,8 @@ public class PluginServiceFilter
 
     // this class implements a simple proxy for a plugin wrapper binder
     protected class PluginFilteringBinderProxy
-      extends ServiceFilterContainerProxy
-      implements PluginManagerForBinder
+        extends ServiceFilterContainerProxy
+        implements PluginManagerForBinder
     {
       public MessageAddress getAgentIdentifier() { return getPluginManager().getAgentIdentifier(); }
       public ConfigFinder getConfigFinder() { return getPluginManager().getConfigFinder(); }
@@ -82,7 +82,7 @@ public class PluginServiceFilter
     // this class catches requests for blackboard services, and
     // installs its own service proxy.
     protected class PluginFilteringServiceBroker
-      extends FilteringServiceBroker
+        extends FilteringServiceBroker
     {
       public PluginFilteringServiceBroker(ServiceBroker sb) {
         super(sb);
@@ -93,16 +93,16 @@ public class PluginServiceFilter
       protected Object getServiceProxy(Object service, Class serviceClass, Object client) {
         if (service instanceof BlackboardService) {
           //return new BlackboardServiceProxy((BlackboardService) service, client);
-            return new BlackboardServiceProxy((BlackboardService)service);
+          return new BlackboardServiceProxy((BlackboardService)service);
         }
         return null;
       }
 
       protected Object getClientProxy(Object client, Class serviceClass) {
-          if ((client instanceof BlackboardClient) && (serviceClass.equals(BlackboardService.class))) {
-              return new BlackboardClientProxy((ComponentPlugin)client);
-          }
-          return null;
+        if ((client instanceof BlackboardClient) && (serviceClass.equals(BlackboardService.class))) {
+          return new BlackboardClientProxy((BlackboardClient)client);
+        }
+        return null;
       }
     }
   }

@@ -34,7 +34,10 @@ public class BlackboardServiceProxy implements BlackboardService {
     }
 
     public void resetBlackboardDeltaState() {
-        currentBlackboardDeltaState.reset();
+      //reset by creating a new BlackboardDeltaState object.  This way the old object
+      //can still hang around of something else grabs hold of it for reporting
+      //purposes
+      currentBlackboardDeltaState = new BlackboardDeltaState();
     }
 
     public BlackboardDeltaState getCurrentBlackboardDeltaState() {

@@ -22,7 +22,7 @@ import java.util.*;
  */
 public class BlackboardClientProxy implements BlackboardClient
 {
-    private ComponentPlugin actualPlugin;
+    private BlackboardClient actualPlugin;
     private static Vector pluginList = new Vector();
 
     /**
@@ -65,7 +65,7 @@ public class BlackboardClientProxy implements BlackboardClient
         }
     }
 
-    public BlackboardClientProxy(ComponentPlugin actualPlugin) {
+    public BlackboardClientProxy(BlackboardClient actualPlugin) {
         this.actualPlugin = actualPlugin;
     }
 

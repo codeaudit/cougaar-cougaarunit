@@ -25,15 +25,19 @@ public class PluginTestResult {
         int testPhase;
         int testCommand;
         boolean testResult;
+        BlackboardDeltaState expectedState = null;
+        BlackboardDeltaState actualState = null;
         String description;
         int id =0;
         static int master_id=0;
 
-        public TestResultEntry(int testPhase, int testCommand, boolean testResult, String description) {
+        public TestResultEntry(int testPhase, int testCommand, boolean testResult, String description, BlackboardDeltaState expectedState, BlackboardDeltaState actualState) {
             this.testPhase = testPhase;
             this.testCommand = testCommand;
             this.testResult = testResult;
             this.description = description;
+            this.expectedState = expectedState;
+            this.actualState = actualState;
             this.id = ++master_id;
         }
     }
@@ -52,7 +56,11 @@ public class PluginTestResult {
     }
 
     public static void addEntry(int phase, int command, boolean result, String description) {
-        entries.add(new TestResultEntry(phase, command, result, description));
+      addEntry(phase, command, result, description, null, null);
+    }
+
+    public static void addEntry(int phase, int command, boolean result, String description, BlackboardDeltaState expectedBDS, BlackboardDeltaState currentBDS) {
+        entries.add(new TestResultEntry(phase, command, result, description, expectedBDS, currentBDS));
     }
 
     /**
@@ -110,6 +118,13 @@ public class PluginTestResult {
             result.append("<COMMAND>" +getCommandAsString(tre.testCommand)+"</COMMAND>\n");
             result.append("<DESCRIPTION>"+tre.description+"</DESCRIPTION>\n");
             result.append("<RESULT>" + (tre.testResult?"pass":"fail") + "</RESULT>\n");
+            if (tre.expectedState != null && tre.actualState != null) {
+              result.append("<EXPECTED_STATE>");
+              result.append(tre.expectedState.getXML());
+              result.append("</EXPECTED_STATE><ACTUAL_STATE>");
+              result.append(tre.actualState.getXML());
+              result.append("</ACTUAL_STATE>");
+            }
             result.append("</ID>\n");
         }
         result.append("</TEST>");
