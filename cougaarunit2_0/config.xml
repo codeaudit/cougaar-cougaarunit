@@ -3,8 +3,8 @@
       <bootstrappers>
          <currentbuildstatusbootstrapper file="currentbuild.txt" />
       </bootstrappers>
-      <modificationset quietperiod="30" >
-         <cvs cvsroot=":extssh:abrams@cougaar.org:/cvsroot/cougaarunit" />
+      <modificationset quietperiod="300">
+         <cvs cvsroot=":ext:abrams@cougaar.org:/cvsroot/cougaarunit" />
       </modificationset>
       <schedule interval="2000" >
          <ant buildfile="build.xml" target="masterbuild" multiple="5" />
@@ -12,14 +12,14 @@
       </schedule>
 <!--      <schedule interval="1000">
 	  <maven goal="test|site:deploy" projectfile="/home/mabrams/projects/csi_core/project.xml" mavenscript="/home/mabrams/maven-1.0-rc1/bi/maven" multiple="1"> 
-	  </maven>-->
-      </schedule>
-      <log dir="logs">
+	  </maven>
+      </schedule>-->
+      <log dir="/home/mabrams/cruisecontrol/logs">
          <merge dir="test-results"/>
       </log>  
       <publishers>
          <currentbuildstatuspublisher file="currentbuild.txt" />
-         <email mailhost="www.cougaarsoftware.com" returnaddress="cruisecontrol@panther1.com" defaultsuffix="" buildresultsurl="http://panther1.va.cougaarsoftware.com:8080/cruisecontrol/buildresults">
+         <email mailhost="cougaar.org" returnaddress="cruisecontrol@panther1.com" defaultsuffix="" buildresultsurl="http://panther1.va.cougaarsoftware.com:8080/cruisecontrol/buildresults">
             <!--<always address="mabrams@cougaarsoftware.com" />-->
             <failure address="mabrams@cougaarsoftware.com" />
          </email>
