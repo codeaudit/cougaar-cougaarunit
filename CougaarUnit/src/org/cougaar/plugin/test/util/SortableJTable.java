@@ -35,7 +35,7 @@ public class SortableJTable extends JTable {
 
   private void init() {
     getTableHeader().addMouseListener(new ColumnHeaderListener());
-    this.setDefaultRenderer(Object.class, new JListRenderer());
+    //this.setDefaultRenderer(Object.class, new JListRenderer());
  }
 
   public void sortAllRowsBy(DefaultTableModel model, int colIndex, boolean ascending) {
@@ -172,8 +172,7 @@ public class SortableJTable extends JTable {
           jTable.setRowHeight(row, height_wanted);
       }
       else {//otherwise let's just return a text field
-        c = new JTextField((String)obj);
-        ((JTextField)c).setBorder(null);
+        c = new JTextArea((String)obj);
       }
 
       return c;
