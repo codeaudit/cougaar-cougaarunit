@@ -5,6 +5,7 @@ import java.util.HashSet;
 import org.cougaar.planning.ldm.plan.Task;
 import org.cougaar.planning.ldm.plan.Expansion;
 import org.cougaar.planning.ldm.asset.Asset;
+import org.cougaar.planning.ldm.plan.Workflow;
 
 /**
  *
@@ -113,6 +114,22 @@ public class ObjectComparators {
         try {return a1.getItemIdentificationPG().getItemIdentification().equals(a2.getItemIdentificationPG().getItemIdentification());} catch(Exception e){}
         return false;
       }
+    };
+
+    public static final Comparator WORKFLOW_COMPARATOR = new Comparator() {
+        public boolean compare(Object obj1, Object obj2) {
+            if ((obj1 == null) || (obj2 == null)) return false;
+            if ((!(obj1 instanceof Workflow) || (!(obj2 instanceof Workflow)))) return false;
+
+            Workflow w1 = (Workflow)obj1;
+            Workflow w2 = (Workflow)obj2;
+            try {
+                return w1.getParentTask().getVerb().equals(w2.getParentTask().getVerb());
+            } catch (Exception e) {
+            }
+
+            return false;
+        }
     };
 
     private static Comparator defaultComaprator = EQUALS_COMPARATOR;
