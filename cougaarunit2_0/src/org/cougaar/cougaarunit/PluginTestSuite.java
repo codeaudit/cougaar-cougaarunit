@@ -1,6 +1,8 @@
 package org.cougaar.cougaarunit;
 
-import java.util.List;
+import java.util.Vector;
+
+import org.cougaar.cougaarunit.vo.results.TestResult;
 
 
 /**
@@ -14,10 +16,26 @@ import java.util.List;
  * @version 1.0
  */
 public abstract class PluginTestSuite {
+	private Vector testResults;
     /**
      * This method should return an iterator of class objects that represent
      * all the test cases to be tested within this suite
      */
     public abstract Class[] getTestClasses();
   
+    
+    public void setTestResults(Vector v){
+    	this.testResults = v;
+    }
+    public Vector getTestResults(){
+    	return this.testResults;
+    	
+    }
+    public void addTestResult(TestResult result){
+    	if(testResults==null){
+    		testResults = new Vector();
+    	}
+    	testResults.add(result);
+    	
+    }
 }

@@ -18,14 +18,7 @@ public class BlackboardClientProxy implements BlackboardClient {
 	private BlackboardClient actualPlugin;
 	private static Vector pluginList = new Vector();
 
-	/*  private void setParameters(ComponentPlugin plugin, String[] params) {
-	    ArrayList list = new ArrayList(params.length);
-	    for (int i=0; i<params.length; i++) {
-	      list.add(params[i]);
-	    }
-	    plugin.setParameter(list);
 	
-	  }*/
 
 	/**
 	 * This method is added for testing

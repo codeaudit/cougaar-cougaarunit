@@ -5,10 +5,10 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <html>
   <body>
     <table border="0" width="80%" align="center">
-    <xsl:for-each select="TEST">
+    <xsl:for-each select="test">
     	<tr>
     		<td colspan="5">
-    			<h3>Cougaar Unit Test: <i><xsl:value-of select="@Name"/></i></h3>
+    			<h3>Cougaar Unit Test: <i><xsl:value-of select="@name"/></i></h3>
     		</td>
     	</tr>
     </xsl:for-each>
@@ -16,22 +16,50 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
       <th align="left">id</th>
       <th align="left">Phase</th>
       <th align="left">Command</th>
-      <th align="left">Description</th>
       <th align="left">Result</th>
+      <th align="left">Expected State</th>
+      <th align="left">Actual State</th>
     </tr>
-    <xsl:for-each select="TEST/ID">
+    <xsl:for-each select="test/entry">
     <tr>
-      <td><xsl:value-of select="@Value"/></td>
-      <td><xsl:value-of select="PHASE"/></td>
-      <td><xsl:value-of select="COMMAND"/></td>
-      <td><xsl:value-of select="DESCRIPTION"/></td>
-      <xsl:if test="RESULT='pass'">
-      	<td bgcolor="green"><xsl:value-of select="RESULT"/></td>
-      </xsl:if>
-      <xsl:if test="RESULT='fail'">
-      	<td bgcolor="red"><xsl:value-of select="RESULT"/></td>
-      </xsl:if>
-      
+      <td><xsl:value-of select="@id"/></td>
+      <td><xsl:value-of select="phase"/></td>
+      <td><xsl:value-of select="command"/></td>
+      <td><xsl:value-of select="result"/></td>
+     
+      <td>
+      	<xsl:for-each select="test/entry/expectedState">
+      		<table>
+      			<tr>
+      				<th>action</th>
+      				<th>result</th>
+      			</tr>
+      			<xsl:for-each select="test/entry/expectedState/stateChange">
+      			<tr>
+      				<td><xsl:value-of select="action"/></td>
+      				<td><xsl:value-of select="result"/></td>
+      			</tr>
+      			</xsl:for-each>
+      		</table>
+      	</xsl:for-each>
+      </td>
+      <td>
+     	<xsl:for-each select="test/entry/actualState">
+      		<table>
+      			<tr>
+      				<th>action</th>
+      				<th>result</th>
+      			</tr>
+      			<xsl:for-each select="test/entry/actualState/stateChange">
+      			<tr>
+      				<td><xsl:value-of select="action"/></td>
+      				<td><xsl:value-of select="result"/></td>
+      			</tr>
+      			</xsl:for-each>
+      		</table>
+      	</xsl:for-each>
+      </td>
+    
     </tr>
     </xsl:for-each>
     </table>

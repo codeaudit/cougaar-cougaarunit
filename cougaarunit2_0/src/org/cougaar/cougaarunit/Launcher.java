@@ -9,7 +9,6 @@ import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Vector;
@@ -21,14 +20,10 @@ import javax.xml.transform.stream.StreamSource;
 
 import org.cougaar.cougaarunit.vo.Node;
 import org.cougaar.cougaarunit.vo.Society;
-import org.cougaar.cougaarunit.vo.TestResult;
-import org.cougaar.cougaarunit.vo.TestResultId;
-import org.cougaar.cougaarunit.vo.TestResultSummary;
-import org.cougaar.cougaarunit.vo.TestSuiteResult;
-
+import org.cougaar.cougaarunit.vo.results.TestResult;
+import org.cougaar.cougaarunit.vo.results.TestResultEntry;
 import org.exolab.castor.mapping.Mapping;
 import org.exolab.castor.xml.Unmarshaller;
-
 import org.xml.sax.InputSource;
 
 
@@ -73,7 +68,8 @@ public class Launcher {
     public static final int OUTPUT_STYLE_XML = 1;
     private static boolean writeToOutput = false;
     private Class testClass;
-
+    private static PluginTestSuite testSuite;
+    private static boolean cougaarError = false;
     /**
      * Creates a new Launcher object.
      *
@@ -114,83 +110,51 @@ public class Launcher {
                     p.getInputStream()));
         BufferedReader es = new BufferedReader(new InputStreamReader(
                     p.getErrorStream()));
-        String line = null;
-        String line2 = null;
-
-        while (((line = is.readLine()) != null)
-            || ((line2 = es.readLine()) != null)) {
-            if (line != null) {
-                line += "\n";
-
-                byte[] lineData = line.getBytes();
-
-                if ((new String(lineData).toUpperCase().indexOf("Exception") >= 0)
-                    || (new String(lineData).toUpperCase().indexOf("ERROR") >= 0)) {
-                    retCode = COUGAAR_ERROR_CODE;
-                }
-
-                if (writeToOutput) {
-                    os.write(lineData);
-                }
-            }
-
-            if (line2 != null) {
-                byte[] lineData = line2.getBytes();
-
-                if ((new String(lineData).toUpperCase().indexOf("Exception") >= 0)
-                    || (new String(lineData).toUpperCase().indexOf("ERROR") >= 0)) {
-                    retCode = COUGAAR_ERROR_CODE;
-                }
-
-                if (writeToOutput) {
-                    os.write(lineData);
-                }
-            }
-
-            if (retCode == COUGAAR_ERROR_CODE) {
-                p.destroy();
-
-                return COUGAAR_ERROR_CODE;
-            }
-
-            //os.write('\n');
+        
+        if(writeToOutput){
+        	Outputter errorOutputter = new Outputter(is, os);
+        	Outputter standardOutputter = new Outputter(es, os);
+        	errorOutputter.start();
+        	standardOutputter.start();
         }
+       
 
-        System.out.println("exiting Cougaar system...");
-        System.out.flush();
+        
 
         int processCode = p.waitFor(); //wait for this process to terminate
 
-        if (processCode != 0) {
+        if (processCode != 0 || cougaarError) {
             return COUGAAR_ERROR_CODE;
         }
 
         //test result of test case
-        TestResult testResult = null;
+        org.cougaar.cougaarunit.vo.results.TestResult testResult = null;
         String fileName = PluginTestCase.RESULTS_DIRECTORY + File.separator
             + ((PluginTestCase) this.testClass.newInstance()).getDescription()
             + ".xml";
 
         try {
             Mapping mapping = new Mapping();
-            mapping.loadMapping("resultMapping.xml");
+            mapping.loadMapping("testresultMapping.xml");
 
             Unmarshaller unmar = new Unmarshaller(mapping);
 
             testResult = (TestResult) unmar.unmarshal(new InputSource(
                         new FileReader(fileName)));
-
-            Vector ids = testResult.getIdList();
-            Enumeration enumeration = ids.elements();
-            boolean pass = true;
-
-            while (enumeration.hasMoreElements()) {
-                TestResultId _id = (TestResultId) enumeration.nextElement();
-
-                if (!(_id.getResult().equals("pass"))) {
-                    pass = false;
-                }
+            Vector entries = testResult.getEntries();
+			boolean pass = true;
+            if(entries!=null){
+            	Enumeration enumeration = entries.elements();
+				while (enumeration.hasMoreElements()) {
+					TestResultEntry entry= (TestResultEntry) enumeration.nextElement();
+					if (!(entry.getResult().equals("pass"))) {
+									pass = false;
+					}
+				}
             }
+            testSuite.addTestResult(testResult);
+
+            
 
             if (pass) {
                 retCode = TEST_PASS_CODE;
@@ -201,11 +165,13 @@ public class Launcher {
             System.err.println("Exception reading results XML file " + fileName);
             e.printStackTrace();
         }
-
+		System.out.println("exiting Cougaar system...");
+		System.out.flush();
         return retCode;
     }
-
-
+    
+    
+    
     private void createLogProps() throws Exception {
         File logPropsFile;
         logPropsFile = new File("log.properties");
@@ -279,8 +245,9 @@ public class Launcher {
                     }
                 } else if (testType == TEST_SUITE_TYPE) {
                     //process test suite
-                    PluginTestSuite testSuite = (PluginTestSuite) _class
+                    testSuite = (PluginTestSuite) _class
                         .newInstance();
+                    
                     Class[] _classes = testSuite.getTestClasses();
                     int failures = 0;
                     float successrate = 0f;
@@ -298,76 +265,23 @@ public class Launcher {
                                 pass = false;
 
                             }
-
-                            //get test result
-                            if (returnCode != COUGAAR_ERROR_CODE) {
-                                try {
-                                    //														test result of test case
-                                    TestResult testResult = null;
-                                    String fileName = new File(PluginTestCase.RESULTS_DIRECTORY
-                                            + File.separator
-                                            + ((PluginTestCase) _classes[i]
-                                            .newInstance()).getDescription()
-                                            + ".xml").getAbsolutePath();
-
-
-                                    Mapping mapping = new Mapping();
-                                    mapping.loadMapping("resultMapping.xml");
-
-                                    Unmarshaller unmar = new Unmarshaller(mapping);
-
-                                    testResult = (TestResult) unmar.unmarshal(new InputSource(
-                                                new FileReader(fileName)));
-                                    TestResultSummary summary = new TestResultSummary();
-                                    summary.setName(_classes[i].getName());
-                                    summary.setIdList(testResult.getIdList());
-                                    if (testResult.getIdList() != null) {
-                                        Enumeration enumeration = testResult.getIdList()
-                                                                            .elements();
-                                        while (enumeration.hasMoreElements()) {
-                                            if (!(((TestResultId) enumeration
-                                                   .nextElement()).getResult()
-                                                   .equals("pass"))) {
-                                                failures++;
-                                            }
-
-                                            numberOfTests++;
-                                        }
-                                    }
-
-                                    tests.add(summary);
-
-                                } catch (Exception e) {
-                                    System.err.println(
-                                        "Error getting test results");
-                                    e.printStackTrace();
-                                }
-                            }
                         }
-
-                        //create test suite xml file
-                        TestSuiteResult testSuiteResult = new TestSuiteResult();
-                        testSuiteResult.setName(args[0]);
-                        testSuiteResult.setTestList(tests);
-                        successrate = (numberOfTests - failures) / numberOfTests;
-                        testSuiteResult.setFailures("" + failures);
-                        testSuiteResult.setSuccessrate("" + successrate);
-                        testSuiteResult.setTests("" + (int) numberOfTests);
-                        testSuiteResult.saveResult(PluginTestCase.RESULTS_DIRECTORY);
-                        try {
+                        org.cougaar.cougaarunit.vo.results.TestSuite testSuiteVO = new org.cougaar.cougaarunit.vo.results.TestSuite();
+                        testSuiteVO.populate(testSuite);
+                        String location = new File(PluginTestCase.RESULTS_DIRECTORY+ File.separator + testSuite.getClass().getName() + ".xml").getAbsolutePath();
+                        String htmlLocation = new File(PluginTestCase.RESULTS_DIRECTORY+ File.separator + testSuite.getClass().getName() + ".html").getAbsolutePath();
+                        testSuiteVO.save(location);
+                       try {
                             TransformerFactory tFactory = TransformerFactory
                                 .newInstance();
                             Transformer transformer = tFactory.newTransformer(new StreamSource(
                                         "testsuite.xsl"));
-                            File f = new File(PluginTestCase.RESULTS_DIRECTORY
-                                    + File.separator
-                                    + testSuiteResult.getName() + ".html");
+                            File f = new File(htmlLocation);
                             FileOutputStream fos = new FileOutputStream(f);
-                            transformer.transform(new StreamSource(PluginTestCase.RESULTS_DIRECTORY
-                                    + File.separator
-                                    + testSuiteResult.getName() + ".xml"),
+                            transformer.transform(new StreamSource(location),
                                 new StreamResult(new OutputStreamWriter(fos)));
                         } catch (Exception e) {
+                        	e.printStackTrace();
                         }
 
 
@@ -495,4 +409,34 @@ public class Launcher {
     public void setTestClass(Class testClassName) {
         this.testClass = testClassName;
     }
+    
+    
+	class Outputter extends Thread{
+			private BufferedReader reader=null;
+			private OutputStream output= null;
+			public Outputter(BufferedReader reader, OutputStream output){
+				this.reader = reader;
+				this.output = output;
+			}
+			public void run(){
+				try{
+					String line = reader.readLine();
+					while(line!=null){
+						line = line + "\n";
+					
+						if(line.toUpperCase().indexOf("Exception") >= 0
+										|| line.toUpperCase().indexOf("ERROR") >= 0)
+						{
+							cougaarError = true;
+						}
+						output.write(line.getBytes());
+						line = reader.readLine();
+					}
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+    	
+		}
+
 }

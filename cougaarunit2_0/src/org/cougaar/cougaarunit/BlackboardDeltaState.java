@@ -69,21 +69,14 @@ public class BlackboardDeltaState implements Serializable {
         return false;
     }
 
-    /**
-     * Render the contents of this object as XML
-     * @return
-     */
-    public String getXML() {
-      StringBuffer sb = new StringBuffer();
-      sb.append("<BLACKBOARD_DELTA_STATE>");
-      for (Enumeration enum = stateChanges.elements(); enum.hasMoreElements(); ) {
-        sb.append(((PublishAction)enum.nextElement()).getXML());
-      }
-      sb.append("</BLACKBOARD_DELTA_STATE>");
+    
 
-      return sb.toString();
 
-    }
-
+	/**
+	 * @return Returns the stateChanges.
+	 */
+	public Vector getStateChanges() {
+		return stateChanges;
+	}
 
 }

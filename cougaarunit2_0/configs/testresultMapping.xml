@@ -1,0 +1,65 @@
+<!DOCTYPE databases PUBLIC "-//EXOLAB/Castor Mapping DTD Version 1.0//EN"
+                           "http://castor.exolab.org/mapping.dtd">
+
+<mapping>
+	<class name="org.cougaar.cougaarunit.vo.results.TestResult">
+		<map-to xml="test"/>
+		<field name="entries" 
+			   type="org.cougaar.cougaarunit.vo.results.TestResultEntry"
+			   collection="vector">
+			<bind-xml name="entry"/>
+		</field>
+		<field name="name" type="java.lang.String">
+			<bind-xml name="name" node="attribute"/>
+		</field>
+	</class>
+	
+	<class name="org.cougaar.cougaarunit.vo.results.TestResultEntry">
+		<field name="id" type="java.lang.String">
+			<bind-xml name="id" node="attribute"/>
+		</field>
+		<field name="acutalState" 
+				type="org.cougaar.cougaarunit.vo.results.BlackboardDeltaState">
+			<bind-xml name="actualState"/>
+		</field>
+		<field name="description" type="java.lang.String">
+			<bind-xml name="description"/>
+		</field>
+		<field name="expectedState"
+			type="org.cougaar.cougaarunit.vo.results.BlackboardDeltaState">
+			<bind-xml name="expectedState"/>
+		</field>
+		<field name="command" type="java.lang.String">
+			<bind-xml name="command" node="element"/>
+		</field>
+		<field name="phase" type="java.lang.String">
+			<bind-xml name="phase" node="element"/>
+		</field>
+		<field name="result" type="java.lang.String">
+			<bind-xml name="result" node="element"/>
+		</field>
+				
+	</class>
+	
+	<class name="org.cougaar.cougaarunit.vo.results.BlackboardDeltaState">
+		<field name="stateChanges"
+			  type="org.cougaar.cougaarunit.vo.results.PublishAction"
+			  collection="vector">
+			  <bind-xml name="stateChange"/>
+		</field>
+		  
+		
+	</class>
+	
+	
+	
+	<class name="org.cougaar.cougaarunit.vo.results.PublishAction">
+		<field name="action" type="java.lang.String">
+			<bind-xml name="action" node="element"/>
+		</field>
+		<field name="result" type="java.lang.String">
+			<bind-xml name="result" node="element"/>
+		</field>
+	</class>
+	
+</mapping>

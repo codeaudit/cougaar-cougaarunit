@@ -16,7 +16,7 @@
 		<value>08/10/2005</value>
 	</parameter>
 	<parameter name="-Dorg.cougaar.class.path">
-		<value>../bin</value>
+		<value>../bin;../lib/castor-0.9.5.2-xml.jar</value>
 	</parameter>
 	<parameter name="-Dorg.cougaar.workspace">
 		<value>COUGAAR_WORKSPACE</value>

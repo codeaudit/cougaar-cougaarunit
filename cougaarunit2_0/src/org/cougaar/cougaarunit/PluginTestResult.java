@@ -30,7 +30,7 @@ public class PluginTestResult {
      * @author David Craine
      * @version 1.0
      */
-    static class TestResultEntry {
+    public static class TestResultEntry {
         int testPhase;
         int testCommand;
         boolean testResult;
@@ -58,6 +58,104 @@ public class PluginTestResult {
             this.actualState = actualState;
             this.id = ++master_id;
         }
+		/**
+		 * @return Returns the actualState.
+		 */
+		public BlackboardDeltaState getActualState() {
+			return actualState;
+		}
+
+		/**
+		 * @param actualState The actualState to set.
+		 */
+		public void setActualState(BlackboardDeltaState actualState) {
+			this.actualState = actualState;
+		}
+
+		/**
+		 * @return Returns the description.
+		 */
+		public String getDescription() {
+			return description;
+		}
+
+		/**
+		 * @param description The description to set.
+		 */
+		public void setDescription(String description) {
+			this.description = description;
+		}
+
+		/**
+		 * @return Returns the expectedState.
+		 */
+		public BlackboardDeltaState getExpectedState() {
+			return expectedState;
+		}
+
+		/**
+		 * @param expectedState The expectedState to set.
+		 */
+		public void setExpectedState(BlackboardDeltaState expectedState) {
+			this.expectedState = expectedState;
+		}
+
+		/**
+		 * @return Returns the id.
+		 */
+		public int getId() {
+			return id;
+		}
+
+		/**
+		 * @param id The id to set.
+		 */
+		public void setId(int id) {
+			this.id = id;
+		}
+
+		/**
+		 * @return Returns the testCommand.
+		 */
+		public int getTestCommand() {
+			return testCommand;
+		}
+
+		/**
+		 * @param testCommand The testCommand to set.
+		 */
+		public void setTestCommand(int testCommand) {
+			this.testCommand = testCommand;
+		}
+
+		/**
+		 * @return Returns the testPhase.
+		 */
+		public int getTestPhase() {
+			return testPhase;
+		}
+
+		/**
+		 * @param testPhase The testPhase to set.
+		 */
+		public void setTestPhase(int testPhase) {
+			this.testPhase = testPhase;
+		}
+
+		/**
+		 * @return Returns the testResult.
+		 */
+		public boolean isTestResult() {
+			return testResult;
+		}
+
+		/**
+		 * @param testResult The testResult to set.
+		 */
+		public void setTestResult(boolean testResult) {
+			this.testResult = testResult;
+		}
+
     }
 
     private static Vector entries = new Vector();
@@ -164,32 +262,26 @@ public class PluginTestResult {
         return result.toString();
     }
 
-    /**
-     * Get test result details as an xml string
-     * @return
-     */
-    public static String getReportAsXML() {
-        StringBuffer result = new StringBuffer();
-        result.append("<?xml version=\"1.0\"?>\n");
-        result.append("<?xml-stylesheet type=\"text/xsl\" href=\"../cougaar_unit_results.xsl\"?>\n");
-        result.append("<TEST Name=\""+testName+"\">\n");
-        for (Enumeration enum = entries.elements(); enum.hasMoreElements(); ) {
-            TestResultEntry tre = (TestResultEntry)enum.nextElement();
-            result.append("<ID Value=\""+ String.valueOf(tre.id)+"\">\n");
-            result.append("<PHASE>" + getPhaseAsString(tre.testPhase) + "</PHASE>\n");
-            result.append("<COMMAND>" +getCommandAsString(tre.testCommand)+"</COMMAND>\n");
-            result.append("<DESCRIPTION>"+tre.description+"</DESCRIPTION>\n");
-            result.append("<RESULT>" + (tre.testResult?"pass":"fail") + "</RESULT>\n");
-            if (tre.expectedState != null && tre.actualState != null) {
-              result.append("<EXPECTED_STATE>");
-              result.append(tre.expectedState.getXML());
-              result.append("</EXPECTED_STATE><ACTUAL_STATE>");
-              result.append(tre.actualState.getXML());
-              result.append("</ACTUAL_STATE>");
-            }
-            result.append("</ID>\n");
-        }
-        result.append("</TEST>");
-        return result.toString();
-    }
+   
+	/**
+	 * @return Returns the entries.
+	 */
+	public static Vector getEntries() {
+		return entries;
+	}
+
+	/**
+	 * @return Returns the testDescription.
+	 */
+	public static String getTestDescription() {
+		return testDescription;
+	}
+
+	/**
+	 * @return Returns the testName.
+	 */
+	public static String getTestName() {
+		return testName;
+	}
+
 }

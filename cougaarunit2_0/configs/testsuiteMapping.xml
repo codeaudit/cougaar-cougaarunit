@@ -2,50 +2,45 @@
                            "http://castor.exolab.org/mapping.dtd">
 
 <mapping>
-	<class name="org.cougaar.cougaarunit.vo.TestSuiteResult">
+	<class name="org.cougaar.cougaarunit.vo.results.TestSuite">
 		<map-to xml="testsuite"/>
-		<field name="testList" 
-			   type="org.cougaar.cougaarunit.vo.TestResultSummary"
+		<field name="tests" 
+			   type="org.cougaar.cougaarunit.vo.results.TestResult"
 			   collection="vector">
 			<bind-xml name="testcase"/>
 		</field>
 		<field name="name" type="java.lang.String">
 			<bind-xml name="name" node="attribute"/>
 		</field>
-		<field name="tests" type="java.lang.String">
+		<field name="numberOfTests" type="java.lang.String">
 			<bind-xml name="tests" node="attribute"/>
 		</field>
-		<field name="failures" type="java.lang.String">
+		<field name="numberOfFailures" type="java.lang.String">
 			<bind-xml name="failures" node="attribute"/>
 		</field>
-		<field name="successrate" type="java.lang.String">
+		<field name="successRate" type="java.lang.String">
 			<bind-xml name="successrate" node="attribute"/>
 		</field>
 	</class>
 	
-	<class name="org.cougaar.cougaarunit.vo.TestResultSummary">
-		<map-to xml="testcase"/>
+	<class name="org.cougaar.cougaarunit.vo.results.TestResult">
 		<field name="name" type="java.lang.String">
 			<bind-xml name="name" node="attribute"/>
 		</field>
-		<field name="idList" 
-			   type="org.cougaar.cougaarunit.vo.TestResultId"
+		<field name="entries" 
+			   type="org.cougaar.cougaarunit.vo.results.TestResultEntry"
 			   collection="vector">
 			<bind-xml name="test"/>
 		</field>
 		
 	</class>
 	
-	<class name="org.cougaar.cougaarunit.vo.TestResultId">
-		<map-to xml="test"/>
+	<class name="org.cougaar.cougaarunit.vo.results.TestResultEntry">
 		<field name="id" type="java.lang.String">
-			<bind-xml name="value" node="attribute"/>
+			<bind-xml name="id" node="attribute"/>
 		</field>
 		<field name="command" type="java.lang.String">
 			<bind-xml name="command" node="element"/>
-		</field>
-		<field name="description" type="java.lang.String">
-			<bind-xml name="description" node="element"/>
 		</field>
 		<field name="phase" type="java.lang.String">
 			<bind-xml name="phase" node="element"/>
