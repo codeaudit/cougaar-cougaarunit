@@ -107,11 +107,11 @@ public class Launcher {
                 Class clazz = Class.forName(args[0]);
                 if (clazz.getSuperclass().equals(PluginTestSuite.class)) {
                     PluginTestSuite pts = (PluginTestSuite)clazz.newInstance();
-                    for (Iterator tests = pts.getTestClasses(); tests.hasNext(); ) {
+                    Class[] testClasses = pts.getTestClasses();
+                    for (int i=0; i<testClasses.length; i++) {
                         try {
-                            Class testClass = (Class)tests.next();
-                            if (testClass.isInstance(PluginTestCase.class)) {
-                                runTestCase((PluginTestCase)testClass.newInstance());
+                            if (testClasses[i].getSuperclass().equals(PluginTestCase.class)) {
+                                runTestCase((PluginTestCase)testClasses[i].newInstance());
                             }
                             else {
                                 System.out.println("Invalid Test Case object found in Test Suite.");
