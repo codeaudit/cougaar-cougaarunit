@@ -26,14 +26,15 @@ public class PluginTestResult {
         int testCommand;
         boolean testResult;
         String description;
-        static int id=0;
+        int id =0;
+        static int master_id=0;
 
         public TestResultEntry(int testPhase, int testCommand, boolean testResult, String description) {
             this.testPhase = testPhase;
             this.testCommand = testCommand;
             this.testResult = testResult;
             this.description = description;
-            id++;
+            this.id = ++master_id;
         }
     }
 
@@ -83,9 +84,9 @@ public class PluginTestResult {
         StringBuffer result = new StringBuffer();
         for (Enumeration enum = entries.elements(); enum.hasMoreElements(); ) {
             TestResultEntry tre = (TestResultEntry)enum.nextElement();
-            result.append("TEST RESULTS FOR: " + testName);
-            result.append("ID\tPHASE\tTEST\tRESULT\tDESCRIPTION\n");
-            result.append("--\t-----\t----\t------\t-----------\n");
+            result.append("TEST RESULTS FOR: " + testName+"\n");
+            result.append("ID\tPHASE\t\t\tTEST\t\t\t\tRESULT\tDESCRIPTION\n");
+            result.append("--\t-----\t\t\t----\t\t\t\t------\t-----------\n");
             result.append(String.valueOf(tre.id)+"\t"+getPhaseAsString(tre.testPhase)+"\t"+getCommandAsString(tre.testCommand)+"\t"+String.valueOf(tre.testResult)+"\t"+tre.description+"\n");
         }
         return result.toString();

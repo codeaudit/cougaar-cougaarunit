@@ -70,7 +70,9 @@ public abstract class PluginTestCase extends ComponentPlugin {
             false - fail
             */
     public void assertPublishAdd(Object obj, BlackboardDeltaState bbs, long waitTime, boolean expectedResult) {
+        blackboard.openTransaction();
         ((TestBlackboardService)blackboard).publishAdd(obj);
+        blackboard.closeTransaction();
         if (bbs != null) {
             try {
                 Thread.currentThread().sleep(waitTime > 0?waitTime:0);   //wait the designated amount of time
@@ -100,7 +102,9 @@ public abstract class PluginTestCase extends ComponentPlugin {
             false - fail
             */
     public void assertPublishChange(Object obj, BlackboardDeltaState bbs, long waitTime, boolean expectedResult) {
+        blackboard.openTransaction();
         ((TestBlackboardService)blackboard).publishChange(obj);
+        blackboard.closeTransaction();
         if (bbs != null) {
             try {
                 Thread.currentThread().sleep(waitTime > 0?waitTime:0);   //wait the designated amount of time
@@ -130,7 +134,9 @@ public abstract class PluginTestCase extends ComponentPlugin {
             false - fail
             */
     public void assertPublishRemove(Object obj, BlackboardDeltaState bbs, long waitTime, boolean expectedResult) {
+        blackboard.openTransaction();
         ((TestBlackboardService)blackboard).publishRemove(obj);
+        blackboard.closeTransaction();
         if (bbs != null) {
             try {
                 Thread.currentThread().sleep(waitTime > 0?waitTime:0);   //wait the designated amount of time
