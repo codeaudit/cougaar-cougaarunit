@@ -7,8 +7,10 @@ import org.cougaar.core.agent.ClusterIdentifier;
 import org.cougaar.core.component.*;
 import org.cougaar.core.service.AlarmService;
 import java.util.Collection;
+import org.cougaar.core.blackboard.BlackboardClient;
 
-public class ComponentPluginProxy extends ComponentPlugin {
+public class ComponentPluginProxy extends ComponentPlugin
+{
     private ComponentPlugin actualPlugin;
 
     public ComponentPluginProxy(ComponentPlugin actualPlugin) {
@@ -24,6 +26,7 @@ public class ComponentPluginProxy extends ComponentPlugin {
     }
 
     public void load() {
+        System.out.println("COMPONENT PROXY LOAD");
         actualPlugin.load();
     }
 
@@ -67,10 +70,6 @@ public class ComponentPluginProxy extends ComponentPlugin {
         actualPlugin.suspend();
     }
 
-    public void registerClass() {
-        actualPlugin.registerClass();
-    }
-
     public void initialize() {
         actualPlugin.initialize();
     }
@@ -84,6 +83,7 @@ public class ComponentPluginProxy extends ComponentPlugin {
     }
 
     protected void execute() {
+        System.out.println("PROXY EXECUTE");
         actualPlugin.execute();
     }
 
@@ -108,6 +108,7 @@ public class ComponentPluginProxy extends ComponentPlugin {
     }
 
     protected void setupSubscriptions() {
+        System.out.println("PROXY SETUP SUBSCRIPTIONS");
         actualPlugin.setupSubscriptions();
     }
 

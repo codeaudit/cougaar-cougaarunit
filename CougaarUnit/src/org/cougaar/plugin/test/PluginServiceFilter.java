@@ -32,6 +32,8 @@ import org.cougaar.core.persist.*;
 import org.cougaar.core.blackboard.*;
 import org.cougaar.core.plugin.PluginManagerForBinder;
 import org.cougaar.core.service.BlackboardService;
+import org.cougaar.core.plugin.ComponentPluginProxy;
+import org.cougaar.core.plugin.ComponentPlugin;
 
 /** A plugin's view of its parent component (Container).
  * Add a line like the following to a cluster.ini file:
@@ -96,8 +98,15 @@ public class PluginServiceFilter
         return null;
       }
       protected Object getClientProxy(Object client, Class serviceClass) {
-          System.out.println("client: " + client + ", serviceClass: " + serviceClass);
-          return super.getClientProxy(client, serviceClass);
+          //System.out.println("client: " + client + ", serviceClass: " + serviceClass);
+          //return super.getClientProxy(client, serviceClass);
+          if (client instanceof ComponentPlugin) {
+
+              System.out.println("HERHEHERHERHEHREHREHRH");
+              return new ComponentPluginProxy((ComponentPlugin)client);
+          }
+          return null;
+
       }
     }
   }
