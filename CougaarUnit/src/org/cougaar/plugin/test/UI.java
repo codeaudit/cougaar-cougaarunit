@@ -931,7 +931,7 @@ public class UI extends JFrame {
      */
     public void write(byte[] bytes) throws IOException  {
       super.write(bytes);
-      jTextPaneOutput.setText(jTextPaneOutput.getText()+new String(bytes)+"\n");
+      jTextPaneOutput.setText(jTextPaneOutput.getText()+new String(bytes));
     }
   }
 

@@ -142,6 +142,7 @@ public class Launcher {
     String line2 = null;
     while (((line = is.readLine()) != null) ||  ((line2 = es.readLine()) != null)) {
       if (line != null) {
+        line += "\n";
         byte[] lineData = line.getBytes();
         os.write(lineData);
       }
@@ -235,6 +236,7 @@ public class Launcher {
       try {
         //determine if args[0] is a PluginTestSuite or a PluginTestCase
         Class clazz = Class.forName(args[0]);
+        if (args.length > 1) launcher.setTestJarFile(args[1]);
         if (clazz.getSuperclass().equals(PluginTestSuite.class)) {
           launcher.runTestSuite((PluginTestSuite)clazz.newInstance(), System.out);
         }
