@@ -87,16 +87,16 @@ public class Launcher {
    
    
     private void createLogProps() throws Exception {
-        File logPropsFile;
-        logPropsFile = new File("logging.props");
-        logPropsFile.createNewFile();
-        FileWriter fw = new FileWriter(logPropsFile);
-        fw.write("log4j.rootCategory=INFO,A1,A2\n"
-            + "log4j.appender.A1=org.apache.log4j.ConsoleAppender\n"
-            + "log4j.appender.A1.layout=org.apache.log4j.PatternLayout\n"
-            + "log4j.appender.A1.layout.ConversionPattern=%m%n\n"
-            + "log4j.appender.A2=org.cougaar.plugin.test.ErrorDetectionAppender");
-        fw.close();
+//        File logPropsFile;
+//        logPropsFile = new File("logging.props");
+//        logPropsFile.createNewFile();
+//        FileWriter fw = new FileWriter(logPropsFile);
+//        fw.write("log4j.rootCategory=INFO,A1,A2\n"
+//            + "log4j.appender.A1=org.apache.log4j.ConsoleAppender\n"
+//            + "log4j.appender.A1.layout=org.apache.log4j.PatternLayout\n"
+//            + "log4j.appender.A1.layout.ConversionPattern=%m%n\n"
+//            + "log4j.appender.A2=org.cougaar.plugin.test.ErrorDetectionAppender");
+//        fw.close();
     }
 
 
@@ -112,15 +112,18 @@ public class Launcher {
                     System.err.println("Unregonized test type");
                 } else if (testType == TEST_CASE_TYPE) {
 					Launcher launcher = new Launcher(_class);
-                    launcher.launchCougaar(System.out);
+					launcher.createLogProps();
+                    launcher.launchCougaar(System.err);
                 } else if (testType == TEST_SUITE_TYPE) {
                     //process test suite
 					PluginTestSuite testSuite = (PluginTestSuite)_class.newInstance();
 					Class[] _classes = testSuite.getTestClasses();
 					if(_classes!=null && _classes.length>0){
 						for(int i=0;i<_classes.length;i++){
-							Launcher launcher  = new Launcher(_classes[i]);
+							Launcher launcher  = new Launcher(_classes[i]);		
+							launcher.createLogProps();
 							launcher.launchCougaar(System.out);
+							
 						}
 					}else{
 						System.err.println("Test suite with no test cases");
@@ -159,7 +162,7 @@ public class Launcher {
 
             j = null;
             String envParams = "";
-            j = testNode.getEnvrionmentParams().iterator();
+            j = testNode.getEnvironmentParams().iterator();
             while (j.hasNext()) {
                 envParams += ((String) j.next() + " ");
             }

@@ -7,7 +7,7 @@
 		<field name="nodeList" 
 			   type="org.cougaar.cougaarunit.vo.Node"
 			   collection="vector">
-			<bind-xml name="Node"/>
+			<bind-xml name="node"/>
 		</field>
 		<field name="name" type="java.lang.String">
 			<bind-xml name="name" node="attribute"/>
@@ -15,7 +15,7 @@
 	</class>
 	
 	<class name="org.cougaar.cougaarunit.vo.Node">
-		<map-to xml="Node"/>
+		<map-to xml="node"/>
 		<field name="name" type="java.lang.String">
 			<bind-xml name="name" node="attribute"/>
 		</field>
@@ -29,7 +29,7 @@
 			   collection="vector">
 			<bind-xml name="vmParam" node="element"/>
 		</field>
-		<field name="envrionmentParams" 
+		<field name="environmentParams" 
 			   type="java.lang.String"
 			   collection="vector">
 			<bind-xml name="envrionmentParam" node="element"/>
@@ -89,14 +89,14 @@
 		<field name="className"
 			   type="java.lang.String">
 			<bind-xml name="class" node="attribute"/>
+		</field>		
+		<field name="insertionpoint"
+			   type="java.lang.String">
+			<bind-xml name="insertionpoint" node="attribute"/>
 		</field>
 		<field name="priority"
 			   type="java.lang.String">
 			<bind-xml name="priority" node="attribute"/>
-		</field>
-		<field name="insertionpoint"
-			   type="java.lang.String">
-			<bind-xml name="insertionpoint" node="attribute"/>
 		</field>		
 	</class>
 	

@@ -52,7 +52,7 @@ public class SocietyBuilderTest extends TestCase {
 		 */
 		public String getPluginClass() {
 			// TODO Auto-generated method stub
-			return "org.cougaar.cougaarunit.SocietyBuilderPlugin";
+			return "org.cougaar.cougaarunit.SamplePlugin";
 		}
 	}
 }

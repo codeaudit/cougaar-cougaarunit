@@ -15,7 +15,7 @@ import org.cougaar.core.util.UID;
  */
 public class Node implements Serializable {   
     private Vector programParams = null;
-    private Vector envrionmentParams = null;
+    private Vector environmentParams = null;
     private Vector vmParams = null;
     private Vector agents = null;
     private Vector components = null;
@@ -27,7 +27,7 @@ public class Node implements Serializable {
      */
     public Node() {
         programParams = new Vector();
-        envrionmentParams = new Vector();
+        environmentParams = new Vector();
         vmParams = new Vector();
         agents = new Vector();
         components = new Vector();        
@@ -87,20 +87,20 @@ public class Node implements Serializable {
     /**
      * get the enviromental paramarameters
      *
-     * @return Returns the envrionmentParams.
+     * @return Returns the environmentParams.
      */
-    public Vector getEnvrionmentParams() {
-        return envrionmentParams;
+    public Vector getEnvironmentParams() {
+        return environmentParams;
     }
 
 
     /**
      * set the enviromental paramarameters
      *
-     * @param envrionmentParams The envrionmentParams to set.
+     * @param environmentParams The environmentParams to set.
      */
-    public void setEnvrionmentParams(Vector envrionmentParams) {
-        this.envrionmentParams = envrionmentParams;
+    public void setEnvironmentParams(Vector envrionmentParams) {
+        this.environmentParams = envrionmentParams;
     }
 
     /**
@@ -267,7 +267,7 @@ public class Node implements Serializable {
      * @return true if added
      */
     public boolean addEnvParam(String param) {
-        return envrionmentParams.add(param);
+        return environmentParams.add(param);
     }
     
 
@@ -279,7 +279,7 @@ public class Node implements Serializable {
      * @return true if added
      */
     public boolean removeEnvParam(String param) {
-        return envrionmentParams.remove(param);
+        return environmentParams.remove(param);
     }
 	
 	/**

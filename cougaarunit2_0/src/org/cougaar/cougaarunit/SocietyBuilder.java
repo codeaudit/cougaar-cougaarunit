@@ -108,7 +108,8 @@ public class SocietyBuilder {
     private static Agent buildAgent(PluginTestCase pluginTestCase) {
     	String testPluginName = pluginTestCase.getClass().getName();
     	String pluginBeingTested = pluginTestCase.getPluginClass();
-        Agent agent = new Agent(testPluginName + "_testAgent");
+        Agent agent = new Agent("TestAgent");
+        agent.setClassName("org.cougaar.core.agent.SimpleAgent");
         Component comp = new ComponentImpl(testPluginName);
         comp.setInsertionpoint(PluginBase.INSERTION_POINT);
         comp.setClassName(testPluginName);
@@ -123,7 +124,7 @@ public class SocietyBuilder {
         String pluginServiceFilter = "org.cougaar.cougaarunit.PluginServiceFilter";
         comp = new ComponentImpl(pluginServiceFilter);
         comp.setClassName(pluginServiceFilter);
-        comp.setInsertionpoint(PluginManager.INSERTION_POINT + ".BINDER");
+        comp.setInsertionpoint(PluginManager.INSERTION_POINT + ".Binder");
         comp.setPriority("BINDER");
         agent.addComponent(comp);
         return agent;
