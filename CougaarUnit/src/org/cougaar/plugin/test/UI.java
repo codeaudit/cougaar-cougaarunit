@@ -114,6 +114,7 @@ public class UI extends JFrame {
   private static final String SOURCE_DATA_COL_ID = "ID";
   private static final String SOURCE_DATA_COL_TIME = "TIME";
   private JMenuItem jMenuItemClearResults = new JMenuItem();
+  private MyClassLoader loader;
   /**
    *
    * <p>Title: OutputTableModel</p>
@@ -238,6 +239,9 @@ public class UI extends JFrame {
    * Seconday UI initializer
    */
   private void init2() {
+    //configure the customized class loader
+    configClassLoader();
+
     jListTestCases.setModel(testCaseModel);
     jListTestSuites.setModel(testSuiteModel);
     jTableResults.setDefaultRenderer(Object.class, new OutputCellRenderer());
@@ -808,30 +812,17 @@ public class UI extends JFrame {
     launcher.setOutputStyle(Launcher.OUTPUT_STYLE_XML);
     try {
       File f = new File((String)jComboBoxDirJar.getSelectedItem());
-      launcher.setTestJarFile(f.getCanonicalPath());
+      loader.addURL(new URL("file:"+ (String)jComboBoxDirJar.getSelectedItem())); //add the selected jar file to the classpath
+      launcher.setTestJarFile(f.getCanonicalPath());  //configure the laucnher witht hte selected jar file
     }
     catch (Exception e2){}
     Object[] testSuites = jListTestSuites.getSelectedValues();
-    MyClassLoader loader = null;
-    try {
-      //create a class loader that contains the selected directory or jar file in it's class path
-      loader = MyClassLoader.getInstance(new URL[]{new URL("file:"+ (String)jComboBoxDirJar.getSelectedItem())});
-      String cip = Misc.getEnv("COUGAAR_INSTALL_PATH");
-      String cougaarLib = cip+"\\lib";
-      String cougaarSys = cip+"\\sys";
-      loader.addJarsFromDir(cougaarLib);
-      loader.addJarsFromDir(cougaarSys);
-    }
-    catch (Exception e1) {
-      e1.printStackTrace();
-      return;
-    }
 
     for (int i=0; i<testSuites.length; i++) {
       try {
         baos = new MyByteArrayOutputStream(256);
         Class clazz = loader.loadClass((String)testSuites[i]);
-        Thread t = new Thread(new LauncherRunnable("Executing test suite", launcher, clazz, baos));
+        Thread t = new Thread(new LauncherRunnable("Executing test suite", launcher, clazz, baos, loader));
         t.start();
       }
       catch (Exception ex) {
@@ -843,15 +834,21 @@ public class UI extends JFrame {
     for (int i=0; i<testCases.length; i++) {
       try {
         baos = new MyByteArrayOutputStream(256);
-        System.out.println("LOADING CLASS: "+ (String)testCases[i]);
         Class clazz = loader.loadClass((String)testCases[i]);
-        Thread t = new Thread(new LauncherRunnable("Executing test class", launcher, clazz, baos));
+        Thread t = new Thread(new LauncherRunnable("Executing test class", launcher, clazz, baos, loader));
         t.start();
       }
       catch (Exception ex) {
         ex.printStackTrace();
       }
     }
+  }
+
+  private void configClassLoader()  {
+    loader = MyClassLoader.getInstance();
+    String cip = Misc.getEnv("COUGAAR_INSTALL_PATH");
+    loader.addJarsFromDir(cip+"\\lib");
+    loader.addJarsFromDir(cip+"\\sys");
   }
 
   /**
@@ -877,12 +874,14 @@ public class UI extends JFrame {
     Class clazz;
     ByteArrayOutputStream baos;
     String title;
+    ClassLoader loader;
 
-    public LauncherRunnable(String title, Launcher launcher, Class clazz, ByteArrayOutputStream baos) {
+    public LauncherRunnable(String title, Launcher launcher, Class clazz, ByteArrayOutputStream baos, ClassLoader loader) {
       this.launcher = launcher;
       this.clazz = clazz;
       this.baos = baos;
       this.title = title;
+      this.loader = loader;
     }
 
     public void run() {
@@ -895,6 +894,7 @@ public class UI extends JFrame {
         jTabbedPane1.setSelectedComponent(jScrollPaneOutput);  //switch to the output tab while running cougaar
 
         Object obj = clazz.newInstance();
+        System.out.println("OBJ:" + obj);
         if (obj instanceof PluginTestCase)
           launcher.runTestCase((PluginTestCase)obj, baos);
         else if (obj instanceof PluginTestSuite)
@@ -1192,6 +1192,9 @@ class MyClassLoader extends URLClassLoader {
     }
   }
 
+  public void addURL(URL url) {
+    super.addURL(url);
+  }
 }
 
 

@@ -70,7 +70,7 @@
   <property category="sys" name="InstanceVisibility" value="2"/>
   <property category="sys" name="JDK" value="java 1.4.1_01-b01"/>
   <property category="sys" name="LastTag" value="0"/>
-  <property category="sys" name="Libraries" value="JBCL;BCEL;Servlet;COUGAAR_10"/>
+  <property category="sys" name="Libraries" value="JBCL;BCEL;Servlet;COUGAAR_10;COUGAAR_10_CORE;COUGAAR_10_UTIL"/>
   <property category="sys" name="MakeStable" value="0"/>
   <property category="sys" name="OutPath" value="classes"/>
   <property category="sys" name="ServletContentType" value="HTML"/>
@@ -100,22 +100,79 @@
     <property category="external" name="params" value="&quot;($ProjectDir)\cougaarUnit.jar&quot; &quot;c:\cougaar10\lib\cougaarUnit.jar&quot;"/>
     <property category="external" name="phase" value="package"/>
   </node>
-  <node name="CougaarUnit" type="Archive">
-    <property category="archiving" name="archiverClass" value="com.borland.jbuilder.wizard.archive.ExecutableArchiver"/>
-    <property category="archiving" name="executableEnabled.1" value="1"/>
+  <node name="CougaarUnitApp" type="Archive">
+    <property category="archiving" name="archiverClass" value="com.borland.jbuilder.wizard.archive.ApplicationArchiver"/>
+    <property category="archiving" name="executableEnabled.1" value="0"/>
     <property category="archiving" name="executableEnabled.2" value="1"/>
-    <property category="archiving" name="executableEnabled.3" value="1"/>
+    <property category="archiving" name="executableEnabled.3" value="0"/>
     <property category="archiving" name="executableEnabled.4" value="0"/>
     <property category="archiving" name="executableEnabled.5" value="0"/>
-    <property category="archiving" name="executableFiles.1" value=""/>
-    <property category="archiving" name="executableFiles.2" value=""/>
-    <property category="archiving" name="executableFiles.3" value=""/>
-    <property category="archiving" name="executableFiles.4" value=""/>
-    <property category="archiving" name="executableFiles.5" value=""/>
+    <property category="archiving" name="executableFiles.1" value="CougaarUnit2W.exe"/>
+    <property category="archiving" name="executableFiles.2" value="CougaarUnitApp.exe"/>
+    <property category="archiving" name="executableFiles.3" value="CougaarUnit2-linux"/>
+    <property category="archiving" name="executableFiles.4" value="CougaarUnit2-solaris"/>
+    <property category="archiving" name="executableFiles.5" value="CougaarUnit2-mac"/>
+    <property category="archiving" name="extraDeployRoots.1" value="C:images.*"/>
+    <property category="archiving" name="extraDeployRoots.10" value="C:org.cougaar.plugin.test.Launcher"/>
+    <property category="archiving" name="extraDeployRoots.11" value="C:org.cougaar.plugin.test.AnimatedPanel"/>
+    <property category="archiving" name="extraDeployRoots.12" value="C:org.cougaar.plugin.test.UI"/>
+    <property category="archiving" name="extraDeployRoots.13" value="C:org.cougaar.plugin.test.ClassStringRenderer"/>
+    <property category="archiving" name="extraDeployRoots.14" value="C:org.cougaar.plugin.test.ResultsDialog"/>
+    <property category="archiving" name="extraDeployRoots.15" value="C:org.cougaar.plugin.test.ClassStringRendererRegistry"/>
+    <property category="archiving" name="extraDeployRoots.16" value="C:org.cougaar.plugin.test.capture.*"/>
+    <property category="archiving" name="extraDeployRoots.17" value="C:org.cougaar.plugin.test.TestClassLoader"/>
+    <property category="archiving" name="extraDeployRoots.18" value="C:org.cougaar.plugin.test.BlackboardDeltaState"/>
+    <property category="archiving" name="extraDeployRoots.2" value="C:org.cougaar.plugin.test.util.*"/>
+    <property category="archiving" name="extraDeployRoots.3" value="C:org.cougaar.plugin.test.RunDialog"/>
+    <property category="archiving" name="extraDeployRoots.4" value="C:org.cougaar.plugin.test.Animation"/>
+    <property category="archiving" name="extraDeployRoots.5" value="C:org.cougaar.plugin.test.sample.*"/>
+    <property category="archiving" name="extraDeployRoots.6" value="C:org.cougaar.plugin.test.PluginTestResult"/>
+    <property category="archiving" name="extraDeployRoots.7" value="C:org.cougaar.plugin.test.PublishAction"/>
+    <property category="archiving" name="extraDeployRoots.8" value="C:org.cougaar.plugin.test.SearchProgressDialog"/>
+    <property category="archiving" name="extraDeployRoots.9" value="C:org.cougaar.plugin.test.lp.*"/>
     <property category="archiving" name="libraryStates.1" value="1:JBCL"/>
     <property category="archiving" name="libraryStates.2" value="1:BCEL"/>
-    <property category="archiving" name="libraryStates.3" value="1:COUGAAR_10"/>
+    <property category="archiving" name="libraryStates.3" value="1:COUGAAR_10_CORE"/>
+    <property category="archiving" name="libraryStates.4" value="1:COUGAAR_10_UTIL"/>
+    <property category="archiving" name="outPathState" value="1"/>
+    <property category="archiving" name="targetPath" value="CougaarUnitApp.jar"/>
+  </node>
+  <node name="CougaarUnitArchive" type="Archive">
+    <property category="archiving" name="extraDeployRoots.1" value="C:org.cougaar.plugin.test.PluginServiceFilter"/>
+    <property category="archiving" name="extraDeployRoots.10" value="C:org.cougaar.plugin.test.util.*"/>
+    <property category="archiving" name="extraDeployRoots.11" value="C:org.cougaar.plugin.test.DomainServiceProxy"/>
+    <property category="archiving" name="extraDeployRoots.12" value="C:org.cougaar.plugin.test.BlackboardDeltaState"/>
+    <property category="archiving" name="extraDeployRoots.13" value="C:org.cougaar.plugin.test.BlackboardServiceProxy"/>
+    <property category="archiving" name="extraDeployRoots.14" value="C:org.cougaar.plugin.test.PluginTestSuite"/>
+    <property category="archiving" name="extraDeployRoots.15" value="C:org.cougaar.plugin.test.PublishAction"/>
+    <property category="archiving" name="extraDeployRoots.16" value="C:org.cougaar.plugin.test.ClassStringRendererRegistry"/>
+    <property category="archiving" name="extraDeployRoots.2" value="C:org.cougaar.plugin.test.PluginTestResult"/>
+    <property category="archiving" name="extraDeployRoots.3" value="C:org.cougaar.plugin.test.lp.*"/>
+    <property category="archiving" name="extraDeployRoots.4" value="C:org.cougaar.plugin.test.capture.*"/>
+    <property category="archiving" name="extraDeployRoots.5" value="C:org.cougaar.plugin.test.BlackboardClientProxy"/>
+    <property category="archiving" name="extraDeployRoots.6" value="C:org.cougaar.plugin.test.ObjectComparators"/>
+    <property category="archiving" name="extraDeployRoots.7" value="C:org.cougaar.plugin.test.PluginTestCase"/>
+    <property category="archiving" name="extraDeployRoots.8" value="C:org.cougaar.plugin.test.ClassStringRenderer"/>
+    <property category="archiving" name="extraDeployRoots.9" value="C:org.cougaar.plugin.test.Comparator"/>
+    <property category="archiving" name="outPathState" value="1"/>
     <property category="archiving" name="targetPath" value="CougaarUnit.jar"/>
+  </node>
+  <node name="TestClassLoader" type="Archive">
+    <property category="archiving" name="archiverClass" value="com.borland.jbuilder.wizard.archive.ApplicationArchiver"/>
+    <property category="archiving" name="executableEnabled.1" value="0"/>
+    <property category="archiving" name="executableEnabled.2" value="1"/>
+    <property category="archiving" name="executableEnabled.3" value="0"/>
+    <property category="archiving" name="executableEnabled.4" value="0"/>
+    <property category="archiving" name="executableEnabled.5" value="0"/>
+    <property category="archiving" name="executableFiles.1" value="CougaarUnit2W.exe"/>
+    <property category="archiving" name="executableFiles.2" value=""/>
+    <property category="archiving" name="executableFiles.3" value="CougaarUnit2-linux"/>
+    <property category="archiving" name="executableFiles.4" value="CougaarUnit2-solaris"/>
+    <property category="archiving" name="executableFiles.5" value="CougaarUnit2-mac"/>
+    <property category="archiving" name="extraDeployRoots.1" value="C:org.cougaar.plugin.test.TestClassLoader"/>
+    <property category="archiving" name="manifestMainClass" value="org.cougaar.plugin.test.TestClassLoader"/>
+    <property category="archiving" name="outPathState" value="1"/>
+    <property category="archiving" name="targetPath" value="TestClassLoader.jar"/>
   </node>
   <node name="TestJarArchive" type="Archive">
     <property category="archiving" name="buildWithProject" value="0"/>
