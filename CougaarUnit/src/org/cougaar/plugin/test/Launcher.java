@@ -25,17 +25,17 @@ import java.io.InputStreamReader;
  * @version 1.0
  */
 public class Launcher {
-    protected final static List excludedJars = new ArrayList();
-    static {
-        excludedJars.add("javaiopatch.jar");
-        excludedJars.add("bootstrap.jar");
-    }
 
+    /**
+     * Note:  the -Dorg.cougaar.class.path=%COUGAAR_INSTALL_PATH%\\lib\\test\\AAACougaarUnit.jar is required so that the AAACougaarUnity.jar
+     * file comes first in the classpath.  This way the ComponentPlugin from that jar file will be used instead of the normal
+     * one.
+     */
     private static String RUN_BAT_TEXT = "@echo OFF\n"+
                                        "if \"%COUGAAR_INSTALL_PATH%\"==\"\" goto AIP_ERROR\n" +
                                        "if \"%1\"==\"\" goto ARG_ERROR\n"+
                                        "set LIBPATHS=%COUGAAR_INSTALL_PATH%\\lib\\bootstrap.jar\n"+
-                                       "set MYPROPERTIES= -Dorg.cougaar.system.path=%COUGAAR_INSTALL_PATH%\\sys -Dorg.cougaar.install.path=%COUGAAR_INSTALL_PATH% -Dorg.cougaar.core.servlet.enable=true -Dorg.cougaar.lib.web.scanRange=100 -Dorg.cougaar.lib.web.http.port=8800 -Dorg.cougaar.lib.web.https.port=-1 -Dorg.cougaar.lib.web.https.clientAuth=true -Xbootclasspath/p:%COUGAAR_INSTALL_PATH%\\lib\\javaiopatch.jar\n"+
+                                       "set MYPROPERTIES= -Dorg.cougaar.class.path=%COUGAAR_INSTALL_PATH%\\lib\\test\\AAACougaarUnit.jar -Dorg.cougaar.system.path=%COUGAAR_INSTALL_PATH%\\sys -Dorg.cougaar.install.path=%COUGAAR_INSTALL_PATH% -Dorg.cougaar.core.servlet.enable=true -Dorg.cougaar.lib.web.scanRange=100 -Dorg.cougaar.lib.web.http.port=8800 -Dorg.cougaar.lib.web.https.port=-1 -Dorg.cougaar.lib.web.https.clientAuth=true -Xbootclasspath/p:%COUGAAR_INSTALL_PATH%\\lib\\javaiopatch.jar\n"+
                                        "set MYMEMORY=\n"+
                                        "set MYCLASSES=org.cougaar.bootstrap.Bootstrapper org.cougaar.core.node.Node\n"+
                                        "set MYARGUMENTS= -c -n \"%1\"\n"+
