@@ -91,7 +91,7 @@ public class SocietyBuilder {
      * @return
      */
     private static Node buildNode(PluginTestCase pluginTestCase) {
-        Node node = new Node(pluginTestCase.getDescription() + "_testNode");
+		Node node = new Node("TestNode");
         setUpParameters(node);
         node.addAgent(SocietyBuilder.buildAgent(pluginTestCase));
         return node;

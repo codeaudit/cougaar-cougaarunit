@@ -1,8 +1,11 @@
 package org.cougaar.cougaarunit;
 
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.Iterator;
 import java.util.Vector;
 
@@ -38,7 +41,49 @@ public class Launcher {
     public static final int OUTPUT_STYLE_TEXT = 0;
     /** DOCUMENT ME! */
     public static final int OUTPUT_STYLE_XML = 1;
+	private String testClassName;
+    
+    public Launcher (String testClassName) {
+    	this.testClassName = testClassName;
+    }
    
+	/**
+	 * Here is where we launch the cougaar environment once the node and
+	 * agent ini files have been configured.  This method presumes that
+	 */
+	private int launchCougaar(OutputStream os) throws Exception {
+		int retCode = 0;
+		if (os == null) os = System.out;
+
+		String execStr = createTestSociety(testClassName);
+
+		System.out.println("execing: " + execStr);
+		Process p = Runtime.getRuntime().exec(execStr);
+		System.out.println("Process:  "+ p);
+
+		//BufferedWriter ps = new BufferedWriter(new OutputStreamWriter(p.getOutputStream()));
+		BufferedReader is= new BufferedReader(new InputStreamReader(p.getInputStream()));
+		BufferedReader es = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+		String line = null;
+		String line2 = null;
+		while (((line = is.readLine()) != null) ||  ((line2 = es.readLine()) != null)) {
+			if (line != null) {
+				line += "\n";
+				byte[] lineData = line.getBytes();
+				os.write(lineData);
+			}
+			if (line2 != null) {
+				byte[] lineData = line2.getBytes();
+				os.write(lineData);
+			}
+			//os.write('\n');
+		}
+		System.out.println("exiting Cougaar system...");
+		System.out.flush();
+		retCode = p.waitFor();   //wait for this process to terminate
+
+		return retCode;
+	}
    
    
     private void createLogProps() throws Exception {
@@ -57,16 +102,17 @@ public class Launcher {
 
     public static void main(String[] args) {
         if (args.length > 0) {
-            Launcher launcher = new Launcher();
+            Launcher launcher = new Launcher(args[0]);
             try {
                 //get class name
-                Class _class = Class.forName(args[0]);
-                launcher.createTestSociety(_class.getName());
+                Class _class = Class.forName(launcher.getTestClassName());
+             
                 int testType = getTestType(_class.getSuperclass());
+                
                 if (testType < 0) {
                     System.err.println("Unregonized test type");
                 } else if (testType == TEST_CASE_TYPE) {
-                    //process test case
+                    launcher.launchCougaar(System.out);
                 } else if (testType == TEST_SUITE_TYPE) {
                     //process test suite
                 }
@@ -79,7 +125,7 @@ public class Launcher {
     }
 
 
-    private void createTestSociety(String testName) {
+    private String createTestSociety(String testName) {
         Society testSociety = SocietyBuilder.buildSociety(testName);
         Vector v = testSociety.getNodeList();
         Iterator i = v.iterator();
@@ -115,8 +161,9 @@ public class Launcher {
             String ws = System.getProperty("org.cougaar.workspace", "./");
             cmdLine = cmdLine.replaceAll("COUGAAR_INSTALL_PATH", cip);
 			cmdLine = cmdLine.replaceAll("COUGAAR_WORKSPACE", ws);
-            System.out.println(cmdLine);
+            return cmdLine;
         }
+        return null;
     }
 
 
@@ -141,4 +188,16 @@ public class Launcher {
         }
     }
 
+	/**
+	 * @return Returns the testClassName.
+	 */
+	public String getTestClassName() {
+		return testClassName;
+	}
+	/**
+	 * @param testClassName The testClassName to set.
+	 */
+	public void setTestClassName(String testClassName) {
+		this.testClassName = testClassName;
+	}
 }
