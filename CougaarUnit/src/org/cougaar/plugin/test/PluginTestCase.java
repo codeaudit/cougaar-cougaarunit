@@ -59,13 +59,13 @@ public abstract class PluginTestCase extends ComponentPlugin {
    * @param waitTime length of time to wait before testing the inital state
    * @param expectedResult Indicates whether this test is expected to pass or fail
    */
-  public void assertInitialState(BlackboardDeltaState bds, long waitTime, boolean expectedResult) {
+  public void assertInitialState(BlackboardDeltaState bds, long waitTime, boolean expectedResult, boolean isOrdered) {
     if (bds != null) {
       try {
         Thread.currentThread().sleep(waitTime > 0?waitTime:0);   //wait the designated amount of time
         BlackboardDeltaState currentBDS = ((BlackboardServiceProxy)blackboard).getCurrentBlackboardDeltaState();
-        boolean result = bds.compare(currentBDS, expectedResult);
-        PluginTestResult.addEntry(PluginTestResult.PHASE_TEST_EXECUTION, PluginTestResult.INITIAL_STATE, result, "Initial State", bds, currentBDS);
+        boolean result = bds.compare(currentBDS, isOrdered);
+        PluginTestResult.addEntry(PluginTestResult.PHASE_TEST_EXECUTION, PluginTestResult.INITIAL_STATE, !(result^expectedResult), "Initial State", bds, currentBDS);
         ((BlackboardServiceProxy)blackboard).resetBlackboardDeltaState();   //reset the blackboard state
       }
       catch (Exception ex) {

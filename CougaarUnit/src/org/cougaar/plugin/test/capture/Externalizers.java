@@ -33,6 +33,20 @@ public class Externalizers {
     }
   };
 
+  static Externalizer SERIAL_EXTERNALIZER = new Externalizer() {
+    public String getUniqueId() {
+      return "serial externalizer";
+    }
+    public Serializable externalize(Object obj) {
+      if (obj instanceof Serializable)
+        return (Serializable)obj;
+      return ClassStringRendererRegistry.render(obj);
+    }
+    public Object internalize(Object obj) {
+      return obj;
+    }
+  };
+
   static {
     addExternalizer(Object.class, DEFAULT_EXTERNALIZER);
   }

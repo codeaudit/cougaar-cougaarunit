@@ -22,6 +22,11 @@ public class InventoryPluginTestCase1 extends PluginTestCase {
   public final Integer LEVEL_2_MAX = new Integer(225);
   public final String  LEVEL_2_TIME_HORIZON = "Level2TimeHorizon";
   public final Integer LEVEL_2_TIME_HORIZON_DEFAULT = LEVEL_2_MAX;
+  public final Integer LEVEL_6_MIN = new Integer(20);
+  public final Integer LEVEL_6_MAX = new Integer(225);
+  public final String  LEVEL_6_TIME_HORIZON = "Level6TimeHorizon";
+  public final Integer LEVEL_6_TIME_HORIZON_DEFAULT = LEVEL_6_MAX;
+
   OMCRange level2Range = new IntRange (LEVEL_2_MIN.intValue(), LEVEL_2_MAX.intValue());
   OMCRangeList rangeList = new OMCRangeList (level2Range);
 
@@ -36,10 +41,15 @@ public class InventoryPluginTestCase1 extends PluginTestCase {
   public void validateExecution() {
     OperatingMode om = new OperatingModeImpl (LEVEL_2_TIME_HORIZON+"_"+SUPPLY_TYPE, rangeList,
                                                     LEVEL_2_TIME_HORIZON_DEFAULT);
-    PublishAction pa = new PublishAction(PublishAction.ADD, om);
+    OperatingMode om2 = new OperatingModeImpl (LEVEL_6_TIME_HORIZON+"_"+SUPPLY_TYPE, rangeList,
+                                                    LEVEL_6_TIME_HORIZON_DEFAULT);
+
     BlackboardDeltaState bds = new BlackboardDeltaState();
-    bds.add(pa);
-    assertPublishAdd(om, bds, 5000, true, true);
+    bds.add(new PublishAction(PublishAction.ADD, om, ObjectComparators.EQUALS_COMPARATOR));
+    bds.add(new PublishAction(PublishAction.ADD, om2, ObjectComparators.EQUALS_COMPARATOR));
+
+    assertInitialState(bds, 5000, true, true);
+    //assertPublishAdd(om, bds, 5000, true, true);
   }
 
   public String[] getPluginParameters() {
@@ -47,7 +57,7 @@ public class InventoryPluginTestCase1 extends PluginTestCase {
   }
 
   public String getPluginClass() {
-    return "org.cougaar.logistics.plugin.inventory";
+    return "org.cougaar.logistics.plugin.inventory.InventoryPlugin";
   }
 
   public void validateSubscriptions() {

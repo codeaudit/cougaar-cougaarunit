@@ -83,7 +83,7 @@ public class ManagerTestCase extends PluginTestCase {
     bds.add(new PublishAction(PublishAction.ADD, what_else_to_code, ObjectComparators.ASSET_COMPARATOR));
     bds.add(new PublishAction(PublishAction.ADD, makeTask(what_else_to_code), ObjectComparators.TASK_VERB_COMPARATOR));
 
-    this.assertInitialState(bds, 5000, true);
+    this.assertInitialState(bds, 5000, true, true);
   }
 
   public void validateSubscriptions() {
