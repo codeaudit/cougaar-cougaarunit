@@ -12,6 +12,15 @@
 		<field name="name" type="java.lang.String">
 			<bind-xml name="name" node="attribute"/>
 		</field>
+		<field name="tests" type="java.lang.String">
+			<bind-xml name="tests" node="attribute"/>
+		</field>
+		<field name="failures" type="java.lang.String">
+			<bind-xml name="failures" node="attribute"/>
+		</field>
+		<field name="successrate" type="java.lang.String">
+			<bind-xml name="successrate" node="attribute"/>
+		</field>
 	</class>
 	
 	<class name="org.cougaar.cougaarunit.vo.TestResultSummary">

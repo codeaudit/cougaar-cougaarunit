@@ -39,7 +39,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
  	  					</td>
  	  					<td align="right">
  	  						<xsl:for-each select="testsuite">
-						    	 <xsl:value-of select="@sucessrate"/>    	
+						    	 <xsl:value-of select="@successrate"/>    	
 						    </xsl:for-each>
  	  					</td>
  	  				</tr>

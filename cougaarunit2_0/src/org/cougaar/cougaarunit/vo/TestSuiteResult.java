@@ -16,8 +16,52 @@ public class TestSuiteResult implements Serializable{
 	private String name;
 	private String result;
 	private Vector testList;
+	private String tests;
+	private String successrate;
+	private String failures;
 	
-	
+	/**
+	 * @return
+	 */
+	public String getFailures() {
+		return failures;
+	}
+
+	/**
+	 * @param failures
+	 */
+	public void setFailures(String failures) {
+		this.failures = failures;
+	}
+
+	/**
+	 * @return
+	 */
+	public String getSuccessrate() {
+		return successrate;
+	}
+
+	/**
+	 * @param successrate
+	 */
+	public void setSuccessrate(String successrate) {
+		this.successrate = successrate;
+	}
+
+	/**
+	 * @return
+	 */
+	public String getTests() {
+		return tests;
+	}
+
+	/**
+	 * @param tests
+	 */
+	public void setTests(String tests) {
+		this.tests = tests;
+	}
+
 	/**
 	 * @return
 	 */
