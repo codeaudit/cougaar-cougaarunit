@@ -25,6 +25,10 @@ import java.io.InputStreamReader;
  * @version 1.0
  */
 public class Launcher {
+    private static final int PLATFORM_WINDOWS = 0;
+    private static final int PLATFORM_LINUX = 1;
+    private static final int PLATFORM_OTHER = 2;
+    private static int currentOS;
 
     /**
      * Note:  the -Dorg.cougaar.class.path=%COUGAAR_INSTALL_PATH%\\lib\\test\\AAACougaarUnit.jar is required so that the AAACougaarUnity.jar
@@ -64,6 +68,17 @@ public class Launcher {
                                         "java $MYPROPERTIES $MYMEMORY -classpath $LIBPATHS $MYCLASSES $MYARGUMENTS $2 $3\n";
 
 
+    static {
+        //initilaize the currentOS setting
+        String osName = System.getProperty("os.name").toLowerCase();
+        if (osName.indexOf("windows") != -1)
+            currentOS = PLATFORM_WINDOWS;
+        else if (osName.indexOf("linux")!= 01)
+            currentOS = PLATFORM_LINUX;
+        else
+            currentOS = PLATFORM_OTHER;
+    }
+
     private static void writeNodeIni() throws Exception {
         File nodeFile = new File("TestNode.ini");
         FileWriter fw = new FileWriter(nodeFile);
@@ -102,18 +117,21 @@ public class Launcher {
     private static void launchCougaar() throws Exception {
         File shellFile = null;
         String shellFileText = null;
+        String execStr = null;
 
-        if (System.getProperty("os.name").toLowerCase().indexOf("windows") != -1) {  //is this a Windows environment?
+        if (currentOS == PLATFORM_WINDOWS) {  //is this a Windows environment?
             shellFile = new File("Run.bat");
             shellFileText = RUN_BAT_TEXT;
+            execStr = shellFile.getName() + " TestNode";
         }
-        else if (System.getProperty("os.name").toLowerCase().indexOf("linux") != -1) {  //is this a Linux environment?
+        else if (currentOS == PLATFORM_LINUX) {  //is this a Linux environment?
             shellFile = new File("Run.sh");
             shellFileText = RUN_SH_TEXT;
             if (!shellFile.exists()) {
               shellFile.createNewFile();
               Runtime.getRuntime().exec("chmod +x " + shellFile.getName());
             }
+            execStr = "./"+shellFile.getName() + " TestNode";
         }
         else throw new Exception("Unsupported platfrom");
 
@@ -121,8 +139,9 @@ public class Launcher {
         fw.write(shellFileText);
         fw.flush();
         fw.close();
-        System.out.println("execing: " + "./"+shellFile.getName() + " TestNode");
-        Process p = Runtime.getRuntime().exec("./"+shellFile.getName() + " TestNode");
+
+        System.out.println("execing: " + execStr);
+        Process p = Runtime.getRuntime().exec(execStr);
 
         BufferedReader is= new BufferedReader(new InputStreamReader(p.getInputStream()));
         String line;
