@@ -80,7 +80,7 @@ public class PluginServiceFilter
 
       protected Object getClientProxy(Object client, Class serviceClass) {
         if ((client instanceof BlackboardClient) && (serviceClass.equals(BlackboardService.class))) {
-          return (BlackboardClient)client;
+          return new BlackboardClientProxy((BlackboardClient)client);
         }
         return null;
       }

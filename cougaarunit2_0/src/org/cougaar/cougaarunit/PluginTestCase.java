@@ -245,7 +245,7 @@ public abstract class PluginTestCase extends ComponentPlugin {
    *
    * @return
    */
-  abstract public String getPluginClass();
+   abstract public String getPluginClass();
 
   /**
    * Initiates the tests by calling the validateSubscritpions() and validateExecution()
