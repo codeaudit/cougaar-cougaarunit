@@ -1036,6 +1036,7 @@ public class UI extends JFrame {
 
   void jMenuItemOutputPrint_actionPerformed(ActionEvent e) {
     PrintableComponent pc = new PrintableComponent(this.jTextPaneOutput);
+
     try {pc.print();} catch (Exception e1){}
   }
 
@@ -1329,6 +1330,8 @@ class PrintableComponent implements Printable {
 
     // We're passed a Graphics object, but it can always be cast to Graphics2D
     Graphics2D g2 = (Graphics2D) g;
+    Font f = new Font("SansSerif", Font.PLAIN, 8);
+    g2.setFont(f);
 
     // Use the top and left margins specified in the PageFormat Note
     // that the PageFormat methods are poorly named.  They specify
