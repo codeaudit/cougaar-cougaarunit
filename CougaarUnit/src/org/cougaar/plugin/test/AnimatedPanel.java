@@ -72,6 +72,7 @@ public class AnimatedPanel extends JPanel implements Runnable {
   }
 
   public void run() {
+    Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
     size = this.getSize();
     offScreenImage = new BufferedImage(size.width, size.height, BufferedImage.TYPE_INT_RGB);
     Graphics2D grp = (Graphics2D)offScreenImage.getGraphics();
@@ -83,9 +84,8 @@ public class AnimatedPanel extends JPanel implements Runnable {
 
     public void renderTo(Graphics2D grp, JPanel offScreenPanel, Image offScreenImage) {
       Dimension d = AnimatedPanel.this.getSize();
-      System.out.println(d);
       grp.setPaint(Color.BLACK);
-      grp.fillRect(0,0, d.height, d.width);
+      grp.fillRect(0,0, d.width, d.height);
       Point2D.Double p = new Point2D.Double(d.width/2, d.height/2);
       Point2D.Double pEnd = new Point2D.Double(d.width/2, d.height/2);
       //Color c = Color.RED;
@@ -102,7 +102,15 @@ public class AnimatedPanel extends JPanel implements Runnable {
                                   Math.cos(theta)*length);
         grp.drawRect((int)(p.getX()+pEnd.getX()), (int)(p.getY()+pEnd.getY()), 1, 1);
         offScreenPanel.getGraphics().drawImage(offScreenImage, 0, 0, offScreenPanel);
-        try {Thread.currentThread().sleep(250);} catch (Exception e){}
+        try {Thread.currentThread().sleep(10);} catch (Exception e){}
+        if (length > AnimatedPanel.this.getSize().width/2) {
+          pEnd = new Point2D.Double(d.width/2, d.height/2);
+          grp.setPaint(Color.BLACK);
+          grp.fillRect(0,0, d.width, d.height);
+          offScreenPanel.getGraphics().drawImage(offScreenImage, 0, 0, offScreenPanel);
+          theta = 0;
+          length = 1;
+        }
 
       }
     }
@@ -231,7 +239,8 @@ public class AnimatedPanel extends JPanel implements Runnable {
   public static void main(String[] args) {
     JFrame f = new JFrame("Test");
     f.pack();
-    f.setSize(400,400);
+    f.setSize(300,200);
+    f.setResizable(false);
     f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     f.getContentPane().setLayout(new BorderLayout());
     AnimatedPanel ap = new AnimatedPanel();

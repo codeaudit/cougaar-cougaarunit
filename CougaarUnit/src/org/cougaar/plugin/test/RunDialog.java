@@ -42,6 +42,7 @@ public class RunDialog extends JDialog {
     jLabelMessage.setHorizontalTextPosition(SwingConstants.CENTER);
     //panel1.setPreferredSize(new Dimension(200, 350));
     this.getContentPane().setLayout(borderLayout2);
+    this.setResizable(false);
     getContentPane().add(panel1, BorderLayout.CENTER);
     panel1.add(jLabelMessage, BorderLayout.NORTH);
   }
