@@ -109,7 +109,7 @@ public class PluginTestResult {
             result.append("<PHASE>" + getPhaseAsString(tre.testPhase) + "</PHASE>\n");
             result.append("<COMMAND>" +getCommandAsString(tre.testCommand)+"</COMMAND>\n");
             result.append("<DESCRIPTION>"+tre.description+"</DESCRIPTION>\n");
-            result.append("<RESULT>" + String.valueOf(tre.testResult) + "</RESULT>\n");
+            result.append("<RESULT>" + (tre.testResult?"pass":"fail") + "</RESULT>\n");
             result.append("</ID>\n");
         }
         result.append("</TEST>");
