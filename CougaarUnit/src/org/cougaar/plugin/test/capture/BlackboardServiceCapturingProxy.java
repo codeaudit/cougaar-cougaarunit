@@ -202,7 +202,7 @@ public class BlackboardServiceCapturingProxy implements BlackboardService {
      * Proxied method
      */
     public void openTransaction() {
-      System.out.println("open transaction: " + requestingClient);
+        objectStream.add(new CapturedPublishAction(CapturedPublishAction.ACTION_OPEN_TRANSACTION, "", requestingClient));
         actualBlackboardService.openTransaction();
     }
 
@@ -219,6 +219,7 @@ public class BlackboardServiceCapturingProxy implements BlackboardService {
      * @throws org.cougaar.core.blackboard.SubscriberException
      */
     public void closeTransaction() throws org.cougaar.core.blackboard.SubscriberException {
+        objectStream.add(new CapturedPublishAction(CapturedPublishAction.ACTION_CLOSE_TRANSACTION, "", requestingClient));
         actualBlackboardService.closeTransaction();
     }
 

@@ -974,7 +974,7 @@ class StreamedDataTableModel extends DefaultTableModel  {
     //calculate the rows
     for (int i=0; i<v.size(); i++) {
       CapturedPublishAction cpa = (CapturedPublishAction)v.elementAt(i);
-      Object[] row = (Object[])rows.get(String.valueOf(cpa.timeStamp-baseTime));
+      /*Object[] row = (Object[])rows.get(String.valueOf(cpa.timeStamp-baseTime));
       if (row == null) {
         row = new Object[cols.size()];
         row[0] = String.valueOf(cpa.timeStamp-baseTime);
@@ -982,6 +982,11 @@ class StreamedDataTableModel extends DefaultTableModel  {
           row[j] = "";
         }
         rows.put(String.valueOf(cpa.timeStamp-baseTime), row);
+      }*/
+      Object[] row = new Object[cols.size()];
+      row[0] = String.valueOf(cpa.timeStamp-baseTime);
+      for (int j=1; j<cols.size(); j++) { //initialize the row
+          row[j] = "";
       }
       String currentVal = (String)row[cols.indexOf(cpa.publishingSource)];
       String newVal = (currentVal.equals(""))?cpa.getActionString() + " " + cpa.publishedObject:currentVal+"\n"+cpa.getActionString() + " " + cpa.publishedObject;

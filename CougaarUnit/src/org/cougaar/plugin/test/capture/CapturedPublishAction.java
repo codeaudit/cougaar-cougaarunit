@@ -15,6 +15,8 @@ public class CapturedPublishAction implements Serializable {
     public final static int ACTION_ADD = 1;
     public final static int ACTION_CHANGE =2 ;
     public final static int ACTION_REMOVE = 3;
+    public final static int ACTION_OPEN_TRANSACTION = 4;
+    public final static int ACTION_CLOSE_TRANSACTION = 5;
 
     public String publishedObject;
     public int action;
@@ -37,6 +39,8 @@ public class CapturedPublishAction implements Serializable {
          case ACTION_ADD: return "ADD";
          case ACTION_REMOVE: return "REMOVE";
          case ACTION_CHANGE: return "CHANGE";
+         case ACTION_OPEN_TRANSACTION: return "OPEN TRANSACTION";
+         case ACTION_CLOSE_TRANSACTION: return "CLOSE TRANSACTION";
      }
      return "";
     }
