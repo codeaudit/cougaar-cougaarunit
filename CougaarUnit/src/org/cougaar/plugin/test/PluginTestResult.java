@@ -15,6 +15,7 @@ import java.util.Enumeration;
 public class PluginTestResult {
     public static final int PHASE_TEST_SUBSCRIPTION = 1;
     public static final int PHASE_TEST_EXECUTION = 2;
+    public static final int INITIAL_STATE = 0;
     public static final int COMMAND_SUBSCRIPTION_ASSERT = 1;
     public static final int COMMAND_ASSERT_PUBLISH_ADD = 2;
     public static final int COMMAND_ASSERT_PUBLISH_CHANGE = 3;
@@ -24,11 +25,15 @@ public class PluginTestResult {
         int testPhase;
         int testCommand;
         boolean testResult;
+        String description;
+        static int id=0;
 
-        public TestResultEntry(int testPhase, int testCommand, boolean testResult) {
+        public TestResultEntry(int testPhase, int testCommand, boolean testResult, String description) {
             this.testPhase = testPhase;
             this.testCommand = testCommand;
             this.testResult = testResult;
+            this.description = description;
+            id++;
         }
     }
 
@@ -40,8 +45,8 @@ public class PluginTestResult {
         testName = name;
     }
 
-    public static void addEntry(int phase, int command, boolean result) {
-        entries.add(new TestResultEntry(phase, command, result));
+    public static void addEntry(int phase, int command, boolean result, String description) {
+        entries.add(new TestResultEntry(phase, command, result, description));
     }
 
     /**
@@ -79,9 +84,9 @@ public class PluginTestResult {
         for (Enumeration enum = entries.elements(); enum.hasMoreElements(); ) {
             TestResultEntry tre = (TestResultEntry)enum.nextElement();
             result.append("TEST RESULTS FOR: " + testName);
-            result.append("PHASE\tTEST\tRESULT\n");
-            result.append("-----\t----\t------\n");
-            result.append(getPhaseAsString(tre.testPhase)+"\t"+getCommandAsString(tre.testCommand)+"\t"+String.valueOf(tre.testResult)+"\n");
+            result.append("ID\tPHASE\tTEST\tRESULT\tDESCRIPTION\n");
+            result.append("--\t-----\t----\t------\t-----------\n");
+            result.append(String.valueOf(tre.id)+"\t"+getPhaseAsString(tre.testPhase)+"\t"+getCommandAsString(tre.testCommand)+"\t"+String.valueOf(tre.testResult)+"\t"+tre.description+"\n");
         }
         return result.toString();
     }

@@ -30,7 +30,28 @@ public abstract class PluginTestCase extends ComponentPlugin {
             */
     public void subscriptionAssert(Object obj, boolean expectedResult) {
         boolean result = ((TestBlackboardService)blackboard).testSubscriptions(obj);
-        PluginTestResult.addEntry(PluginTestResult.PHASE_TEST_SUBSCRIPTION, PluginTestResult.COMMAND_SUBSCRIPTION_ASSERT, result);
+        PluginTestResult.addEntry(PluginTestResult.PHASE_TEST_SUBSCRIPTION, PluginTestResult.COMMAND_SUBSCRIPTION_ASSERT, result, obj.getClass().getName());
+    }
+
+    /**
+     * This method can be used to test that a source plugin's initial set of publications
+     * is what is expected.
+     * @param bbs The BlackBoardDeltaState object that defines the initial set of publications
+     * by the source plugin
+     * @param waitTime length of time to wait before testing the inital state
+     * @param expectedResult Indicates whether this test is expected to pass or fail
+     */
+    public void assertInitialState(BlackboardDeltaState bbs, long waitTime, boolean expectedResult) {
+        if (bbs != null) {
+            try {
+                Thread.currentThread().sleep(waitTime > 0?waitTime:0);   //wait the designated amount of time
+                boolean result = bbs.compare(((TestBlackboardService)blackboard).getCurrentBlackboardDeltaState(), expectedResult);
+                PluginTestResult.addEntry(PluginTestResult.PHASE_TEST_EXECUTION, PluginTestResult.INITIAL_STATE, result, "Initial State");
+            }
+            catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -54,7 +75,7 @@ public abstract class PluginTestCase extends ComponentPlugin {
             try {
                 Thread.currentThread().sleep(waitTime > 0?waitTime:0);   //wait the designated amount of time
                 boolean result = bbs.compare(((TestBlackboardService)blackboard).getCurrentBlackboardDeltaState(), expectedResult);
-                PluginTestResult.addEntry(PluginTestResult.PHASE_TEST_EXECUTION, PluginTestResult.COMMAND_ASSERT_PUBLISH_ADD, result);
+                PluginTestResult.addEntry(PluginTestResult.PHASE_TEST_EXECUTION, PluginTestResult.COMMAND_ASSERT_PUBLISH_ADD, result, obj.getClass().getName());
                 ((TestBlackboardService)blackboard).resetBlackboardDeltaState();   //reset the blackboard state
             }
             catch (InterruptedException ex) {
@@ -84,7 +105,7 @@ public abstract class PluginTestCase extends ComponentPlugin {
             try {
                 Thread.currentThread().sleep(waitTime > 0?waitTime:0);   //wait the designated amount of time
                 boolean result = bbs.compare(((TestBlackboardService)blackboard).getCurrentBlackboardDeltaState(), expectedResult);
-                PluginTestResult.addEntry(PluginTestResult.PHASE_TEST_EXECUTION, PluginTestResult.COMMAND_ASSERT_PUBLISH_CHANGE, result);
+                PluginTestResult.addEntry(PluginTestResult.PHASE_TEST_EXECUTION, PluginTestResult.COMMAND_ASSERT_PUBLISH_CHANGE, result, obj.getClass().getName());
                 ((TestBlackboardService)blackboard).resetBlackboardDeltaState();   //reset the blackboard state
             }
             catch (InterruptedException ex) {
@@ -114,7 +135,7 @@ public abstract class PluginTestCase extends ComponentPlugin {
             try {
                 Thread.currentThread().sleep(waitTime > 0?waitTime:0);   //wait the designated amount of time
                 boolean result = bbs.compare(((TestBlackboardService)blackboard).getCurrentBlackboardDeltaState(), expectedResult);
-                PluginTestResult.addEntry(PluginTestResult.PHASE_TEST_EXECUTION, PluginTestResult.COMMAND_ASSERT_PUBLISH_REMOVE, result);
+                PluginTestResult.addEntry(PluginTestResult.PHASE_TEST_EXECUTION, PluginTestResult.COMMAND_ASSERT_PUBLISH_REMOVE, result, obj.getClass().getName());
                 ((TestBlackboardService)blackboard).resetBlackboardDeltaState();   //reset the blackboard state
             }
             catch (InterruptedException ex) {
