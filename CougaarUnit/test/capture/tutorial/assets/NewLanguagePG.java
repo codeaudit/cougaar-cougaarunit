@@ -19,7 +19,7 @@
  * </copyright>
  */
 
-/* @generated Fri Feb 14 14:18:27 EST 2003 from properties.def - DO NOT HAND EDIT */
+/* @generated Mon Feb 24 16:14:44 EST 2003 from properties.def - DO NOT HAND EDIT */
 /** Additional methods for LanguagePG
  * offering mutators (set methods) for the object's owner
  **/

@@ -176,7 +176,6 @@
     <property category="archiving" name="targetPath" value="TestClassLoader.jar"/>
   </node>
   <node name="TestJarArchive" type="Archive">
-    <property category="archiving" name="buildWithProject" value="0"/>
     <property category="archiving" name="extraDeployRoots.1" value="C:tutorial.DevelopmentExpanderTestCase"/>
     <property category="archiving" name="extraDeployRoots.2" value="C:tutorial.ManagerTestCase"/>
     <property category="archiving" name="extraDeployRoots.3" value="C:tutorial.TutorialTestSuite"/>

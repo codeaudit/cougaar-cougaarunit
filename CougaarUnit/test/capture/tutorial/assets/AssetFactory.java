@@ -19,7 +19,7 @@
  * </copyright>
  */
 
-/* @generated Fri Feb 14 14:18:26 EST 2003 from programmer_assets.def - DO NOT HAND EDIT */
+/* @generated Mon Feb 24 16:14:44 EST 2003 from programmer_assets.def - DO NOT HAND EDIT */
 package tutorial.assets;
 import org.cougaar.planning.ldm.asset.EssentialAssetFactory;
 
