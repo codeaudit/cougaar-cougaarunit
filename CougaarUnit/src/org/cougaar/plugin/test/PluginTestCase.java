@@ -99,6 +99,14 @@ public abstract class PluginTestCase extends ComponentPlugin {
     }
 
     /**
+     * Helper method for asserting objects that don't require any state evaluation
+     * @param obj
+     */
+    public void assertPublishAdd(Object obj) {
+        assertPublishAdd(obj, null, 0, false, false);
+    }
+
+    /**
      * Publishes an object change  to the blackboard and blocks waitTime milliseconds until the bbs is achieved.
      * A timeout indicates an error.
      * @param obj - The changed object to publish to the blackbaord
@@ -134,6 +142,15 @@ public abstract class PluginTestCase extends ComponentPlugin {
     }
 
     /**
+     * Helper method for asserting objects that don't require any state evaluation
+     * @param obj
+     */
+    public void assertPublishChange(Object obj) {
+        assertPublishChange(obj, null, 0, false, false);
+    }
+
+
+    /**
      * Removes obj from the blackboard and blocks waitTime milliseconds until the bbs is achieved.
      * A timeout indicates an error.
      * @param obj - The object to remove from the blackbaord
@@ -165,6 +182,14 @@ public abstract class PluginTestCase extends ComponentPlugin {
                 ex.printStackTrace();
             }
         }
+    }
+
+    /**
+     * Helper method for asserting objects that don't require any state evaluation
+     * @param obj
+     */
+    public void assertPublishRemove(Object obj) {
+        assertPublishRemove(obj, null, 0, false, false);
     }
 
     /**
