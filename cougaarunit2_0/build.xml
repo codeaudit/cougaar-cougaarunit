@@ -37,7 +37,7 @@
     <property name="jdepend.dir" value="${build.dir}/jdepend"/>
     
     <!--cvs info-->
-    <property name="cvs.repository" value=":pserver:abrams@cougaar.org:/cvsroot/cougaarunit"/>
+    <property name="cvs.repository" value=":extssh:abrams@cougaar.org:/cvsroot/cougaarunit"/>
     <property name="cvs.package" value="cougaarunit2_0"/>
 
     <!--junit info-->
