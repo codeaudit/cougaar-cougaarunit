@@ -167,7 +167,6 @@ public class Launcher {
                             "-Dorg.cougaar.plugin.test.output.format="+OUTPUT_STYLES[outputStyle]+" "+
                             "-Dorg.cougaar.lib.web.https.clientAuth=true "+
                             "-Dorg.cougaar.core.logging.config.filename=logging.props "+
-                            "-Xbootclasspath/p:%COUGAAR_INSTALL_PATH%\\lib\\javaiopatch.jar\n"+
                             "set MYMEMORY=\n"+
                             "set MYCLASSES=org.cougaar.bootstrap.Bootstrapper org.cougaar.core.node.Node\n"+
                             "set MYARGUMENTS= -c -n \"%1\"\n"+
@@ -203,7 +202,6 @@ public class Launcher {
                             "-Dorg.cougaar.lib.web.https.clientAuth=true "+
                             "-Dorg.cougaar.plugin.test.output.format="+OUTPUT_STYLES[outputStyle]+" "+
                             "-Dorg.cougaar.core.logging.config.filename=log.props "+
-                            "-Xbootclasspath/p:$COUGAAR_INSTALL_PATH/lib/javaiopatch.jar\"\n"+
                             "MYMEMORY=\n"+
                             "MYCLASSES=\"org.cougaar.bootstrap.Bootstrapper org.cougaar.core.node.Node\"\n"+
                             "MYARGUMENTS=\"-c -n $1\"\n"+
