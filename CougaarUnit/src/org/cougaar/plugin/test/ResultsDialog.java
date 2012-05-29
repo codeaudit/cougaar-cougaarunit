@@ -100,15 +100,15 @@ public class ResultsDialog extends JDialog {
    */
   public void setResultData(ResultStates resultStates) {
     if (resultStates == null || resultStates.expectedResults == null || resultStates.actualResults == null) return;
-    for (Enumeration enum = resultStates.expectedResults.elements(); enum.hasMoreElements(); ) {
-      ResultStates.ResultState state = (ResultStates.ResultState)enum.nextElement();
+    for (Enumeration enm = resultStates.expectedResults.elements(); enm.hasMoreElements(); ) {
+      ResultStates.ResultState state = (ResultStates.ResultState)enm.nextElement();
       Object[] row = new Object[2];
       row[0] = state.id;
       row[1] = state.result;
       this.expectedResultsModel.addRow(row);
     }
-    for (Enumeration enum = resultStates.actualResults.elements(); enum.hasMoreElements(); ) {
-      ResultStates.ResultState state = (ResultStates.ResultState)enum.nextElement();
+    for (Enumeration enm = resultStates.actualResults.elements(); enm.hasMoreElements(); ) {
+      ResultStates.ResultState state = (ResultStates.ResultState)enm.nextElement();
       Object[] row = new Object[2];
       row[0] = state.id;
       row[1] = state.result;

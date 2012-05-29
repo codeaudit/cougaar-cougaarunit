@@ -110,8 +110,8 @@ public class PluginTestResult {
      * @return true if every test passed, false if at least one test failed
      */
     public static boolean getOverallResult() {
-        for (Enumeration enum = entries.elements(); enum.hasMoreElements(); ) {
-            if (!(((TestResultEntry)enum.nextElement()).testResult))
+        for (Enumeration enm = entries.elements(); enm.hasMoreElements(); ) {
+            if (!(((TestResultEntry)enm.nextElement()).testResult))
                 return false;
         }
         return true;
@@ -153,8 +153,8 @@ public class PluginTestResult {
     public static String getReportAsString() {
         StringBuffer result = new StringBuffer();
         result.append("Test Name: " + testName+"\n");
-        for (Enumeration enum = entries.elements(); enum.hasMoreElements(); ) {
-            TestResultEntry tre = (TestResultEntry)enum.nextElement();
+        for (Enumeration enm = entries.elements(); enm.hasMoreElements(); ) {
+            TestResultEntry tre = (TestResultEntry)enm.nextElement();
             result.append("ID: " + String.valueOf(tre.id)+
                           "\nPhase: "+ getPhaseAsString(tre.testPhase)+
                           "\nCommand: "+getCommandAsString(tre.testCommand)+
@@ -172,8 +172,8 @@ public class PluginTestResult {
         StringBuffer result = new StringBuffer();
         result.append("<?xml version=\"1.0\"?>\n");
         result.append("<TEST Name=\""+testName+"\">\n");
-        for (Enumeration enum = entries.elements(); enum.hasMoreElements(); ) {
-            TestResultEntry tre = (TestResultEntry)enum.nextElement();
+        for (Enumeration enm = entries.elements(); enm.hasMoreElements(); ) {
+            TestResultEntry tre = (TestResultEntry)enm.nextElement();
             result.append("<ID Value=\""+ String.valueOf(tre.id)+"\">\n");
             result.append("<PHASE>" + getPhaseAsString(tre.testPhase) + "</PHASE>\n");
             result.append("<COMMAND>" +getCommandAsString(tre.testCommand)+"</COMMAND>\n");

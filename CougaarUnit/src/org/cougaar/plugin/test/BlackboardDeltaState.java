@@ -53,11 +53,11 @@ public class BlackboardDeltaState implements Serializable {
         }
         else {
             Vector targetStateChanges = new Vector(bbs.stateChanges);  //create a copy of the stateChanges object in the bbs
-            for (Enumeration enum = stateChanges.elements(); enum.hasMoreElements(); ) {
-                PublishAction pa1 = (PublishAction)enum.nextElement();
+            for (Enumeration enm = stateChanges.elements(); enm.hasMoreElements(); ) {
+                PublishAction pa1 = (PublishAction)enm.nextElement();
                 //now loop through the targetStateChanges vector to see if we get a match
-                for (Enumeration enum2 = targetStateChanges.elements(); enum2.hasMoreElements(); ) {
-                    PublishAction pa2 = (PublishAction)enum2.nextElement();
+                for (Enumeration enm2 = targetStateChanges.elements(); enm2.hasMoreElements(); ) {
+                    PublishAction pa2 = (PublishAction)enm2.nextElement();
                     if (pa1.equals(pa2)) {  //if they match then remove the item and break out to the outer loop to continue
                         targetStateChanges.remove(pa2);
                         break;
@@ -77,8 +77,8 @@ public class BlackboardDeltaState implements Serializable {
     public String getXML() {
       StringBuffer sb = new StringBuffer();
       sb.append("<BLACKBOARD_DELTA_STATE>");
-      for (Enumeration enum = stateChanges.elements(); enum.hasMoreElements(); ) {
-        sb.append(((PublishAction)enum.nextElement()).getXML());
+      for (Enumeration enm = stateChanges.elements(); enm.hasMoreElements(); ) {
+        sb.append(((PublishAction)enm.nextElement()).getXML());
       }
       sb.append("</BLACKBOARD_DELTA_STATE>");
 
